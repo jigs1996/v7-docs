@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en-us" class=" bg-neutral-950">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -9,10 +9,16 @@
     @vite(['resources/css/app.css', 'resources/js/app.ts'])
     @stack('dumper')
   </head>
-  <body>
+  <body class="font-sans antialiased tracking-wide text-woodsmoke-300 relative">    
+    {{-- <div class="pointer-events-none absolute inset-0 h-full z-99 mix-blend-overlay overscroll-contain" preserveAspectRatio="none">
+      <img src="/resources/assets/noise.svg" class="w-full h-full object-cover" alt="noise background" />
+    </div> --}}
+
     @include('partials/header')
     <main>
       {{{ await $slots.main() }}}
     </main>
+
+    <div class="pointer-events-none absolute inset-0 h-full z-99 mix-blend-overlay overscroll-contain bg-[url('/resources/assets/noise.png')] bg-size-[64px] opacity-40"></div>
   </body>
 </html>

@@ -1,23 +1,18 @@
 @layout()
-  <div class="hero">
-    <h1>It works — welcome to the simplicity of a Hypermedia app</h1>
-    <p>A lightweight foundation for building modern web interfaces — straightforward, flexible, and true to the web's core simplicity.</p>
+  <div class="hero text-center">
+    <div class="container mx-auto px-5 sm:px-10 pt-20 sm:pt-35 pb-50 sm:pb-54 border-x border-woodsmoke-800/70 relative">
+      <h1 class="text-3xl lg:text-42 text-white leading-10 lg:leading-52">Everything you need to get building?</h1>
+      <p class="text-16 lg:text-18 text-woodsmoke-200 max-w-2xl mx-auto mt-5 lg:mt-3 mb-6.5">Comprehensive guides, step-by-step tutorials, and complete API reference to help you build, test, and deploy applications with AdonisJS</p>
+      @!search()
+      <div class="absolute inset-0 pointer-events-none -z-1 bg-[url('/resources/assets/hero-bg.svg')] bg-position-[80%] bg-no-repeat"></div>
+    </div>
   </div>
 
-  <div class="cards">
-    <a href="https://insiders.adonisjs.com/docs/v7-alpha/introduction" target="_blank">
-      <h3>Official Docs &nbsp;›</h3>
-      <p>Comprehensive reference for building with AdonisJS</p>
-    </a>
-
-    <a href="https://adocasts.com/" target="_blank">
-      <h3>Adocasts &nbsp;›</h3>
-      <p>Guided video tutorials for everyday development</p>
-    </a>
-
-    <a href="https://discord.gg/vDcEjq6" target="_blank">
-      <h3>Discord &nbsp;›</h3>
-      <p>Connect with developers building with AdonisJS every day</p>
-    </a>
+  <div class="">
+    <div class="container mx-auto border-x border-woodsmoke-800/70 relative">
+      <div class="relative -top-23">
+        @include('partials/home/cards')
+      </div>
+    </div>
   </div>
 @end

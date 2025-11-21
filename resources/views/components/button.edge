@@ -1,7 +1,49 @@
-@let(buttonTextFromSlot = await $slots.main())
-@let(buttonText = buttonTextFromSlot.trim() ? buttonTextFromSlot : $props.get('text') ?? '')
-@let(classes = [])
+@let(slotContent = await $slots.main())
+@let(
+  buttonClasses = tv({
+    base: 'font-medium items-center justify-center cursor-pointer transition-colors text-center uppercase inline-flex',
 
-<button {{
-  $props.except(['text']).merge({ class: classes }).toAttrs()
-}}>{{{ buttonText }}}</button>
+    variants: {
+      color: {
+        primary: 'bg-indigo-600 hover:bg-indigo-700 focus:bg-indigo-700 text-white',
+        secondary: 'bg-white hover:bg-neutral-100 text-neutral-900 dark:text-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 border ',
+        danger: 'bg-red-500 hover:bg-red-600 focus:bg-red-600',
+      },
+      size: {
+        sm: 'px-3.5 py-1.5 text-xs',
+        md: 'px-5 py-2.5 text-base',
+        lg: 'px-7 py-3 text-base',
+        xl: 'px-4 py-3 text-base h-12.5',
+      },
+      radius: {
+        none: 'rounded-none',
+        sm: 'rounded-sm',
+        md: 'rounded-md',
+        lg: 'rounded-lg',
+        full: 'rounded-4xl',
+      },
+    }
+  })($props.only(['size', 'color', 'radius', 'class' ]))
+)
+
+@if($props.get('href'))
+  <a
+    {{ $props.except(['text', 'size', 'color', 'radius', 'class']).merge({ class: buttonClasses }).toAttrs() }}
+  >
+    @if(slotContent)
+      {{{ slotContent }}}
+    @else
+      {{ text }}
+    @end
+  </a>
+@else
+  <button
+    {{ $props.except(['text', 'size', 'color', 'radius', 'class']).merge({ class: buttonClasses }).toAttrs() }}
+  >
+    @if(slotContent)
+      {{{ slotContent }}}
+    @else
+      {{ text }}
+    @end
+  </button>
+@end

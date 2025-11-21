@@ -1,21 +1,45 @@
 @layout()
-  @each(group in docs.all())
-    <h2>{{ group.category }}</h2>
-    <ul>
-      @each(doc in group.children)
-        <li><a href="">{{ doc.title }}</a></li>
-      @end
-    </ul>
-  @end
+  <div class="container-full mx-auto px-5 sm:px-10">
+    <div class="md:border-l md:border-r border-woodsmoke-800/70 md:bg-[url('/resources/assets/docs-hero-bg.svg')] bg-no-repeat bg-top-bottom lg:grid xl:grid-cols-[260px_1fr_230px] lg:grid-cols-[270px_1fr] gap-4">
+      <aside class="pl-8 pr-3 sticky top-19 hidden lg:block pt-19 pb-11 max-h-screen overflow-y-auto">
+        @each(group in docs.all())
+          <button role="button" class="font-display text-15 text-white leading-5 mb-4 flex items-center gap-1.5">
+            <span class="inline-block">{{ group.category }}</span>  
+            @svg('mynaui:chevron-right', { class: 'w-4 h-4 mt-0.5 rotate-90 transition-transform' })
+          </button>
+          <ul class="mb-8 docs_sidebar_menu">
+            @each(doc in group.children)
+              <li class="text-14 mb-1"><a href="" class="leading-5 block py-1 relative">{{ doc.title }}</a></li>
+            @end
+          </ul>
+        @end
+      </aside>
 
-  <main>
-    @let(doc = await $markdown.render({
-      file: docs.findByPermalink(request.param('*').join('/')).contentPath,
-    }))
+      <main class="prose py-17 mx-auto relative">
+        @let(doc = await $markdown.render({
+          file: docs.findByPermalink(request.param('*').join('/')).contentPath,
+          toc: {
+            enabled: true,
+            maxDepth: 3
+          }
+        }))
+        <div>{{{ doc.content }}}</div>
+      </main>
 
-    <h1>{{{ doc.frontmatter.title }}}</h1>
-    <div>{{{ doc.content }}}</div>
-
-    <div>{{{ doc.toc }}}</div>
-  </main>
+      <aside class="relative hidden xl:block">
+        <div class="absolute inset-0 px-3">
+          <div
+            class="sticky top-22 max-h-[calc(100dvh-(var(--spacing)*16))] overflow-y-auto pt-12 pb-6 doc-right-nav"
+          >
+            <label
+              class="block font-medium text-white text-xs uppercase tracking-tight pt-2.5 mb-4 font-mono"
+            >
+              On this page
+            </label>
+            {{{ doc.toc }}}
+          </div>
+        </div>
+      </aside>
+    </div> 
+  </div>
 @end

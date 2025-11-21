@@ -58,10 +58,17 @@
     "@adonisjs/core": "^7.0.0-next.10",
     "@adonisjs/static": "^2.0.0-next.1",
     "@adonisjs/vite": "^5.1.0-next.1",
+    "@iconify-json/mynaui": "^1.2.16",
+    "@iconify-json/uiw": "^1.2.3",
+    "@tailwindcss/vite": "^4.1.17",
     "@vinejs/vine": "^4.1.0",
+    "edge-iconify": "^2.0.1",
     "edge-markdown": "^1.7.0",
     "edge.js": "^6.3.0",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "tailwind-merge": "^3.4.0",
+    "tailwind-variants": "^3.1.1",
+    "tailwindcss": "^4.1.17"
   },
   "hotHook": {
     "boundaries": [

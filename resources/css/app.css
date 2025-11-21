@@ -1,0 +1,82 @@
+@import "tailwindcss";
+@source "../views";
+
+@import './font.css';
+@import './markdown.css';
+
+@theme {
+    --color-woodsmoke-50: oklch(81.144% 0.0167 286.02);
+    --color-woodsmoke-100: oklch(77.744% 0.01971 285.93);
+    --color-woodsmoke-200: oklch(70.544% 0.02748 285.67);
+    --color-woodsmoke-300: oklch(63.426% 0.03273 285.43);
+    --color-woodsmoke-400: oklch(56.154% 0.03996 285.04);
+    --color-woodsmoke-500: oklch(49.375% 0.03491 285.05);
+    --color-woodsmoke-600: oklch(42.722% 0.02961 285.08);
+    --color-woodsmoke-700: oklch(35.754% 0.02235 285.21);
+    --color-woodsmoke-800: oklch(28.113% 0.01826 285.17);
+    --color-woodsmoke-900: oklch(20.245% 0.00989 285.48);
+    --color-woodsmoke-950: oklch(16.048% 0.00628 285.67);
+
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Display', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --text-11: 0.6875rem;
+    --text-12: 0.75rem;
+    --text-13: 0.8125rem;
+    --text-14: 0.875rem;
+    --text-15: 0.9375rem;
+    --text-16: 1rem;
+    --text-17: 1.0625rem;
+    --text-18: 1.125rem;
+    --text-20: 1.25rem;
+
+    --text-42: 2.625rem;
+
+    --leading-52: 3.25rem;
+}
+
+* {
+    outline: none;
+}
+
+* :focus-visible {
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: var(--color-indigo-400);
+    outline-offset: -2px;
+}
+
+* {
+    scrollbar-width: auto;
+    scrollbar-color: var(--color-woodsmoke-700) transparent;
+}
+
+::selection {
+    background-color: var(--color-woodsmoke-800);
+    color: white;
+}
+
+*::-webkit-scrollbar {
+    width: 16px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--color-woodsmoke-700);
+    border-radius: 10px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: var(--font-display);
+}
+
+.container {
+    max-width: 1360px;
+}
+
+.container-full {
+    max-width: 1440px;
+}
+
+.bg-radial-purple {
+    background: radial-gradient(105% 83.79% at 95.7% 73.59%, rgba(67, 45, 215, 0.2) 0%, rgba(0, 0, 0, 0.2) 100%);
+}

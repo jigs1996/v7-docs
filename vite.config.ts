@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite'
+import tailwindcss from '@tailwindcss/vite'
 import adonisjs from '@adonisjs/vite/client'
 
 export default defineConfig({
   plugins: [
+    tailwindcss(),
     adonisjs({
       /**
        * Entrypoints of your application. Each entrypoint will

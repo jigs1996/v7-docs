@@ -3,6 +3,8 @@ title: "Introduction"
 description: "An overview of AdonisJS and the design principles behind it."
 ---
 
+# Introduction
+
 AdonisJS is a **backend-first, type-safe framework** for building web applications with Node.js and TypeScript. It provides the core building blocks for writing and maintaining complete backends, eliminating the need for third-party services to handle common features such as authentication, file uploads, caching, and rate limiting.
 
 Each AdonisJS application is written in TypeScript, runs in ESM mode, and offers end-to-end type safety across the entire stack.
@@ -49,7 +51,7 @@ Developers familiar with Express or Fastify will recognize AdonisJS as an approa
 
 AdonisJS APIs are functional and modern. You can use class-based components where a structured approach is helpful, such as in controllers, models, and services.
 
-## How AdonisJS compares
+### How AdonisJS compares
 
 **vs. Express/Fastify** — AdonisJS provides structure and conventions that Express lacks, while remaining just as performant. You get authentication, validation, and ORM out of the box instead of assembling packages yourself.
 
@@ -59,7 +61,7 @@ AdonisJS APIs are functional and modern. You can use class-based components wher
 
 Choose AdonisJS when you want the productivity of a full-featured framework without the complexity of enterprise patterns or the fragmentation of minimal frameworks.
 
-## MVC with Configurable View Layer
+### MVC with Configurable View Layer
 
 AdonisJS uses the **Model-View-Controller (MVC)** pattern to keep data, logic, and presentation separate. The view layer is optional and can be configured to fit your needs.
 

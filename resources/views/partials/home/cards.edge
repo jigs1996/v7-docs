@@ -1,0 +1,43 @@
+@let(cards = [
+  {
+    href: '/',
+    title: 'Build Your First App',
+    subTitle: 'Build OS Hunt from scratch following step by step instructions',
+    icon: 'mynaui:rocket-solid'
+  },
+  {
+    href: '/',
+    title: 'Guides',
+    subTitle: 'In-depth framework guides to master the framework',
+    icon: 'mynaui:book-dot-solid'
+  },
+  {
+    href: 'https://adocasts.com/',
+    title: 'Adocasts',
+    subTitle: 'For visual learners to take their AdonisJS skills to the stars',
+    icon: 'mynaui:video-solid'
+  },
+  {
+    href: 'https://plus.adonisjs.com/',  
+    title: 'AdonisJS Kit',
+    subTitle: 'Speed up development using full-stack premium components',
+    icon: 'mynaui:box-solid',
+    badgeIcon: 'mynaui:star-solid'
+ }
+])
+
+<div class="grid sm:grid-cols-3 md:grid-cols-4 gap-8 px-5 md:px-10">
+    @each(card in cards)
+        <a href="">
+            <div class="flex items-center justify-center group bg-woodsmoke-900 rounded-md border border-woodsmoke-800/70 h-47 relative">
+                <div class="absolute inset-0 bg-[url('/resources/assets/round.png')] bg-size-[7px] opacity-23 rounded-md"></div>
+                @!svg(card.icon, { width: '70px', height: '70px', class: 'text-woodsmoke-400 scale-90 transition-transform duration-300 z-1 group-hover:scale-110' })
+                @if(card.badgeIcon)
+                    @!svg(card.badgeIcon, { width: '32px', height: '32px', class: 'text-amber-300 z-1 absolute -right-4 -top-3 rotate-15' })
+                @end
+            </div>
+            <h3 class="mt-6 mb-3 leading-none text-18 text-woodsmoke-50">{{card.title}}</h3>
+            <p class="text-15 text-woodsmoke-400 leading-6">{{card.subTitle}}</p>
+        </a>
+    @end
+</div>

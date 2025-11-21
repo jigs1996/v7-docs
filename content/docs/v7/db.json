@@ -145,7 +145,7 @@
     ]
   },
   {
-    "category": "Authentication & Authorization",
+    "category": "Auth",
     "children": [
       {
         "title": "Introduction",
@@ -400,7 +400,7 @@
     ]
   },
   {
-    "category": "Operations & Deployment",
+    "category": "Deployment",
     "children": [
       {
         "title": "Environment Variables",
