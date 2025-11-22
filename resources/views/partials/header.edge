@@ -4,14 +4,6 @@
     href: '/'
   },
   {
-    text: 'Wall of love',
-    href: '/'
-  },
-  {
-    text: 'Learn',
-    href: '/',
-  },
-  {
     text: 'Sponsor',
     href: '/'
   },
@@ -28,45 +20,51 @@
         @!logos.adonisjs()
       </a>
     </div>
-    <div>
-      <nav class="flex items-center gap-9">
-        <ul class="hidden md:flex items-center gap-5">
-          @each(item in navItems)
+      
+      <div class="flex items-center gap-7">
+        <div class="w-36 lg:w-44">
+          @!search({ text: 'Search', color: 'primary', radius: 'full', size: 'md' })
+        </div>
+
+        <nav class="flex items-center gap-7">
+          <ul class="hidden md:flex items-center gap-4">
+            @each(item in navItems)
+              <li>
+                <a
+                  href="{{ item.href }}"
+                  class="text-sm hover:text-white transition-colors"
+                >
+                  <span>{{ item.text }}</span>
+                </a>
+              </li>
+            @end
+          </ul>
+          <ul class="flex items-center gap-5">
             <li>
-              <a
-                href="{{ item.href }}"
-                class="text-sm hover:text-white transition-colors"
-              >
-                <span>{{ item.text }}</span>
+              <div class="relative">
+                <span class="absolute -top-0.5 -left-0.5">
+                  @!buttonBorder()
+                </span>
+                <span class="absolute -bottom-0.5 -left-0.5 -rotate-90">
+                  @!buttonBorder()
+                </span>
+                <span class="absolute -top-0.5 -right-0.5 rotate-90">
+                  @!buttonBorder()
+                </span>
+                <span class="absolute -bottom-0.5 -right-0.5 rotate-180">
+                  @!buttonBorder()
+                </span>
+                @!button({ text: 'Plus', color: 'primary', size: 'sm', href: 'https://plus.adonisjs.com/', target: "_blank" })
+              </div>
+            </li>
+            <li>
+              <a href="https://github.com/adonisjs/core" target="_blank" class="block">
+                @svg('uiw:github', { width: '24px', height: '24px', class: 'text-woodsmoke-400 hover:text-white transition-colors' })
               </a>
             </li>
-          @end
-        </ul>
-        <ul class="flex items-center gap-5">
-          <li>
-            <div class="relative">
-              <span class="absolute -top-0.5 -left-0.5">
-                @!buttonBorder()
-              </span>
-              <span class="absolute -bottom-0.5 -left-0.5 -rotate-90">
-                @!buttonBorder()
-              </span>
-              <span class="absolute -top-0.5 -right-0.5 rotate-90">
-                @!buttonBorder()
-              </span>
-              <span class="absolute -bottom-0.5 -right-0.5 rotate-180">
-                @!buttonBorder()
-              </span>
-              @!button({ text: 'Plus', color: 'primary', size: 'sm', href: 'https://plus.adonisjs.com/', target: "_blank" })
-            </div>
-          </li>
-          <li>
-            <a href="https://github.com/adonisjs/core" target="_blank" class="block">
-              @svg('uiw:github', { width: '24px', height: '24px', class: 'text-woodsmoke-400 hover:text-white transition-colors' })
-            </a>
-          </li>
-        </ul>
-      </nav>
+          </ul>
+        </nav>
+      </div>
     </div>
   </div>
 </header>

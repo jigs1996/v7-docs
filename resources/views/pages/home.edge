@@ -3,7 +3,7 @@
     <div class="container mx-auto px-5 sm:px-10 pt-20 sm:pt-35 pb-50 sm:pb-54 border-x border-woodsmoke-800/70 relative">
       <h1 class="text-3xl lg:text-42 text-white leading-10 lg:leading-52">Everything you need to get building?</h1>
       <p class="text-16 lg:text-18 text-woodsmoke-200 max-w-2xl mx-auto mt-5 lg:mt-3 mb-6.5">Comprehensive guides, step-by-step tutorials, and complete API reference to help you build, test, and deploy applications with AdonisJS</p>
-      @!search()
+      @!search({ text: 'Search docs', color: 'primary', size: 'lg', radius: 'md' })
       <div class="absolute inset-0 pointer-events-none -z-1 bg-[url('/resources/assets/hero-bg.svg')] bg-position-[80%] bg-no-repeat"></div>
     </div>
   </div>

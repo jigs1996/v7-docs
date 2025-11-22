@@ -1,7 +1,50 @@
-<div class="relative flex items-center">
-    <button type="button" class="text-sm flex gap-2.5 items-center w-full max-w-96 px-4 py-2.5 mx-auto rounded-md bg-woodsmoke-950 text-woodsmoke-400 border border-woodsmoke-800/70">
-        @svg('mynaui:search', { width: '20px', height: '20px', class: 'text-woodsmoke-400 hover:text-white transition-colors' })
-        
-        Search docs
-    </button>
-</div>
+@let(slotContent = await $slots.main())
+@let(
+  searchClasses = tv({
+    base: 'flex gap-2 items-center w-full max-w-96 px-4 py-2 mx-auto bg-woodsmoke-950 text-woodsmoke-400 border border-woodsmoke-800/70 hover:border-woodsmoke-700/70 group hover:text-woodsmoke-100',
+
+    variants: {
+      color: {
+        primary: '',
+        secondary: '',
+      },
+      size: {
+        sm: 'gap-1.5 px-3 py-2 text-xs',
+        md: 'text-sm',
+        lg: 'px-4 py-2.5 text-base',
+      },
+      radius: {
+        none: 'rounded-none',
+        sm: 'rounded-sm',
+        md: 'rounded-md',
+        lg: 'rounded-lg',
+        full: 'rounded-4xl',
+      },
+    }
+  })($props.only(['size', 'color', 'radius', 'class' ]))
+)
+
+@let(
+  searchIconClasses = tv({
+    base: 'text-woodsmoke-400 group-hover:text-woodsmoke-100 transition-colors',
+
+    variants: {
+      size: {
+        sm: 'w-4 h-4',
+        md: 'w-5 h-5',
+        lg: '',
+      },
+    }
+  })($props.only(['size']))
+)
+
+<button
+{{ $props.except(['text', 'size', 'color', 'radius', 'class']).merge({ class: searchClasses }).toAttrs() }}
+>
+@svg('mynaui:search', { width: 'auto', height: 'auto', class: searchIconClasses })
+@if(slotContent)
+  {{{ slotContent }}}
+@else
+  {{ text }}
+@end
+</button>

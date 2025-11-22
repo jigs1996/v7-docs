@@ -27,7 +27,6 @@
 .prose h6 {
   font-weight: 500;
   color: var(--color-white);
-  @apply dark:text-neutral-50;
 }
 
 .prose h1 {
@@ -278,7 +277,7 @@
 .prose .code_snippet {
   margin-top: 32px;
   margin-bottom: 32px;
-  @apply bg-woodsmoke-950/50 border border-woodsmoke-900;
+  @apply bg-woodsmoke-900/50 border border-woodsmoke-800/70;
   border-radius: var(--radius-xl);
   overflow: hidden;
   padding: 1px;
@@ -295,7 +294,7 @@
 
 .prose .code_snippet .code_snippet_header {
   padding: 0 calc(var(--spacing) * 2.5) calc(var(--spacing) * 1) calc(var(--spacing) * 4);
-  color: var(--color-neutral-300);
+  color: var(--color-woodsmoke-200);
   font-size: var(--text-sm);
 }
 
