@@ -6,9 +6,8 @@
 
 .prose :not(pre) > code {
   font-family: var(--font-mono);
-  font-weight: var(--font-weight-semibold);
-  @apply dark:text-woodsmoke-200;
-  @apply dark:bg-woodsmoke-900/80;
+  @apply text-woodsmoke-200;
+  @apply bg-woodsmoke-800/80;
   padding: calc(var(--spacing) * 0.5) calc(var(--spacing) * 1);
   border-radius: var(--radius-sm);
   white-space: nowrap;
@@ -145,7 +144,7 @@
   left: -6px;
   top: 0;
   font-weight: 500;
-  color: var(--color-neutral-900);
+  color: var(--color-woodsmoke-50);
 }
 
 .prose ol > li {
@@ -160,16 +159,12 @@
 }
 
 .prose table th {
-  color: var(--color-neutral-900);
-  @apply dark:text-neutral-50;
+  color: var(--color-woodsmoke-50);
   text-align: left;
 }
 
 .prose table tr {
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  border-bottom-color: var(--color-neutral-200);
-  @apply dark:border-neutral-800;
+  @apply border-b border-woodsmoke-800/70;
 }
 
 .prose table th,
@@ -186,48 +181,23 @@
 .prose .alert_note,
 .prose .alert_warning,
 .prose .alert_tip {
-  display: flex;
   gap: 12px;
   border-radius: var(--radius-lg);
-  padding: 16px;
+  padding: 24px;
   margin: 16px 0;
+  @apply bg-woodsmoke-900 border border-woodsmoke-800/70;
 }
 
 .prose .alert_note p,
 .prose .alert_warning p,
 .prose .alert_tip p {
-  font-size: var(--text-sm);
-  line-height: inherit;
+  line-height: 24px;
 }
 
 .prose .alert_note div > *:last-child,
 .prose .alert_warning div > *:last-child,
 .prose .alert_tip div > *:last-child {
   margin-bottom: 0;
-}
-
-.prose .alert_note {
-  border-style: solid;
-  border-width: 1px;
-  border-color: var(--color-sky-100);
-  @apply dark:border-sky-500/20;
-  background-color: var(--color-sky-50);
-  @apply dark:bg-sky-500/10;
-  color: var(--color-sky-950);
-}
-
-.prose .alert_note code {
-  background-color: transparent;
-  color: var(--color-sky-950);
-  @apply dark:text-sky-200;
-}
-
-.prose .alert_note a {
-  border-bottom-color: var(--color-sky-300);
-}
-
-.prose .alert_note * {
-  @apply dark:text-sky-200;
 }
 
 .prose .alert_warning {
@@ -248,30 +218,6 @@
 
 .prose .alert_warning * {
   @apply text-amber-950 dark:text-amber-100;
-}
-
-.prose .alert_tip {
-  border-style: solid;
-  border-width: 1px;
-  border-color: var(--color-emerald-200);
-  @apply dark:border-emerald-500/30;
-  background-color: var(--color-emerald-50);
-  @apply dark:bg-emerald-500/10;
-  color: var(--color-emerald-950);
-}
-
-.prose .alert_tip * {
-  @apply dark:text-emerald-200;
-}
-
-.prose .alert_tip code {
-  background-color: transparent;
-  color: var(--color-emerald-950);
-  @apply dark:text-emerald-200;
-}
-
-.prose .alert_tip a {
-  border-bottom-color: var(--color-emerald-300);
 }
 
 .prose .code_snippet {
@@ -344,29 +290,26 @@
   cursor: pointer;
   font-weight: 500;
   margin-right: 24px;
-  @apply dark:text-neutral-400 border-none;
+  @apply text-woodsmoke-400;
 }
 
 .prose .tabs .tab_content {
   padding-top: calc(var(--spacing) * 4);
   border-top-width: 1px;
   border-top-style: solid;
-  border-top-color: var(--color-neutral-200);
-  @apply dark:border-neutral-700/60;
-  @apply dark:text-neutral-300;
+  border-top-color: var(--color-woodsmoke-800);
+  @apply text-woodsmoke-300;
 }
 
 .prose .tabs .tab_content > .code_snippet {
-  margin-top: -10px;
+  margin-top: 0px;
 }
 
 .prose .tabs [role='tab'][aria-selected='true'] {
-  color: var(--color-indigo-600);
-  @apply dark:text-indigo-300;
+  color: var(--color-indigo-400);
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  border-bottom-color: var(--color-indigo-600);
-  @apply dark:border-indigo-300;
+  border-bottom-color: var(--color-indigo-400);
 }
 
 .prose .disclosure {
@@ -508,14 +451,10 @@
 .prose .steppers li::before {
   content: '';
   position: absolute;
-  border-left: 1px solid var(--color-neutral-200);
   left: 5px;
   top: 34px;
-  bottom: -8px;
-}
-
-.prose .steppers li {
-  @apply dark:before:border-neutral-700/60;
+  bottom: 0;
+  @apply border-l border-woodsmoke-800/70;
 }
 
 .prose .steppers li::after {
@@ -526,7 +465,7 @@
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background-color: var(--color-neutral-100);
+  background-color: var(--color-woodsmoke-800);
   display: flex;
   align-items: center;
   justify-content: center;
