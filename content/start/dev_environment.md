@@ -57,7 +57,7 @@ TypeScript is a first-class citizen in AdonisJS. Every application is created an
 
 ### Required TypeScript Configuration
 
-AdonisJS requires specific TypeScript compiler options to function correctly. The framework relies heavily on **experimental decorators** for dependency injection, model definitions, and routing. Additionally, if you use Inertia with JSX-based templates, JSX compilation must be enabled.
+AdonisJS requires specific TypeScript compiler options to function correctly. The framework relies heavily on **experimental decorators** for dependency injection, model definitions, and Ace commands.
 
 The following `tsconfig.json` configuration represents the bare minimum required for AdonisJS applications:
 
@@ -120,7 +120,7 @@ This differs from Node.js' native TypeScript support because AdonisJS requires:
 - **Experimental decorators** support (used for dependency injection and model decorators)
 - **JSX compilation** (if you replace Edge with a JSX-based template engine like Inertia)
 
-Since Node.js' built-in TypeScript loader does not support these features, `@poppinss/ts-exec` provides the necessary compatibility layer.
+Since Node.js' built-in TypeScript loader does not support these features, [`@poppinss/ts-exec`](https://github.com/poppinss/ts-exec) provides the necessary compatibility layer.
 
 ### Production Mode (Ahead-of-Time Compilation)
 
@@ -142,6 +142,11 @@ See also: [Deploying to production](./deploying-to-production.md), [TypeScript b
 ## ESLint and Prettier Configuration
 
 AdonisJS projects include pre-configured **ESLint** and **Prettier** setups that enforce TypeScript best practices and maintain consistent code formatting across your team.
+
+:::tip
+Most code editors support running ESLint and Prettier automatically on file save. Configuring this in your editor eliminates manual formatting steps and catches linting issues immediately.
+:::
+
 
 ### ESLint
 
@@ -174,43 +179,18 @@ Run Prettier manually:
 npm run format
 ```
 
-:::tip
-Most code editors support running ESLint and Prettier automatically on file save. Configuring this in your editor eliminates manual formatting steps and catches linting issues immediately.
-:::
-
 See also: [ESLint configuration reference](https://github.com/adonisjs/tooling-config/tree/main/packages/eslint-config), [Prettier configuration reference](https://github.com/adonisjs/tooling-config/tree/main/packages/prettier-config)
 
 ## Database Setup
 
-AdonisJS applications are pre-configured with **SQLite**, a lightweight file-based database that requires no additional installation. This allows you to start building your application immediately without external dependencies.
+AdonisJS applications are pre-configured with **SQLite**, a lightweight file-based database. SQLite requires no installation and stores data in a local `tmp/database.sqlite` file, allowing you to start building immediately without setting up external database servers.
 
-### SQLite (Default)
+However, most applications use PostgreSQL or MySQL in production. We recommend switching to your production database engine early in development to avoid schema differences and driver-specific behavior that can cause deployment issues.
 
-SQLite is configured by default and stores data in a local `database.sqlite` file. This setup is ideal for:
+### Local database tools
 
-- Quick prototyping and experimentation
-- Learning AdonisJS features without database overhead
-- Simple applications with modest data requirements
-
-### PostgreSQL and MySQL
-
-For production applications, using **PostgreSQL** or **MySQL** in local development ensures consistency with your production environment. This prevents schema differences and driver-specific behavior from causing issues during deployment.
-
-**Recommended databases:**
-
-| Database       | Best For                | Strengths                                          |
-| -------------- | ----------------------- | -------------------------------------------------- |
-| **PostgreSQL** | Modern web applications | JSON support, advanced queries, strong consistency |
-| **MySQL**      | Legacy compatibility    | Wide hosting support, mature ecosystem             |
-
-**Local database tools:**
+You can use the following tools to run PostgreSQL or MySQL locally:
 
 - [Dbngin](https://dbngin.com/) – GUI for managing PostgreSQL and MySQL on macOS and Windows
 - [Docker](https://www.docker.com/) – Run databases in containers for isolated environments
 - [Postgres.app](https://postgresapp.com/) – Native PostgreSQL for macOS
-
-:::note
-Switching from SQLite to PostgreSQL or MySQL requires updating your database configuration and installing the appropriate driver. Most applications will make this change early in development.
-:::
-
-See also: [Database configuration guide](https://docs.adonisjs.com/guides/database/introduction), [Lucid ORM documentation](https://docs.adonisjs.com/guides/database/introduction)

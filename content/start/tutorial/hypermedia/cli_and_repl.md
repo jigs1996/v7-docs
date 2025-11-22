@@ -14,7 +14,9 @@ node ace list
 
 You'll see something like this:
 
-![Screenshot of node ace list output showing all available commands]
+:::media
+![](./node_ace_list.png)
+:::
 
 Notice how the commands are grouped together? 
 - The `make:*` commands help you generate files.
@@ -69,8 +71,10 @@ There they are - both users in an array! You can also grab a specific user by th
 ```typescript
 const user = await models.user.find(1)
 
-user.id
-user.email
+// > (js) user.id
+// 1
+// > (js) user.email
+// 'virk@adonisjs.com'
 ```
 
 This gives you back the user with id 1. Now let's clean up by deleting this user:

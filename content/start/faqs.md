@@ -8,7 +8,7 @@ summary: Quick answers to the most common questions about AdonisJS, including fr
 
 Yes, AdonisJS is actively maintained with regular updates, bug fixes, and feature additions. The framework has been consistently developed since 2015 and receives continuous attention from its core team.
 
-You can verify maintenance activity by checking [OSS Insights](https://next.ossinsight.io/analyze/adonisjs#issue), which shows comprehensive metrics across the entire AdonisJS GitHub organization including recent commits, responsive issue discussions, and release patterns.
+You can verify maintenance activity by checking [OSS Insights](https://next.ossinsight.io/analyze/adonisjs), which shows comprehensive metrics across the entire AdonisJS GitHub organization including recent commits, responsive issue discussions, and release patterns.
 
 ## How does AdonisJS compare to Express, NestJS, and Fastify?
 
@@ -42,13 +42,11 @@ The framework uses advanced TypeScript features to infer types automatically, me
 
 TypeScript compiles away during the build process, so there's no runtime overhead. Your production code runs as optimized JavaScript with the same performance as hand-written JavaScript.
 
-See also: [TypeScript guide](./typescript.md)
-
 ## Who maintains AdonisJS?
 
-AdonisJS is primarily maintained by Harminder Virk , who created the framework in 2015 and continues to lead its development. The framework also has a small core team of contributors who help with specific areas like documentation, package maintenance, and community support.
+AdonisJS is primarily maintained by Harminder Virk , who created the framework in 2015 and continues to lead its development. The framework also has a [small core team](https://adonisjs.com/core-team) of contributors who help with specific areas like documentation, package maintenance, and community support.
 
-Harminder works on AdonisJS full-time as his primary professional focus, not as a side project. This ensures consistent attention, timely issue responses, and regular feature development. The framework receives financial support through the Insiders and Partners programs, enabling sustainable full-time maintenance.
+Harminder works on AdonisJS full-time as his primary professional focus, not as a side project. This ensures consistent attention, timely issue responses, and regular feature development. The framework receives financial support through the [Insiders and Partners programs](https://adonisjs.com/sponsor), enabling sustainable full-time maintenance.
 
 While some developers worry about frameworks maintained primarily by one person, this model has proven sustainable for nearly a decade. A single maintainer ensures coherent vision, consistent code quality, and fast decision-making. Many successful open-source projects (Linux, Ruby on Rails, Laravel, Vue.js) have followed similar models successfully.
 

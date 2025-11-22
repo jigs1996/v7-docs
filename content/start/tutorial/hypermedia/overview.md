@@ -8,7 +8,7 @@ In this tutorial, you will build DevShow. **DevShow is a small community showcas
 
 ## Overview
 
-We are taking a hands-on approach in this tutorial by building a real application from start to finish. Instead of learning about features in isolation, you will see how everything in AdonisJS works together—routing, controllers, models, validation, authentication, and templating all coming together to create a functioning web application.
+We are taking a hands-on approach in this tutorial by building a real application from start to finish. Instead of learning about features in isolation, you will see how everything in AdonisJS works together — **routing, controllers, models, validation, authentication, and templating all coming together to create a functioning web application**.
 
 By the end, you will have built a deployable DevShow web-app and gained a solid understanding of how AdonisJS features work together in practice.
 
@@ -80,6 +80,6 @@ Let's walk through what is happening here.
 
 - The `store` method is where things get interesting. When a user submits the signup form, this method validates the data using a validator, creates a new user in the database using the User model, mark them as logged-in using the `auth` object, and redirects to the home page.
 
-Notice how the controller brings together different parts of the framework—models for database interaction, validators for data validation, and views for rendering HTML. This is the pattern we will follow throughout the tutorial as we build the Hacker News clone.
+Notice how the controller brings together different parts of the framework—models for database interaction, validators for data validation, and views for rendering HTML. This is the pattern we will follow throughout the tutorial as we build our app.
 
-Before we move forward, go ahead and start your development server. Visit the signup and login pages in your browser and try creating an account and logging in. Get comfortable with how the starter kit works—it will help you understand what we are building upon.
+Before we move forward, go ahead and start your development server using `node ace serve --hmr` command. Visit the signup and login pages in your browser and try creating an account and logging in. Get comfortable with how the starter kit works—it will help you understand what we are building upon.

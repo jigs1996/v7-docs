@@ -4,6 +4,7 @@ import app from '@adonisjs/core/services/app'
 import { Collection } from '@adonisjs/content'
 import { type Infer } from '@vinejs/vine/types'
 import { loaders } from '@adonisjs/content/loaders'
+import vite from '@adonisjs/vite/services/main'
 
 const singleDoc = vine.object({
   title: vine.string(),
@@ -105,4 +106,9 @@ export function resolveLink(fromFile: string, toFile: string) {
   }
 
   return null
+}
+
+export function resolveAsset(fromFile: string, toFile: string) {
+  const assetAbsolutePath = app.relativePath(resolve(dirname(fromFile), toFile))
+  return vite.assetPath(assetAbsolutePath)
 }

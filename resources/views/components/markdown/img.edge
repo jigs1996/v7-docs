@@ -1,0 +1,6 @@
+<img
+  {{ $props.only([]).merge({
+  ...node.properties,
+  src: resolveAsset($renderingContext.vFile.path, node.properties.src)
+}).toAttrs() }}
+/>
