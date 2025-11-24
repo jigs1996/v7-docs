@@ -118,7 +118,7 @@
 }
 
 .prose ul li {
-  @apply before:bg-neutral-300;
+  @apply before:bg-woodsmoke-200;
 }
 
 .prose ul li p {
@@ -147,10 +147,6 @@
   color: var(--color-woodsmoke-50);
 }
 
-.prose ol > li {
-  @apply dark:after:text-neutral-100;
-}
-
 .prose table {
   width: 100%;
   border-collapse: collapse;
@@ -175,11 +171,10 @@
 }
 
 .prose table td {
-  @apply dark:text-neutral-300;
+  @apply text-woodsmoke-300;
 }
 
 .prose .alert_note,
-.prose .alert_warning,
 .prose .alert_tip {
   gap: 12px;
   border-radius: var(--radius-lg);
@@ -189,35 +184,13 @@
 }
 
 .prose .alert_note p,
-.prose .alert_warning p,
 .prose .alert_tip p {
   line-height: 24px;
 }
 
 .prose .alert_note div > *:last-child,
-.prose .alert_warning div > *:last-child,
 .prose .alert_tip div > *:last-child {
   margin-bottom: 0;
-}
-
-.prose .alert_warning {
-  border-style: solid;
-  border-width: 1px;
-  @apply border-amber-200 dark:border-amber-500/20;
-  @apply bg-amber-50 dark:bg-amber-600/5;
-}
-
-.prose .alert_warning code {
-  background-color: transparent;
-}
-
-.prose .alert_warning a {
-  border-bottom-color: var(--color-amber-300);
-  @apply dark:border-amber-500/30;
-}
-
-.prose .alert_warning * {
-  @apply text-amber-950 dark:text-amber-100;
 }
 
 .prose .code_snippet {
@@ -268,15 +241,15 @@
 }
 
 .prose .code_snippet code .remove {
-  @apply border-l-4 bg-red-500/10 border-red-400/50 dark:border-red-600/50 dark:bg-red-800/10;
+  @apply border-l-4 border-red-600/50 bg-red-800/10;
 }
 
 .prose .code_snippet code .add {
-  @apply border-l-4 bg-teal-500/10 border-teal-400/50 dark:border-teal-600/50 dark:bg-teal-800/10;
+  @apply border-l-4 border-teal-600/50 bg-teal-800/10;
 }
 
 .prose .code_snippet code .highlighted {
-  @apply border-l-4 border-violet-400 bg-neutral-400/15 dark:bg-neutral-900/45;
+  @apply border-l-4 border-violet-400 bg-woodsmoke-800/45;
 }
 
 .prose .tabs {
@@ -316,8 +289,7 @@
   overflow: hidden;
   margin-top: 32px;
   margin-bottom: 32px;
-  @apply border border-neutral-100 rounded-lg;
-  @apply dark:border-neutral-700/50;
+  @apply border border-woodsmoke-800/70 rounded-lg;
 }
 
 .prose .disclosure_summary {
@@ -325,14 +297,12 @@
   anchor-name: --summary;
   user-select: none;
   cursor: pointer;
-  @apply py-4 px-6 font-medium text-neutral-900;
-  @apply dark:text-neutral-200;
-  @apply dark:bg-neutral-800;
+  @apply py-4 px-6 font-medium text-woodsmoke-50;
+  @apply bg-woodsmoke-900;
 }
 
 .prose .disclosure_summary:hover {
-  background-color: var(--color-neutral-100);
-  @apply dark:bg-neutral-800/70;
+  @apply bg-woodsmoke-800/50;
 }
 
 .prose .disclosure_summary::marker {
@@ -344,7 +314,6 @@
   content: '';
   border-block-start-width: 1.5px;
   border-block-start-style: solid;
-  border-block-start-color: var(--color-neutral-900);
   border-radius: 4px;
   height: 0;
   width: 8px;
@@ -369,8 +338,8 @@
 }
 
 .prose .disclosure_summary {
-  @apply dark:before:border-neutral-50;
-  @apply dark:after:border-neutral-50;
+  @apply before:border-woodsmoke-50;
+  @apply after:border-woodsmoke-50;
 }
 
 .prose .disclosure[open] .disclosure_summary::after {
@@ -382,8 +351,7 @@
 }
 
 .prose .disclosure[open] .disclosure_summary {
-  background-color: var(--color-neutral-100);
-  @apply dark:bg-neutral-800;
+  @apply bg-woodsmoke-800/50;
 }
 
 .docs_sidebar_menu li > a.up-current {
@@ -392,6 +360,10 @@
 
 .docs_sidebar_menu li a.up-current {
   @apply text-white before:content-[''] before:absolute before:-left-8 before:top-0 before:bottom-0 before:w-0.5 before:bg-indigo-400;
+}
+
+.doc-right-nav > ul {
+  @apply mb-7 pr-3;
 }
 
 .doc-right-nav > ul > li {
@@ -473,11 +445,6 @@
   font-weight: 500;
 }
 
-.prose .steppers li {
-  @apply dark:after:bg-neutral-700/60;
-  @apply dark:after:text-neutral-100;
-}
-
 .prose .code_snippet span.line span {
   font-style: normal !important;
 }
@@ -487,7 +454,7 @@
 }
 
 .prose .card .card-banner {
-  @apply bg-[url('/resources/assets/extension-bg.svg')] bg-white w-full sm:w-[257px] h-[173px] bg-no-repeat bg-cover sm:bg-contain;
+  @apply w-full sm:w-[257px] h-[173px];
 }
 
 .prose .card p {
@@ -495,7 +462,7 @@
 }
 
 .prose .card a {
-  @apply text-indigo-500 dark:text-indigo-300 border-none;
+  @apply text-indigo-500;
 }
 
 .changelog .prose {
