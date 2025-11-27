@@ -5,7 +5,16 @@ description: "Define URL patterns, handle dynamic routes, create resource routes
 
 # Routing
 
-This guide covers routing in AdonisJS applications. You will learn how to define routes for different HTTP methods, handle dynamic route parameters with validation, organize routes into groups with shared configuration, generate RESTful resource routes, apply middleware to routes, register domain-specific routes, build type-safe URLs using the URL builder, and extend the router with custom functionality.
+This guide covers routing in AdonisJS applications. You will learn how to:
+
+- Define routes for different HTTP methods
+- Handle dynamic route parameters with validation
+- Organize routes into groups with shared configuration
+- Generate RESTful resource routes
+- Apply middleware to routes
+- Register domain-specific routes
+- Build type-safe URLs using the URL builder
+- Extend the router with custom functionality
 
 ## Overview
 
@@ -23,9 +32,11 @@ Routes can also include [middleware](./middleware.md) for authentication, rate-l
 
 In AdonisJS, routes are defined inside the `start/routes.ts` file using the router service.
 
+A route handler is the function that runs when a route matches. It receives the HTTP context and can return a string, an object, or call services to produce a response.
+
 The following example shows static routes and a dynamic route using `:id`, which matches any value passed in that segment.
-```ts
-// title: start/routes.ts
+
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/', () => 'Hello world from the home page.')
@@ -35,22 +46,26 @@ router.get('/about', () => 'This is the about page.')
 router.get('/posts/:id', ({ params }) => {
   return `This is post with id ${params.id}`
 })
+
+router.post('/users', async ({ request }) => {
+  const data = request.all()
+  await createUser(data)
+  return 'User created successfully'
+})
 ```
 
 ### Using a controller as a route handler
 
-Instead of inline callbacks, you can delegate request handling to a [controller](./controllers.md) method. Controllers help organize logic into dedicated classes and make handlers reusable across multiple routes.
-```ts
-// title: start/routes.ts
+Instead of inline callbacks, you can delegate request handling to a controller method. Controllers help organize logic into dedicated classes and make handlers reusable across multiple routes.
+
+See also: [Controllers guide](./controllers.md) and [HTTP Context documentation](../concepts/http_context.md)
+
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 const PostsController = () => import('#controllers/posts_controller')
 
 router.get('/posts/:id', [PostsController, 'show'])
 ```
-
-When this route matches, AdonisJS instantiates the `PostsController` using the [IoC container](../concepts/dependency_injection.md) and calls its `show` method with the HTTP context.
-
-See also: [Controllers guide](./controllers.md) for creating and organizing controller classes.
 
 ## Viewing registered routes
 
@@ -59,22 +74,15 @@ You can view all routes registered by your application using the Ace CLI command
 node ace list:routes
 ```
 
-**Example output**:
-```
-┌────────┬───────────────────────────┬──────────────┬─────────────────────────────────────┐
-│ Method │ Route                     │ Name         │ Handler                             │
-├────────┼───────────────────────────┼──────────────┼─────────────────────────────────────┤
-│ GET    │ /                         │              │ Closure                             │
-│ GET    │ /about                    │              │ Closure                             │
-│ GET    │ /posts/:id                │ posts.show   │ PostsController.show                │
-│ GET    │ /posts                    │ posts.index  │ PostsController.index               │
-│ POST   │ /posts                    │ posts.store  │ PostsController.store               │
-└────────┴───────────────────────────┴──────────────┴─────────────────────────────────────┘
-```
+:::media
+![](./routes_list_cli.png)
+:::
 
 If you're using the [official VSCode extension](https://marketplace.visualstudio.com/items?itemName=jripouteau.adonis-vscode-extension), routes are also visible directly from the VSCode activity bar, making it easy to navigate your application's endpoints.
 
+:::media
 ![](./vscode_routes_list.png)
+:::
 
 ## Route params
 
@@ -83,8 +91,8 @@ Route params allow parts of the URL to be dynamic, capturing values from specifi
 ### Basic route params
 
 A basic route param is defined with a colon `:` followed by a name. The captured value can be accessed in your handler through the `params` object.
-```ts
-// title: start/routes.ts
+
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/posts/:id', ({ params }) => {
@@ -97,8 +105,8 @@ When someone visits `/posts/42`, the value `42` is captured and `params.id` equa
 ### Multiple route params
 
 You can include more than one param in a single route. Each param must have a unique name and is separated by `/`.
-```ts
-// title: start/routes.ts
+
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/posts/:id/comments/:commentId', ({ params }) => {
@@ -112,8 +120,8 @@ This matches URLs like `/posts/42/comments/7`, capturing both values.
 ### Optional route params
 
 Sometimes, a parameter is not always required. You can mark it optional by appending `?` to its name. Optional params must be the last segment in the route pattern.
-```ts
-// title: start/routes.ts
+
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/posts/:id?', ({ params }) => {
@@ -129,8 +137,8 @@ This route matches both `/posts` and `/posts/42`.
 ### Wildcard route params
 
 A wildcard param captures all remaining segments of the URL as an array. It is defined using `*` and must appear last in the pattern.
-```ts
-// title: start/routes.ts
+
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/docs/:category/*', ({ params }) => {
@@ -155,9 +163,8 @@ When a param fails validation, the router skips that route and continues searchi
 ### Why validate params
 
 Without validation, you need to manually check and convert params in every handler:
-```ts
-// title: start/routes.ts
-// ❌ Without param validation - manual checking in every handler
+
+```ts title="❌ Without param validation"
 router.get('/posts/:id', ({ params, response }) => {
   if (!/^[0-9]+$/.test(params.id)) {
     return response.badRequest('Invalid ID format')
@@ -168,9 +175,8 @@ router.get('/posts/:id', ({ params, response }) => {
 ```
 
 With param validation, the router handles this automatically before your handler runs:
-```ts
-// title: start/routes.ts
-// ✅ With param validation - automatic validation and casting
+
+```ts title="✅ With param validation"
 router
   .get('/posts/:id', ({ params }) => {
     console.log(typeof params.id) // 'number'
@@ -192,8 +198,8 @@ Use param validation to:
 ### Custom matchers
 
 The `.where()` method accepts an object with two properties: `match` for validation and `cast` for type conversion.
-```ts
-// title: start/routes.ts
+
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router
@@ -218,8 +224,8 @@ For common patterns like numbers, UUIDs, and slugs, AdonisJS provides shorthand 
 | `number()` | Digits only (`/^\d+$/`) | `number` | Database IDs, pagination offsets |
 | `uuid()` | Valid UUID v4 format | `string` | Public resource identifiers, secure IDs |
 | `slug()` | URL-safe strings (`/^[a-z0-9-_]+$/`) | `string` | SEO-friendly URLs, article slugs |
-```ts
-// title: start/routes.ts
+
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 // Numeric IDs
@@ -247,8 +253,8 @@ router
 ### Global matchers
 
 You can apply matchers globally so every route inherits the same validation rules automatically. This is useful when most of your routes follow a convention, like using UUIDs for all IDs.
-```ts
-// title: start/routes.ts
+
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 // Set a global default: all :id params must be UUIDs
@@ -277,8 +283,8 @@ The router provides dedicated methods for each standard HTTP verb. Each method c
 | `PUT` | Replace entire resources | Update all fields of a user profile |
 | `PATCH` | Update partial resources | Update only the email field of a user |
 | `DELETE` | Remove resources | Delete a blog post, remove a user account |
-```ts
-// title: start/routes.ts
+
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/users', () => {})           // List all users
@@ -291,8 +297,7 @@ router.delete('/users/:id', () => {})    // Delete a user
 ### Matching multiple methods
 
 To match all HTTP methods or specify custom verbs:
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 // Matches GET, POST, PUT, PATCH, DELETE, and all other methods
@@ -305,38 +310,13 @@ router.route('/api/data', ['GET', 'POST', 'PUT'], () => {})
 
 The `.any()` method is useful for endpoints that need to respond to any HTTP method, such as webhook receivers or catch-all debugging routes.
 
-## Route handler
-
-The handler is the function that runs when a route matches. It receives the [HTTP context](../concepts/http_context.md) and can return a string, an object, or call services to produce a response.
-```ts
-// title: start/routes.ts
-import router from '@adonisjs/core/services/router'
-
-router.post('/users', async ({ request }) => {
-  const data = request.all()
-  await createUser(data)
-  return 'User created successfully'
-})
-```
-
-You can also delegate handling to a [controller](./controllers.md) method for better organization:
-```ts
-// title: start/routes.ts
-import router from '@adonisjs/core/services/router'
-const UsersController = () => import('#controllers/users_controller')
-
-router.post('/users', [UsersController, 'store'])
-```
-
-Using controllers keeps your routes file clean and makes it easier to test and reuse handler logic across multiple routes.
-
-See also: [Controllers guide](./controllers.md) and [HTTP Context documentation](../concepts/http_context.md).
-
 ## Route middleware
 
 **Middleware** are functions that execute before your route handler, allowing you to run code like authentication checks, logging, rate limiting, or request transformation. Think of middleware as a series of checkpoints that requests pass through before reaching your main handler.
-```ts
-// title: start/routes.ts
+
+See also: [Middleware guide](./middleware.md)
+
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 
@@ -348,9 +328,9 @@ router
   .use(middleware.auth())
 ```
 
-You can also attach inline middleware directly:
-```ts
-// title: start/routes.ts
+You can also attach inline middleware directly.
+
+```ts title="start/routes.ts"
 router
   .get('/posts', () => {
     console.log('Inside route handler')
@@ -362,13 +342,21 @@ router
   })
 ```
 
-See also: [Middleware guide](./middleware.md) for creating reusable middleware classes and understanding the middleware pipeline.
-
 ## Route identifiers
 
 Each route can have a unique **name** that you can use to generate URLs or redirects without hardcoding paths. This keeps your URLs maintainable—if you change a route's path, all references automatically update when using the name.
-```ts
-// title: start/routes.ts
+
+Named routes are essential for:
+- Generating URLs in templates without hardcoding paths
+- Creating redirects that survive URL changes
+- Building navigation menus programmatically
+- Organizing routes with meaningful identifiers
+
+You can provide unique names to routes using the `.as` method. When using controllers, routes are automatically named after the `controller+method` name.
+
+See also: [URL builder](./url_builder.md)
+
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/users', () => {}).as('users.index')
@@ -377,20 +365,16 @@ router.get('/users/:id', () => {}).as('users.show')
 router.delete('/users/:id', () => {}).as('users.destroy')
 ```
 
-Named routes are essential for:
-- Generating URLs in templates without hardcoding paths
-- Creating redirects that survive URL changes
-- Building navigation menus programmatically
-- Organizing routes with meaningful identifiers
-
-See also: [URL builder](#url-builder) section for generating URLs from route names.
-
 ## Grouping routes
 
 Route groups let you apply shared configuration to multiple routes at once, eliminating repetition and making your route file easier to maintain. Without groups, you'd need to repeat the same prefix, middleware, or naming convention on every individual route, creating duplication that becomes error-prone as your application grows.
 
-```ts
-// title: start/routes.ts
+Use route groups when you have multiple routes that share any of the following:
+- **URL prefix** – API versions (`/v1`, `/v2`), admin sections (`/admin`), or language codes (`/en`, `/es`)
+- **Middleware** – Authentication, authorization, rate limiting, or CORS settings
+- **Naming convention** – Namespace prefixes for organized route names
+- **Domain** – Multi-tenant applications with subdomain routing
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 
@@ -406,17 +390,10 @@ router
   .as('api')
 ```
 
-Use route groups when you have multiple routes that share any of the following:
-- **URL prefix** – API versions (`/v1`, `/v2`), admin sections (`/admin`), or language codes (`/en`, `/es`)
-- **Middleware** – Authentication, authorization, rate limiting, or CORS settings
-- **Naming convention** – Namespace prefixes for organized route names
-- **Domain** – Multi-tenant applications with subdomain routing
-
 ### Prefixing routes
 
 Prefixes are prepended to all routes inside a group. This is especially useful for API versioning, admin areas, or organizing related resources under a common path segment.
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router
@@ -431,8 +408,12 @@ router
 ### Naming routes inside a group
 
 When routes inside a group have names, you can prefix their names as well. This creates organized route namespaces that make it clear which routes belong together.
-```ts
-// title: start/routes.ts
+
+Named route groups make URL generation clearer and help you avoid naming collisions between different sections of your application. For example, you might have both `web.users.index` and `api.users.index` routes that serve different purposes.
+
+See also: [URL builder](./url_builder.md)
+
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router
@@ -445,15 +426,13 @@ router
   .as('api')
 ```
 
-Named route groups make URL generation clearer and help you avoid naming collisions between different sections of your application. For example, you might have both `web.users.index` and `api.users.index` routes that serve different purposes.
-
-See also: [URL builder](#url-builder) for generating URLs from named routes.
-
 ### Applying middleware to a group
 
-You can attach [middleware](./middleware.md) at the group level. Group middleware executes before any route-level middleware, creating a pipeline where shared logic runs first, followed by route-specific logic.
-```ts
-// title: start/routes.ts
+You can attach middleware at the group level. Group middleware executes before any route-level middleware, creating a pipeline where shared logic runs first, followed by route-specific logic.
+
+See also: [Middleware guide](./middleware.md)
+
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 import { middleware } from '#start/kernel'
 
@@ -474,21 +453,20 @@ router
   })
 ```
 
-See also: [Middleware guide](./middleware.md) for creating reusable middleware classes.
-
 ## Resource routes
 
 Resource routes automatically generate all standard RESTful routes for a controller, eliminating the need to manually define each CRUD route. This is particularly valuable when building traditional web applications with full CRUD interfaces or RESTful APIs.
 
-```ts
-// title: start/routes.ts
+This single line generates all the following routes with correct HTTP methods, URL patterns, and route names following RESTful conventions.
+
+See also: [Resource driven controllers](./controllers.md#resource-driven-controllers)
+
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
-import { controllers } from '#generates/controllers'
+import { controllers } from '#generated/controllers'
 
 router.resource('posts', controllers.Posts)
 ```
-
-This single line generates all the following routes with correct HTTP methods, URL patterns, and route names following RESTful conventions.
 
 | Route Name      | HTTP Method | URL               | Controller Action | Purpose                        |
 | --------------- | ----------- | ----------------- | ----------------- | ------------------------------ |
@@ -500,14 +478,12 @@ This single line generates all the following routes with correct HTTP methods, U
 | `posts.update`  | PUT/PATCH   | `/posts/:id`      | `update`          | Update a specific post         |
 | `posts.destroy` | DELETE      | `/posts/:id`      | `destroy`         | Delete a specific post         |
 
-
 ## Registering routes for specific domains
 
 Sometimes, you may want certain routes to respond only to a specific domain or subdomain. This is useful for multi-tenant applications, separate admin dashboards, or serving different content based on the hostname.
 
 Use `.domain()` to group routes by hostname:
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router
@@ -523,8 +499,12 @@ These routes only respond when the request comes to `blog.adonisjs.com`. Request
 ### Dynamic subdomains
 
 You can define dynamic segments in the domain name, just like route params. This is essential for multi-tenant applications where each customer gets their own subdomain.
-```ts
-// title: start/routes.ts
+
+Use domain-specific routing for:
+- Multi-tenant SaaS applications with customer subdomains
+- Separate admin dashboards on `admin.yourapp.com`
+- Regional sites like `uk.yourapp.com` and `us.yourapp.com`
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router
@@ -541,19 +521,12 @@ router
 
 When someone visits `acme.adonisjs.com/users`, `subdomains.tenant` equals `"acme"`. When they visit `bigcorp.adonisjs.com/users`, it equals `"bigcorp"`.
 
-Use domain-specific routing for:
-- Multi-tenant SaaS applications with customer subdomains
-- Separate admin dashboards on `admin.yourapp.com`
-- Regional sites like `uk.yourapp.com` and `us.yourapp.com`
-
 ## Render Edge view from a route
 
 If a route's only purpose is to render a view without any logic, use `router.on().render()` for brevity. This eliminates the need for a controller when you're simply displaying a static or simple dynamic page.
 
 The first argument is the view template name, and the optional second argument is data to pass to the view.
-
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.on('/').render('home')
@@ -566,8 +539,7 @@ router.on('/contact').render('contact', { title: 'Contact us', email: 'hello@exa
 For Inertia.js apps, use the similar `router.on().renderInertia()` method to render Inertia pages directly from routes without a controller.
 
 This renders the corresponding Vue, React, or Svelte component through Inertia with the provided props.
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.on('/').renderInertia('home')
@@ -578,8 +550,7 @@ router.on('/contact').renderInertia('contact', { title: 'Contact us' })
 ## Redirect from a route
 
 You can redirect one path to another using `redirectToRoute()` or `redirectToPath()`. This is useful for handling deprecated URLs, shortening URLs, or creating aliases.
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 // Redirect to a named route
@@ -592,8 +563,7 @@ router.on('/posts').redirectToPath('https://medium.com/my-blog')
 ### Forwarding and overriding params
 
 If your route has dynamic params, you can forward them to the destination route or override them with specific values.
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 // Forward the :id param to the destination route
@@ -608,8 +578,7 @@ When someone visits `/posts/42`, they're redirected to the `articles.show` route
 ### Adding query strings
 
 Redirects can also include query strings via the `qs` option:
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.on('/posts').redirectToRoute('articles.index', {}, {
@@ -622,8 +591,7 @@ This redirects to `/articles?limit=20&page=1`.
 ## Accessing the current route
 
 You can access the currently matched route from the [HTTP context](../concepts/http_context.md) via `ctx.route`. This is useful for debugging, auditing, logging, or implementing route-aware logic like breadcrumbs or active navigation.
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/payments', ({ route }) => {
@@ -636,8 +604,7 @@ router.get('/payments', ({ route }) => {
 ### Checking if a route matches
 
 To check if the current request matches a specific named route, use `request.matchesRoute()`:
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router
@@ -652,23 +619,20 @@ router
 
 This is particularly useful in middleware or shared logic where you need different behavior based on the current route.
 
-
 ## How AdonisJS matches routes
 
 Routes are matched in the order you register them. When a request comes in, the router checks each route sequentially until it finds the first match, then stops searching and executes that route's handler.
 
 This sequential matching means route order matters critically when patterns overlap. If you define a dynamic route before a static route with the same prefix, the dynamic route will capture requests intended for the static route.
 
-:::warning
+:::note
 **Route order matters**: Always define static routes before dynamic routes. When someone visits `/posts/archived`, a route pattern `/posts/:id` defined first will match with `id = "archived"` instead of letting the `/posts/archived` route handle it.
 :::
 
 ### Ordering routes correctly
 
 Here's what happens with incorrect ordering:
-```ts
-// title: start/routes.ts
-// ❌ WRONG ORDER - Dynamic route defined first
+```ts title="❌ Wrong order - Dynamic route defined first"
 router.get('/posts/:id', ({ params }) => {
   return `Showing post ${params.id}`
   // When visiting /posts/archived, this matches with params.id = "archived"
@@ -681,9 +645,8 @@ router.get('/posts/archived', () => {
 ```
 
 The correct approach is to define specific routes before dynamic ones:
-```ts
-// title: start/routes.ts
-// ✅ CORRECT ORDER - Static routes first
+
+```ts title="✅ Correct Order - Static routes first"
 router.get('/posts/archived', () => {
   return 'Showing archived posts'
 })
@@ -699,8 +662,7 @@ router.get('/posts/:id', ({ params }) => {
 
 **Quick rule**: Order your routes from most specific to least specific. Static segments always beat dynamic ones, so static routes must come first.
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 // Group all static action routes together
 router.get('/posts/archived', () => {})
 router.get('/posts/trending', () => {})
@@ -715,20 +677,14 @@ router.get('/posts/:id/comments', () => {})
 
 When no route matches an incoming request, AdonisJS raises an `E_ROUTE_NOT_FOUND` exception. You can catch this exception in your global exception handler to render a custom 404 page or return a structured JSON error.
 
-```ts
-// title: app/exceptions/handler.ts
+See also: [Exception handling guide](./exception_handling.md)
+
+```ts title="app/exceptions/handler.ts"
 import { errors } from '@adonisjs/core'
 import { HttpContext, ExceptionHandler } from '@adonisjs/core/http'
 
 export default class HttpExceptionHandler extends ExceptionHandler {
   async handle(error: unknown, ctx: HttpContext) {
-    /**
-     * Handle route not found errors by rendering a custom 404 page
-     */
-    if (error instanceof errors.E_ROUTE_NOT_FOUND) {
-      return ctx.view.render('errors/404')
-    }
-
     /**
      * For API requests, return JSON instead
      */
@@ -739,22 +695,32 @@ export default class HttpExceptionHandler extends ExceptionHandler {
       })
     }
 
+    /**
+     * Handle route not found errors by rendering a custom 404 page
+     */
+    if (error instanceof errors.E_ROUTE_NOT_FOUND) {
+      return ctx.view.render('errors/404')
+    }
+
     return super.handle(error, ctx)
   }
 }
 ```
 
-See also: [Exception handling guide](./exception_handling.md) for customizing error responses.
-
 ## Extending the Router
 
 AdonisJS classes like `Router`, `Route`, and `RouteGroup` can be extended using macros or getters. This allows you to add custom methods that behave like native APIs, useful when building reusable packages or adding organization-specific conventions to your routing layer.
 
+:::note
+
+Read the [Extending AdonisJS](../concepts/extending_adonisjs.md) guide if you are new to the concept of macros and getters.
+
+:::
+
 ### Router
 
 Add methods or properties directly to the `Router` class:
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import { Router } from '@adonisjs/core/http'
 
 Router.macro('health', function (this: Router) {
@@ -771,8 +737,7 @@ Router.getter('version', function (this: Router) {
 ### Route
 
 Extend individual route instances:
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import { Route } from '@adonisjs/core/http'
 
 Route.macro('tracking', function (this: Route, eventName: string) {
@@ -790,8 +755,7 @@ Route.getter('isPublic', function (this: Route) {
 ### RouteGroup
 
 Extend route groups:
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import { RouteGroup } from '@adonisjs/core/http'
 
 RouteGroup.macro('apiVersion', function (this: RouteGroup, version: string) {
@@ -806,8 +770,7 @@ RouteGroup.getter('routeCount', function (this: RouteGroup) {
 ### RouteResource
 
 Extend resource routes:
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import { RouteResource } from '@adonisjs/core/http'
 
 RouteResource.macro('softDeletes', function (this: RouteResource) {
@@ -822,8 +785,7 @@ RouteResource.getter('hasDestroy', function (this: RouteResource) {
 ### BriskRoute
 
 Extend render shortcuts (`router.on().render()`):
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import { BriskRoute } from '@adonisjs/core/http'
 
 BriskRoute.macro('withLayout', function (this: BriskRoute, layout: string) {
@@ -843,11 +805,3 @@ Now that you understand routing, you can:
 - Learn about [HTTP context](../concepts/http_context.md) to access request data
 - Explore [validation](./validation.md) to secure route inputs
 - Study [exception handling](./exception_handling.md) for error responses
-
-## Related topics
-
-* [Controllers](./controllers.md)
-* [Middleware](./middleware.md)
-* [HTTP Context](../concepts/http_context.md)
-* [Response](./response.md)
-* [Exception handling](./exception_handling.md)

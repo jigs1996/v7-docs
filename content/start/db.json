@@ -5,31 +5,37 @@
       {
         "title": "Introduction",
         "permalink": "introduction",
+        "oldUrls": ["guides/preface/introduction"],
         "contentPath": "./introduction.md"
       },
       {
         "title": "Pick your path",
         "permalink": "stacks-and-starter-kits",
+        "oldUrls": ["guides/views-and-templates/introduction"],
         "contentPath": "./pick_your_path.md"
       },
       {
         "title": "Installation",
         "permalink": "installation",
+        "oldUrls": ["guides/getting-started/installation"],
         "contentPath": "./installation.md"
       },
       {
         "title": "Folder Structure",
         "permalink": "folder-structure",
+        "oldUrls": ["guides/getting-started/folder-structure"],
         "contentPath": "./folder_structure.md"
       },
       {
         "title": "Development Environment Setup",
         "permalink": "dev-environment",
+        "oldUrls": ["guides/concepts/tooling-config"],
         "contentPath": "./dev_environment.md"
       },
       {
         "title": "FAQs",
         "permalink": "faqs",
+        "oldUrls": ["guides/preface/faqs"],
         "contentPath": "./faqs.md"
       }
     ]
@@ -71,6 +77,29 @@
         "title": "Authorization",
         "permalink": "tutorial/hypermedia/authorization",
         "contentPath": "./tutorial/hypermedia/authorization.md"
+      }
+    ]
+  },
+  {
+    "category": "Resources",
+    "children": [
+      {
+        "title": "Contributing",
+        "permalink": "contributing",
+        "oldUrls": ["guides/preface/contribution-guide"],
+        "contentPath": "./resources/contributing"
+      },
+      {
+        "title": "Releases",
+        "permalink": "releases",
+        "oldUrls": ["guides/preface/releases"],
+        "contentPath": "./resources/releases"
+      },
+      {
+        "title": "Governance",
+        "permalink": "governance",
+        "oldUrls": ["guides/preface/governance"],
+        "contentPath": "./resources/governance"
       }
     ]
   }

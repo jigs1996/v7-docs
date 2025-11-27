@@ -95,3 +95,18 @@ h6 {
     rgba(0, 0, 0, 0.2) 100%
   );
 }
+
+.menu-group > ul {
+  max-height: 0;
+  overflow-y: clip;
+  transition: max-height 0.45s;
+}
+
+.menu-group.expanded > ul {
+  max-height: none;
+  margin-bottom: calc(var(--spacing) * 8);
+}
+
+.menu-group.expanded > button svg {
+  rotate: 90deg;
+}

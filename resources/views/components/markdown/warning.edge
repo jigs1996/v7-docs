@@ -1,0 +1,9 @@
+<div class="alert_warning">
+  <div class="flex items-center gap-1.5 text-yellow-300">
+    @svg('mynaui:info-circle', { width: '18px', height: '18px' })
+    <span class="uppercase text-12">{{ node.properties.title ?? 'Warning' }}</span>
+  </div>
+  <div class="flex-1 mt-3">
+    @markdownSlot()
+  </div>
+</div>

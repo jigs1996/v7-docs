@@ -1,0 +1,44 @@
+[
+  {
+    "category": "Root",
+    "children": [
+      {
+        "title": "Application",
+        "permalink": "reference/application",
+        "oldUrls": ["guides/concepts/application"],
+        "contentPath": "./application.md"
+      },
+      {
+        "title": "AdonisRC file",
+        "permalink": "reference/adonisrc-rcfile",
+        "oldUrls": ["guides/concepts/adonisrc-file"],
+        "contentPath": "./adonisrc_file.md"
+      },
+      {
+        "title": "Commands",
+        "permalink": "reference/commands",
+        "contentPath": "./commands.md"
+      },
+      {
+        "title": "Edge helpers",
+        "permalink": "reference/edge",
+        "contentPath": "./edge.md"
+      },
+      {
+        "title": "Events",
+        "permalink": "reference/events",
+        "contentPath": "./events.md"
+      },
+      {
+        "title": "Exceptions",
+        "permalink": "reference/exceptions",
+        "contentPath": "./exceptions.md"
+      },
+      {
+        "title": "Helpers",
+        "permalink": "reference/helpers",
+        "contentPath": "./helpers.md"
+      }
+    ]
+  }
+]

@@ -5,14 +5,13 @@ import { findDoc, resolveAsset, resolveLink } from '#collections/docs'
 export default class DocsController {
   async handle({ view, params, request }: HttpContext) {
     const permalink = params['*'].join('/')
-    const doc = findDoc(permalink)
+    const doc = await findDoc(permalink)
     if (!doc) {
       throw new errors.E_ROUTE_NOT_FOUND(['GET', request.url()])
     }
 
     return view.share({ resolveLink, resolveAsset }).render('pages/doc', {
-      menu: doc.zone,
-      menuItem: doc.doc,
+      ...doc,
       permalink,
     })
   }

@@ -1,70 +1,81 @@
 @let(navItems = [
   {
     text: 'Packages',
-    href: '/'
+    href: 'https://adonisjs.com/packages'
   },
   {
     text: 'Sponsor',
-    href: '/'
+    href: 'https://adonisjs.com/sponsor'
   },
   {
     text: 'About',
-    href: '/'
+    href: 'https://adonisjs.com/about'
   }
 ])
 
-<header class="sticky inset-x-0 top-0 border-b border-woodsmoke-800/70 z-2 backdrop-blur-3xl bg-woodsmoke-950/60">
+<header class="sticky inset-x-0 top-0 border-b border-woodsmoke-800/70 z-2 backdrop-blur-3xl bg-woodsmoke-950/60" up-fixed="top">
   <div class="container-full mx-auto px-5 sm:px-10 py-4 flex items-center justify-between h-18">
     <div class="text-white">
       <a href="/" class="block">
         @!logos.adonisjs()
       </a>
     </div>
-      
-      <div class="flex items-center gap-7">
-        <div class="w-36 lg:w-44">
-          @!search({ text: 'Search', color: 'primary', radius: 'full', size: 'md' })
-        </div>
 
-        <nav class="flex items-center gap-7">
-          <ul class="hidden md:flex items-center gap-4">
-            @each(item in navItems)
-              <li>
-                <a
-                  href="{{ item.href }}"
-                  class="text-sm hover:text-white transition-colors"
-                >
-                  <span>{{ item.text }}</span>
-                </a>
-              </li>
-            @end
-          </ul>
-          <ul class="flex items-center gap-5">
+    <div class="flex items-center gap-14">
+      <div class="w-36 lg:w-44">
+        @!search({ text: 'Search', color: 'primary', radius: 'full', size: 'md' })
+      </div>
+
+      <nav class="flex items-center gap-5">
+        <ul class="hidden md:flex items-center gap-4">
+          @each(item in navItems)
             <li>
-              <div class="relative">
-                <span class="absolute -top-0.5 -left-0.5">
-                  @!buttonBorder()
-                </span>
-                <span class="absolute -bottom-0.5 -left-0.5 -rotate-90">
-                  @!buttonBorder()
-                </span>
-                <span class="absolute -top-0.5 -right-0.5 rotate-90">
-                  @!buttonBorder()
-                </span>
-                <span class="absolute -bottom-0.5 -right-0.5 rotate-180">
-                  @!buttonBorder()
-                </span>
-                @!button({ text: 'Plus', color: 'primary', size: 'sm', href: 'https://plus.adonisjs.com/', target: "_blank" })
-              </div>
-            </li>
-            <li>
-              <a href="https://github.com/adonisjs/core" target="_blank" class="block">
-                @svg('uiw:github', { width: '24px', height: '24px', class: 'text-woodsmoke-400 hover:text-white transition-colors' })
+              <a
+                href="{{ item.href }}"
+                class="text-sm hover:text-white transition-colors"
+              >
+                {{ item.text }}
               </a>
             </li>
-          </ul>
-        </nav>
-      </div>
+          @end
+        </ul>
+
+        <ul class="flex items-center gap-4">
+          <li>
+            <div class="relative">
+              <span class="absolute -top-0.5 -left-0.5">
+                @!buttonBorder()
+              </span>
+              <span class="absolute -bottom-0.5 -left-0.5 -rotate-90">
+                @!buttonBorder()
+              </span>
+              <span class="absolute -top-0.5 -right-0.5 rotate-90">
+                @!buttonBorder()
+              </span>
+              <span class="absolute -bottom-0.5 -right-0.5 rotate-180">
+                @!buttonBorder()
+              </span>
+              @!button({
+                text: 'Plus',
+                color: 'primary',
+                size: 'sm',
+                href: 'https://plus.adonisjs.com/',
+                target: "_blank"
+              })
+            </div>
+          </li>
+
+          <li>
+            <a href="https://github.com/adonisjs/core" target="_blank" class="block">
+              @svg('uiw:github', {
+                width: '24px',
+                height: '24px',
+                class: 'text-woodsmoke-400 hover:text-white transition-colors'
+              })
+            </a>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
 </header>

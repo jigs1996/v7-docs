@@ -45,7 +45,7 @@ export default defineConfig({
     () => import('@adonisjs/core/providers/edge_provider'),
     () => import('@adonisjs/vite/vite_provider'),
     () => import('@adonisjs/static/static_provider'),
-    () => import('@adonisjs/content/content_provider')
+    () => import('@adonisjs/content/content_provider'),
   ],
 
   /*
@@ -56,7 +56,11 @@ export default defineConfig({
   | List of modules to import before starting the application.
   |
   */
-  preloads: [() => import('#start/routes'), () => import('#start/kernel'), () => import('#start/view')],
+  preloads: [
+    () => import('#start/routes'),
+    () => import('#start/kernel'),
+    () => import('#start/view'),
+  ],
 
   /*
   |--------------------------------------------------------------------------

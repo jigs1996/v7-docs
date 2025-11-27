@@ -72,8 +72,6 @@ You usually won't need to modify them unless you want to customize how the app b
 
 All application and third-party configuration files live inside the `config` directory. You can also store config local to your application inside this directory.
 
-See also: [Config reference]()
-
 ```sh
 ├── config
 │   ├── app.ts
@@ -94,7 +92,7 @@ See also: [Config reference]()
 
 The `database` directory holds artifacts related to the database layer. By default, AdonisJS ships with Lucid ORM configured for SQLite; switching databases does not require reorganizing this folder.
 
-See also: [Lucid documentation]()
+See also: [Lucid documentation](https://lucid.adonisjs.com)
 
 ```sh
 database/
@@ -109,7 +107,7 @@ database/
 
 ## `providers/`
 
-The `providers` directory is used to store the [service providers]() used by your application. You can create new providers using the `node ace make:provider` command.
+The `providers` directory is used to store the [service providers](../guides/concepts/service_providers.md) used by your application. You can create new providers using the `node ace make:provider` command.
 
 ```sh
 ├── providers
@@ -132,8 +130,6 @@ Typical examples of files stored in this folder include:
 The `resources` directory stores Edge templates and uncompiled frontend assets such as CSS and JavaScript files.
 
 For applications using Inertia (alongside Vue or React), the frontend code is kept within the `inertia` directory, and the `resources` directory contains only the root Edge template. Think of this root template as the `index.html` file that contains the HTML shell for your frontend application.
-
-See also: [Stacks and starter kits documentation]()
 
 ::::tabs
 :::tab{title="Hypermedia app"}
@@ -196,7 +192,7 @@ The frontend can still rely on shared TypeScript types automatically generated b
 
 This approach allows frontend code to remain strongly typed without compromising the separation between the client and the server.
 
-We recommend reading the [types generation docs]() to understand how AdonisJS creates shared types.
+We recommend reading the [types generation docs](../guides/frontend/transformers.md#step-4-understanding-the-generated-types) to understand how AdonisJS creates shared types.
 
 ## `start/`
 
@@ -209,7 +205,7 @@ The `start` directory contains the files you want to import during the boot life
 │   └── routes.ts
 ```
 
-AdonisJS does not auto-import files from the `start` directory. It is merely used as a convention to group similar files. We recommend reading about [preload files]() and the [application boot lifecycle]() to have a better understanding of which files to keep under the start directory.
+AdonisJS does not auto-import files from the `start` directory. It is merely used as a convention to group similar files. We recommend reading about [preload files](../guides/concepts/application_lifecycle.md#running-code-before-the-application-starts) and the [application boot lifecycle](../guides/concepts/application_lifecycle.md) to have a better understanding of which files to keep under the start directory.
 
 ## `tests/`
 
@@ -240,7 +236,7 @@ The `ace.js` file is the entry point for executing Ace commands. This file confi
 
 `adonisrc.ts` is the project manifest. It tells AdonisJS how to discover and load parts of your application and includes configuration for:
 
-See also: [AdonisRC file reference]()
+See also: [AdonisRC file reference](../reference/adonisrc_file.md)
 
 - Directory aliases (for `app`, `start`, etc.)
 - Preload files
@@ -321,9 +317,3 @@ The following configuration options are required for AdonisJS internals to work 
 ## `vite.config.ts`
 
 When the project uses Vite (Edge or Inertia starter kits), `vite.config.ts` defines how frontend assets are compiled and served. Customize entry points, aliases, and plugin settings here if you need specialized bundling behavior.
-
-## Next Steps
-
-- Learn how to define routes in [Routing →](./routing.md)
-- Explore controllers and middleware in [Controllers →](./controllers.md)
-- Configure and use the database with [Lucid ORM →](./lucid.md)

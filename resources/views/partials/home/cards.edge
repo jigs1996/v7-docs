@@ -1,28 +1,28 @@
 @let(cards = [
   {
     href: '/introduction',
-    title: 'Build Your First App',
-    subTitle: 'Build OS Hunt from scratch following step by step instructions',
+    title: 'Tutorial',
+    description: 'Start by preparing your environment, then follow the full hands-on tutorial from scratch',
     icon: 'mynaui:rocket-solid'
   },
   {
-    href: '/guides/http/routing',
+    href: '/http/routing',
     title: 'Guides',
-    subTitle: 'In-depth framework guides to master the framework',
+    description: 'Learn core concepts, best practices, and how to use AdonisJS effectively in real projects',
     icon: 'mynaui:book-dot-solid'
   },
   {
     href: 'https://adocasts.com/',
     target: '_blank',
     title: 'Adocasts',
-    subTitle: 'For visual learners to take their AdonisJS skills to the stars',
+    description: 'Watch practical screencasts and learn AdonisJS through real, guided video lessons',
     icon: 'mynaui:video-solid'
   },
   {
     href: 'https://plus.adonisjs.com/',
     target: '_blank',
     title: 'AdonisJS Kit',
-    subTitle: 'Speed up development using full-stack premium components',
+    description: 'A premium collection of full-stack components to help you build polished features faster',
     icon: 'mynaui:box-solid',
     badgeIcon: 'mynaui:star-solid'
  }
@@ -39,7 +39,7 @@
         @end
       </div>
       <h3 class="mt-6 mb-3 leading-none text-18 text-woodsmoke-50">{{card.title}}</h3>
-      <p class="text-15 text-woodsmoke-400 leading-6">{{card.subTitle}}</p>
+      <p class="text-15 text-woodsmoke-400 leading-6">{{card.description}}</p>
     </a>
   @end
 </div>

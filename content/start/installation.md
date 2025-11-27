@@ -52,7 +52,7 @@ All starter kits come pre-configured with sensible defaults, streamlined develop
 Every newly created AdonisJS application includes:
 
 - Opinionated folder structure.
-- [**Lucid ORM**]() configured with **SQLite** as the default database.
+- [Lucid ORM](https://lucid.adonisjs.com) configured with **SQLite** as the default database.
 - Built-in **authentication** flows for login and signup.
 - **ESLint** and **Prettier** setup with pre-defined configuration.
 
@@ -87,4 +87,4 @@ node ace
 
 ## Next Steps
 
-From here, you can continue to the next guide and learn about the [Folder Structure](./folder-structure.md) or can jump directly to the [Tutorial](./tutorial/hypermedia/overview.md) and create a complete application.
+From here, you can continue to the next guide and learn about the [Folder Structure](./folder_structure.md) or can jump directly to the [Tutorial](./tutorial/hypermedia/overview.md) and create a complete application.

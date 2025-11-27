@@ -4,82 +4,95 @@
     "children": [
       {
         "title": "Routing",
-        "permalink": "http/routing",
+        "permalink": "guides/http/routing",
+        "oldUrls": ["guides/basics/routing"],
         "contentPath": "./http/routing.md"
       },
       {
         "title": "Controllers",
-        "permalink": "http/controllers",
+        "permalink": "guides/http/controllers",
+        "oldUrls": ["guides/basics/controllers"],
         "contentPath": "./http/controllers.md"
       },
       {
         "title": "Middleware",
-        "permalink": "http/middleware",
+        "permalink": "guides/http/middleware",
+        "oldUrls": ["guides/basics/middleware"],
         "contentPath": "./http/middleware.md"
       },
       {
         "title": "Request",
-        "permalink": "http/request",
+        "permalink": "guides/http/request",
+        "oldUrls": ["guides/basics/request"],
         "contentPath": "./http/request.md"
       },
       {
         "title": "Response",
-        "permalink": "http/response",
+        "permalink": "guides/http/response",
+        "oldUrls": ["guides/basics/response"],
         "contentPath": "./http/response.md"
       },
       {
         "title": "Validation",
-        "permalink": "http/validation",
+        "permalink": "guides/http/validation",
+        "oldUrls": ["guides/basics/validation"],
         "contentPath": "./http/validation.md"
       },
       {
         "title": "File uploads",
-        "permalink": "http/file-uploads",
+        "permalink": "guides/http/file-uploads",
+        "oldUrls": ["guides/basics/file-uploads"],
         "contentPath": "./http/file_uploads.md"
       },
       {
         "title": "Session",
-        "permalink": "http/session",
+        "permalink": "guides/http/session",
+        "oldUrls": ["guides/basics/session"],
         "contentPath": "./http/session.md"
       },
       {
-        "title": "Exception Handling",
-        "permalink": "http/exception-handling",
+        "title": "URL builder",
+        "permalink": "guides/http/url-builder",
+        "contentPath": "./http/url_builder.md"
+      },
+      {
+        "title": "Exception handling",
+        "permalink": "guides/http/exception-handling",
+        "oldUrls": ["guides/basics/exception-handling"],
         "contentPath": "./http/exception_handling.md"
       },
       {
         "title": "Static File Server",
-        "permalink": "http/static-file-server",
+        "permalink": "guides/http/static-file-server",
+        "oldUrls": ["guides/basics/static-file-server"],
         "contentPath": "./http/static_file_server.md"
       }
     ]
   },
   {
-    "category": "Frontend Integration",
+    "category": "Frontend",
     "children": [
       {
-        "title": "Introduction",
-        "permalink": "frontend/introduction",
-        "contentPath": "./frontend/introduction.md"
-      },
-      {
         "title": "EdgeJS",
-        "permalink": "frontend/edgejs",
+        "permalink": "guides/frontend/edgejs",
+        "oldUrls": ["guides/views-and-templates/edgejs"],
         "contentPath": "./frontend/edgejs.md"
       },
       {
         "title": "Inertia",
-        "permalink": "frontend/inertia",
+        "permalink": "guides/frontend/inertia",
+        "oldUrls": ["guides/views-and-templates/inertia"],
         "contentPath": "./frontend/inertia.md"
       },
       {
         "title": "Transformers",
-        "permalink": "frontend/transformers",
+        "permalink": "guides/frontend/transformers",
         "contentPath": "./frontend/transformers.md"
       },
       {
         "title": "Vite",
-        "permalink": "frontend/vite",
+        "permalink": "guides/frontend/vite",
+        "oldUrls": ["guides/basics/vite"],
         "contentPath": "./frontend/vite.md"
       }
     ]
@@ -89,17 +102,17 @@
     "children": [
       {
         "title": "Introduction",
-        "permalink": "database/introduction",
+        "permalink": "guides/database/introduction",
         "contentPath": "./database/introduction.md"
       },
       {
         "title": "Lucid ORM",
-        "permalink": "database/lucid",
+        "permalink": "guides/database/lucid",
         "contentPath": "./database/lucid.md"
       },
       {
         "title": "Redis",
-        "permalink": "database/redis",
+        "permalink": "guides/database/redis",
         "contentPath": "./database/redis.md"
       }
     ]
@@ -109,43 +122,43 @@
     "children": [
       {
         "title": "Introduction",
-        "permalink": "auth_and_authorization/introduction",
+        "permalink": "guides/auth/introduction",
         "contentPath": "./auth_and_authorization/introduction.md"
       },
       {
         "title": "Verifying User Credentials",
-        "permalink": "auth_and_authorization/verifying-user-credentials",
-        "contentPath": "./auth_and_authorization/verifying_user_credentials.md"
+        "permalink": "guides/auth/verifying-user-credentials",
+        "contentPath": "./auth/verifying_user_credentials.md"
       },
       {
         "title": "Session Guard",
-        "permalink": "auth_and_authorization/session-guard",
-        "contentPath": "./auth_and_authorization/session_guard.md"
+        "permalink": "guides/auth/session-guard",
+        "contentPath": "./auth/session_guard.md"
       },
       {
         "title": "Access Tokens Guard",
-        "permalink": "auth_and_authorization/access-tokens-guard",
-        "contentPath": "./auth_and_authorization/access_tokens_guard.md"
+        "permalink": "guides/auth/access-tokens-guard",
+        "contentPath": "./auth/access_tokens_guard.md"
       },
       {
         "title": "Basic Auth Guard",
-        "permalink": "auth_and_authorization/basic-auth-guard",
-        "contentPath": "./auth_and_authorization/basic_auth_guard.md"
+        "permalink": "guides/auth/basic-auth-guard",
+        "contentPath": "./auth/basic_auth_guard.md"
       },
       {
         "title": "Custom Auth Guard",
-        "permalink": "auth_and_authorization/custom-auth-guard",
-        "contentPath": "./auth_and_authorization/custom_auth_guard.md"
+        "permalink": "guides/auth/custom-auth-guard",
+        "contentPath": "./auth/custom_auth_guard.md"
       },
       {
         "title": "Social Authentication",
-        "permalink": "auth_and_authorization/social-authentication",
-        "contentPath": "./auth_and_authorization/social_authentication.md"
+        "permalink": "guides/auth/social-authentication",
+        "contentPath": "./auth/social_authentication.md"
       },
       {
         "title": "Authorization",
-        "permalink": "auth_and_authorization/authorization",
-        "contentPath": "./auth_and_authorization/authorization.md"
+        "permalink": "guides/auth/authorization",
+        "contentPath": "./auth/authorization.md"
       }
     ]
   },
@@ -154,27 +167,27 @@
     "children": [
       {
         "title": "Hashing",
-        "permalink": "security/hashing",
+        "permalink": "guides/security/hashing",
         "contentPath": "./security/hashing.md"
       },
       {
         "title": "Encryption",
-        "permalink": "security/encryption",
+        "permalink": "guides/security/encryption",
         "contentPath": "./security/encryption.md"
       },
       {
         "title": "CORS",
-        "permalink": "security/cors",
+        "permalink": "guides/security/cors",
         "contentPath": "./security/cors.md"
       },
       {
         "title": "Securing SSR Apps",
-        "permalink": "security/securing-ssr-applications",
+        "permalink": "guides/security/securing-ssr-applications",
         "contentPath": "./security/securing_ssr_applications.md"
       },
       {
         "title": "Rate Limiting",
-        "permalink": "security/rate-limiting",
+        "permalink": "guides/security/rate-limiting",
         "contentPath": "./security/rate_limiting.md"
       }
     ]
@@ -184,53 +197,58 @@
     "children": [
       {
         "title": "Application Lifecycle",
-        "permalink": "concepts/application-lifecycle",
+        "permalink": "guides/concepts/application-lifecycle",
         "contentPath": "./concepts/application_lifecycle.md"
       },
       {
         "title": "Dependency Injection",
-        "permalink": "concepts/dependency-injection",
+        "permalink": "guides/concepts/dependency-injection",
         "contentPath": "./concepts/dependency_injection.md"
       },
       {
+        "title": "Service providers",
+        "permalink": "guides/concepts/service-providers",
+        "contentPath": "./concepts/service_providers.md"
+      },
+      {
         "title": "Container Services",
-        "permalink": "concepts/container-services",
+        "permalink": "guides/concepts/container-services",
         "contentPath": "./concepts/container_services.md"
       },
       {
         "title": "Barrel Files",
-        "permalink": "concepts/barrel-files",
+        "permalink": "guides/concepts/barrel-files",
         "contentPath": "./concepts/barrel_files.md"
       },
       {
+        "title": "HTTP context",
+        "permalink": "guides/concepts/http-context",
+        "contentPath": "./concepts/http_context.md"
+      },
+      {
+        "title": "Extending AdonisJS",
+        "permalink": "guides/concepts/extending-adonisjs",
+        "contentPath": "./concepts/extending_adonisjs.md"
+      },
+      {
         "title": "Async Local Storage",
-        "permalink": "concepts/async-local-storage",
+        "permalink": "guides/concepts/async-local-storage",
         "contentPath": "./concepts/async_local_storage.md"
       },
       {
         "title": "Content Negotiation",
-        "permalink": "concepts/content-negotiation",
+        "permalink": "guides/concepts/content-negotiation",
         "contentPath": "./concepts/content_negotiation.md"
       },
       {
-        "title": "Extending the Framework",
-        "permalink": "concepts/extending-adonisjs",
-        "contentPath": "./concepts/extending_the_framework.md"
-      },
-      {
         "title": "Assembler Hooks",
-        "permalink": "concepts/assembler-hooks",
+        "permalink": "guides/concepts/assembler-hooks",
         "contentPath": "./concepts/assembler_hooks.md"
       },
       {
         "title": "TypeScript Build Process",
-        "permalink": "concepts/typescript-build-process",
+        "permalink": "guides/concepts/typescript-build-process",
         "contentPath": "./concepts/typescript_build_process.md"
-      },
-      {
-        "title": "Hot Module Replacement",
-        "permalink": "concepts/hot-module-replacement",
-        "contentPath": "./concepts/hmr.md"
       }
     ]
   },
@@ -239,47 +257,47 @@
     "children": [
       {
         "title": "Cache",
-        "permalink": "digging_deeper/cache",
+        "permalink": "guides/digging-deeper/cache",
         "contentPath": "./digging_deeper/cache.md"
       },
       {
         "title": "Drive",
-        "permalink": "digging_deeper/drive",
+        "permalink": "guides/digging-deeper/drive",
         "contentPath": "./digging_deeper/drive.md"
       },
       {
         "title": "Emitter",
-        "permalink": "digging_deeper/emitter",
+        "permalink": "guides/digging-deeper/emitter",
         "contentPath": "./digging_deeper/emitter.md"
       },
       {
         "title": "Health Checks",
-        "permalink": "digging_deeper/health-checks",
+        "permalink": "guides/digging-deeper/health-checks",
         "contentPath": "./digging_deeper/health_checks.md"
       },
       {
         "title": "I18n",
-        "permalink": "digging_deeper/i18n",
+        "permalink": "guides/digging-deeper/i18n",
         "contentPath": "./digging_deeper/i18n.md"
       },
       {
         "title": "Locks",
-        "permalink": "digging_deeper/locks",
+        "permalink": "guides/digging-deeper/locks",
         "contentPath": "./digging_deeper/locks.md"
       },
       {
         "title": "Logger",
-        "permalink": "digging_deeper/logger",
+        "permalink": "guides/digging-deeper/logger",
         "contentPath": "./digging_deeper/logger.md"
       },
       {
         "title": "Mail",
-        "permalink": "digging_deeper/mail",
+        "permalink": "guides/digging-deeper/mail",
         "contentPath": "./digging_deeper/mail.md"
       },
       {
         "title": "Transmit",
-        "permalink": "digging_deeper/transmit",
+        "permalink": "guides/digging-deeper/transmit",
         "contentPath": "./digging_deeper/transmit.md"
       }
     ]
@@ -289,37 +307,37 @@
     "children": [
       {
         "title": "Introduction",
-        "permalink": "ace/introduction",
+        "permalink": "guides/ace/introduction",
         "contentPath": "./ace/introduction.md"
       },
       {
         "title": "Creating Commands",
-        "permalink": "ace/creating-commands",
+        "permalink": "guides/ace/creating-commands",
         "contentPath": "./ace/creating_commands.md"
       },
       {
         "title": "Command Arguments",
-        "permalink": "ace/arguments",
+        "permalink": "guides/ace/arguments",
         "contentPath": "./ace/args.md"
       },
       {
         "title": "Command Flags",
-        "permalink": "ace/flags",
+        "permalink": "guides/ace/flags",
         "contentPath": "./ace/flags.md"
       },
       {
         "title": "Prompts",
-        "permalink": "ace/prompts",
+        "permalink": "guides/ace/prompts",
         "contentPath": "./ace/prompts.md"
       },
       {
         "title": "Terminal UI",
-        "permalink": "ace/terminal-ui",
+        "permalink": "guides/ace/terminal-ui",
         "contentPath": "./ace/tui.md"
       },
       {
         "title": "Repl",
-        "permalink": "ace/repl",
+        "permalink": "guides/ace/repl",
         "contentPath": "./ace/repl.md"
       }
     ]
@@ -329,32 +347,32 @@
     "children": [
       {
         "title": "Introduction",
-        "permalink": "testing/introduction",
+        "permalink": "guides/testing/introduction",
         "contentPath": "./testing/introduction.md"
       },
       {
         "title": "HTTP Tests",
-        "permalink": "testing/http-tests",
+        "permalink": "guides/testing/http-tests",
         "contentPath": "./testing/http_tests.md"
       },
       {
         "title": "Browser Tests",
-        "permalink": "testing/browser-tests",
+        "permalink": "guides/testing/browser-tests",
         "contentPath": "./testing/browser_tests.md"
       },
       {
         "title": "Console Tests",
-        "permalink": "testing/console-tests",
+        "permalink": "guides/testing/console-tests",
         "contentPath": "./testing/console_tests.md"
       },
       {
         "title": "Database Tests",
-        "permalink": "testing/database",
+        "permalink": "guides/testing/database",
         "contentPath": "./testing/database.md"
       },
       {
         "title": "Mocks & Fakes",
-        "permalink": "testing/mocks-and-fakes",
+        "permalink": "guides/testing/mocks-and-fakes",
         "contentPath": "./testing/mocks_and_fakes.md"
       }
     ]
@@ -364,73 +382,13 @@
     "children": [
       {
         "title": "Environment Variables",
-        "permalink": "operations_and_deployment/environment-variables",
+        "permalink": "guides/environment-variables",
         "contentPath": "./operations_and_deployment/environment_variables.md"
       },
       {
         "title": "Deployment",
-        "permalink": "operations_and_deployment/deployment",
+        "permalink": "guides/deployment",
         "contentPath": "./operations_and_deployment/deployment.md"
-      }
-    ]
-  },
-  {
-    "category": "Reference",
-    "children": [
-      {
-        "title": "Application",
-        "permalink": "reference/application",
-        "contentPath": "./reference/application.md"
-      },
-      {
-        "title": "AdonisRC File",
-        "permalink": "reference/adonisrc_file",
-        "contentPath": "./reference/adonisrc_file.md"
-      },
-      {
-        "title": "Configuration",
-        "permalink": "reference/configuration",
-        "contentPath": "./reference/configuration.md"
-      },
-      {
-        "title": "Commands",
-        "permalink": "reference/commands",
-        "contentPath": "./reference/commands.md"
-      },
-      {
-        "title": "Edge Helpers & Tags",
-        "permalink": "reference/edge",
-        "contentPath": "./reference/edge.md"
-      },
-      {
-        "title": "Events",
-        "permalink": "reference/events",
-        "contentPath": "./reference/events.md"
-      },
-      {
-        "title": "Exceptions",
-        "permalink": "reference/exceptions",
-        "contentPath": "./reference/exceptions.md"
-      },
-      {
-        "title": "Helpers",
-        "permalink": "reference/helpers",
-        "contentPath": "./reference/helpers.md"
-      }
-    ]
-  },
-  {
-    "category": "Community",
-    "children": [
-      {
-        "title": "Governance",
-        "permalink": "community/governance",
-        "contentPath": "./community/governance.md"
-      },
-      {
-        "title": "Contribution Guide",
-        "permalink": "community/contribution-guide",
-        "contentPath": "./community/contribution_guide.md"
       }
     ]
   }

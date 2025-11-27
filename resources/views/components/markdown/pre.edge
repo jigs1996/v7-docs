@@ -1,24 +1,60 @@
-<div class="code_snippet">
+<div class="code_snippet" x-data="ctc">
   @if(node.properties.title)
+    @let(parsed = parseCodeblockTitle(node.properties.title))
+
     <div class="code_snippet_header flex justify-between items-center">
-      <span class="code_snippet_title">{{ node.properties.title }}</span>
-      <button class="copy cursor-pointer p-1.5 backdrop-blur rounded-md overflow-hidden" title="Copy" aria-label="Copy" role="button">
-        @svg('tabler:copy', { width: '20px', height: '20px', class: 'text-woodsmoke-400 hover:text-woodsmoke-200' })
+      <div class="flex items-center gap-1">
+        @if(parsed.icon)
+          @svg(parsed.icon, { class: parsed.classes })
+        @end
+        <span class="code_snippet_title whitespace-nowrap text-ellipsis overflow-hidden grow-0">
+          {{ parsed.title }}
+        </span>
+      </div>
+      <button
+        class="copy copy cursor-pointer p-1.5 backdrop-blur rounded-md overflow-hidden"
+        title="Copy"
+        @click.prevent="copy"
+        aria-label="Copy the contents from the code block"
+      >
+        @svg('tabler:copy', {
+          width: '20px',
+          height: '20px',
+          'x-show': `state === 'idle'`,
+          class: 'text-woodsmoke-400 hover:text-woodsmoke-200'
+        })
+        @svg('tabler:check', {
+          width: '20px',
+          height: '20px',
+          'x-show': `state === 'copied'`,
+          class: 'text-green-400'
+        })
       </button>
     </div>
   @end
   <div class="relative overflow-auto">
-<pre {{ $markdown.utils.stringifyAttributes(node.properties) }}>
+<pre>
 @markdownSlot()
 </pre>
   @unless(node.properties.title)
     <button
       class="copy cursor-pointer absolute z-0 top-2 right-2.5 p-1.5 backdrop-blur rounded-md overflow-hidden"
       title="Copy"
-      aria-label="Copy"
-      role="button"
+      @click.prevent="copy"
+      aria-label="Copy the contents from the code block"
     >
-      @svg('tabler:copy', { width: '20px', height: '20px', class: 'text-woodsmoke-400 hover:text-woodsmoke-200' })
+      @svg('tabler:copy', {
+        width: '20px',
+        height: '20px',
+        'x-show': `state === 'idle'`,
+        class: 'text-woodsmoke-400 hover:text-woodsmoke-200'
+      })
+      @svg('tabler:check', {
+        width: '20px',
+        height: '20px',
+        'x-show': `state === 'copied'`,
+        class: 'text-green-400'
+      })
     </button>
   @end
 </div>

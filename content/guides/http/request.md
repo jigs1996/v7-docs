@@ -12,8 +12,7 @@ The request body contains data sent by the client, typically from HTML forms or 
 
 Use the `all` method to retrieve all data from the request body as an object. This is useful when you want to process all submitted fields together.
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.post('/signup', ({ request }) => {
@@ -23,21 +22,15 @@ router.post('/signup', ({ request }) => {
 })
 ```
 
-:::tip
-**Common mistake:** Remember to call the methods like `request.all()` or `request.input()` as functions. A common mistake is treating them as properties: `request.all` instead of `request.all()`.
-:::
-
-
-:::tip
-**Type safety and validation:** The request body data is not type-safe because the bodyparser only collects and parses the raw request data—it does not validate it. Use the [validation system]() to ensure both runtime safety and TypeScript type safety for your request data.
+:::note
+**Type safety and validation:** The request body data is not type-safe because the bodyparser only collects and parses the raw request data — it does not validate it. Use the [validation system](./validation.md) to ensure both runtime safety and TypeScript type safety for your request data.
 :::
 
 ### Accessing specific fields
 
 Use the `input` method when you need to read a specific field from the request body. This method accepts a field name and an optional default value if the field doesn't exist.
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.post('/signup', ({ request }) => {
@@ -51,8 +44,7 @@ router.post('/signup', ({ request }) => {
 
 You can also use the `only` method to retrieve multiple specific fields, or the `except` method to retrieve all fields except certain ones.
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.post('/signup', ({ request }) => {
@@ -74,10 +66,9 @@ router.post('/signup', ({ request }) => {
 
 Files uploaded through multipart form data are available using the `file` method. The method returns a file object with metadata and methods for validation and storage.
 
-See also: [File uploads guide](./file-uploads.md) for detailed file handling and storage
+See also: [File uploads guide](./file_uploads.md) for detailed file handling and storage
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.post('/avatar', ({ request }) => {
@@ -88,8 +79,7 @@ router.post('/avatar', ({ request }) => {
 
 You can validate files at the time of accessing them by providing validation options.
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.post('/avatar', ({ request }) => {
@@ -125,8 +115,7 @@ Query strings and route parameters are two different ways to pass data through U
 
 Use the `qs` method to retrieve all query string parameters as an object.
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/posts', ({ request }) => {
@@ -138,8 +127,7 @@ router.get('/posts', ({ request }) => {
 
 You can access individual query parameters using the `input` method, which works for both body data and query string parameters.
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/posts', ({ request }) => {
@@ -155,8 +143,7 @@ router.get('/posts', ({ request }) => {
 
 Route parameters are available through the `param` method or by accessing the `params` object directly. The params object is also available directly on HttpContext.
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/posts/:id', ({ request }) => {
@@ -181,8 +168,7 @@ Request metadata includes information about how the request was made, where it c
 
 Use the `header` method to read a specific header value. Header names are case-insensitive.
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/profile', ({ request }) => {
@@ -196,8 +182,7 @@ router.get('/profile', ({ request }) => {
 
 You can retrieve all headers using the `headers` method.
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/debug', ({ request }) => {
@@ -210,8 +195,7 @@ router.get('/debug', ({ request }) => {
 
 The request method (GET, POST, PUT, DELETE, etc.) is available through the `method` method.
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.all('/endpoint', ({ request }) => {
@@ -224,8 +208,7 @@ router.all('/endpoint', ({ request }) => {
 
 Use the `url` method to get the request URL without the domain and protocol, or `completeUrl` to get the full URL including domain.
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/posts', ({ request }) => {
@@ -239,12 +222,9 @@ router.get('/posts', ({ request }) => {
 
 ### Accessing the client IP address
 
-The `ip` method returns the client's IP address. When your application is behind a reverse proxy or load balancer, you need to configure trusted proxies to correctly detect the real client IP.
+The `ip` method returns the client's IP address. When your application is behind a reverse proxy or load balancer, you need to configure [trusted proxies](#trusting-proxy-servers) to correctly [detect the real client IP](#custom-ip-address-extraction).
 
-See also: [Trusted proxy configuration]() for accurate IP detection in production environments
-
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/track', ({ request }) => {
@@ -255,8 +235,7 @@ router.get('/track', ({ request }) => {
 
 The `ips` method returns an array of IP addresses when the request has passed through multiple proxies.
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/track', ({ request }) => {
@@ -285,8 +264,7 @@ Cookies are small pieces of data stored in the client's browser and sent with ev
 
 Use the `cookie` method to read a signed cookie value. By default all cookies are signed.
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/preferences', ({ request }) => {
@@ -297,26 +275,11 @@ router.get('/preferences', ({ request }) => {
 })
 ```
 
-### Accessing all signed cookies
-
-The `cookies` method returns all signed cookies as an object.
-
-```ts
-// title: start/routes.ts
-import router from '@adonisjs/core/services/router'
-
-router.get('/debug', ({ request }) => {
-  const allCookies = request.cookies()
-  console.log(allCookies)
-})
-```
-
 ### Accessing encrypted
 
 Use `encryptedCookie` for encrypted cookies. This method automatically decrypt and verify the cookie value.
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/dashboard', ({ request }) => {
@@ -330,7 +293,7 @@ router.get('/dashboard', ({ request }) => {
 | Method | Description |
 |--------|-------------|
 | `cookie(key, defaultValue?)` | Returns a signed cookie value |
-| `cookies()` | Returns all signed cookies as an object |
+| `cookiesList()` | Returns all cookies as an object without decrypting or unsigning them |
 | `encryptedCookie(key, defaultValue?)` | Returns a decrypted cookie value |
 | `plainCookie(key, defaultValue?)` | Returns value for plain cookie |
 
@@ -342,8 +305,7 @@ Every HTTP request in AdonisJS is assigned a unique request ID. This ID is usefu
 
 Use the `id` method to retrieve the unique identifier assigned to the current request.
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
 router.get('/api/posts', ({ request }) => {
@@ -357,17 +319,15 @@ router.get('/api/posts', ({ request }) => {
 AdonisJS generates request IDs using one of these methods, in order of preference:
 
 1. **From X-Request-Id header:** If the client or a proxy sends an `X-Request-Id` header, AdonisJS uses that value. This allows you to trace requests across multiple services.
-
 2. **Generated by AdonisJS:** If no `X-Request-Id` header exists, AdonisJS generates a unique ID using the `uuid` package by default.
 
-You can configure request ID generation in your application config, including using custom ID generation functions or different header names.
+You can configure request ID generation in your `config/app.ts`, including using custom ID generation functions or different header names.
 
 ### Using request IDs for distributed tracing
 
 Request IDs are particularly valuable in distributed systems where a single user request might trigger operations across multiple services. By logging the request ID with every operation, you can trace the complete flow of a request through your system.
 
-```ts
-// title: start/routes.ts
+```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 import logger from '@adonisjs/core/services/logger'
 
@@ -380,16 +340,64 @@ router.post('/checkout', async ({ request }) => {
 })
 ```
 
-### Available methods
+## Content negotiation
 
-| Method | Description |
-|--------|-------------|
-| `id()` | Returns the unique request identifier |
+## Trusting Proxy Servers
 
-See also: [Request lifecycle](./request-lifecycle.md) for understanding how requests flow through your application
+When your application runs behind a reverse proxy (like Nginx) or load balancer, you need to configure which proxy IP addresses to trust. This allows AdonisJS to correctly read the `X-Forwarded-*` headers that proxies add to requests.
 
----
+```ts title="config/app.ts"
+import env from '#start/env'
+import { defineConfig } from '@adonisjs/core/http'
+import proxyAddr from 'proxy-addr'
 
-## API Reference
+export const http = defineConfig({
+  /**
+   * Trust the loopback address and private IP ranges.
+   * This is safe for most deployment scenarios where your
+   * proxy runs on the same machine or private network.
+   */
+  trustProxy: proxyAddr.compile(['loopback', 'uniquelocal'])
+})
+```
 
-For a complete list of all methods and properties available on the Request class, see the [Request API reference](./api/request.md).
+The `trustProxy` option accepts any value supported by the [proxy-addr](https://www.npmjs.com/package/proxy-addr) package. Common configurations include:
+```ts
+// Trust all proxies (not recommended for production)
+trustProxy: () => true
+
+// Trust specific IP addresses
+trustProxy: proxyAddr.compile(['127.0.0.1', '192.168.1.1'])
+
+// Trust IP ranges using CIDR notation
+trustProxy: proxyAddr.compile('10.0.0.0/8')
+```
+
+## Custom IP Address Extraction
+
+By default, AdonisJS extracts the client IP address from the request using standard methods. However, when running behind proxies or CDNs like Cloudflare, you may need to extract the IP from custom headers.
+
+```ts title="config/app.ts"
+import env from '#start/env'
+import { defineConfig } from '@adonisjs/core/http'
+import type { IncomingMessage } from 'node:http'
+
+export const http = defineConfig({
+  /**
+   * Extract IP from Cloudflare's CF-Connecting-IP header
+   * Falls back to standard IP extraction if header is not present
+   */
+  getIp(request: IncomingMessage) {
+    const cloudflareIp = request.headers['cf-connecting-ip']
+    
+    if (cloudflareIp && typeof cloudflareIp === 'string') {
+      return cloudflareIp
+    }
+    
+    // Return undefined to fall back to default IP extraction
+    return undefined
+  }
+})
+```
+
+The `getIp` method receives the Node.js `IncomingMessage` object and must return a string IP address or `undefined` to fall back to default behavior. This is useful when working with CDNs that provide the real client IP in custom headers.

@@ -4,17 +4,29 @@ summary: Learn how to create and use controllers to organize your route handlers
 
 # Controllers
 
-Controllers are JavaScript classes that organize your route handlers into dedicated files. Each controller typically represents a resource (like Users, Posts, or Comments) and contains multiple methods, each handling requests for specific routes.
+This guide covers controllers in AdonisJS applications. You will learn how to:
+
+- Create and organize controllers to handle HTTP requests
+- Use the barrel file system for importing controllers
+- Understand the controller lifecycle and request handling
+- Inject dependencies into controllers using the IoC container
+- Build RESTful resource-driven controllers following conventions
+- Register resourceful routes and manage nested resources
+- Filter, customize, and apply middleware to resource routes
+- Configure controller locations and barrel file generation
 
 :::note
 **Prerequisite**: You should be familiar with [routing](./routing.md) before learning about controllers, as controllers are connected to your application through routes.
 :::
 
-## Why use controllers?
+## Overview
 
-Controllers keep your routes file clean, organize code into logical groups, and enable dependency injection for services and other dependencies. Here's the difference:
+Controllers organize route handlers into dedicated JavaScript classes, solving the problem of route file bloat. Instead of defining all your route logic inline, controllers let you group related request handlers into a single class, where each method (called an action) handles a specific route.
 
-**Without controllers** (inline route handlers):
+A typical controller represents a resource (like Users, Posts, or Comments) and defines actions for creating, reading, updating, and deleting that resource. Controllers keep your routes file clean and readable, enable dependency injection for services and other dependencies, and follow RESTful conventions for resource-based CRUD operations.
+
+Without controllers, your routes file becomes cluttered with inline handlers:
+
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
@@ -36,7 +48,8 @@ router.post('/posts', async ({ request }) => {
 // This file becomes unmanageable as routes grow
 ```
 
-**With controllers** (organized and reusable):
+With controllers, you organize handlers into reusable classes:
+
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 import { controllers } from '#generated/controllers'
@@ -70,9 +83,10 @@ export default class PostsController {
 
 ## Creating your first controller
 
-### Step 1: Generate the controller
+::::steps
+:::step{title="Generate the controller"}
 
-Controllers are stored in the `app/controllers` directory. The easiest way to create a controller is using the `make:controller` command:
+Controllers are stored in the `app/controllers` directory. The easiest way to create a controller is using the `make:controller` command.
 
 ```bash
 node ace make:controller posts
@@ -83,7 +97,7 @@ node ace make:controller posts
 DONE:    create app/controllers/posts_controller.ts
 ```
 
-This command creates a controller scaffolded with a plain JavaScript class and a default export:
+This command creates a controller scaffolded with a plain JavaScript class and a default export.
 
 ```ts title="app/controllers/posts_controller.ts"
 import type { HttpContext } from '@adonisjs/core/http'
@@ -92,9 +106,11 @@ export default class PostsController {
 }
 ```
 
-### Step 2: Add your first action
+:::
 
-A controller action is simply a method that handles an HTTP request. Let's add an `index` method to list all posts:
+:::step{title="Add your first action"}
+
+A controller action is simply a method that handles an HTTP request. Let's add an `index` method to list all posts.
 
 ```ts title="app/controllers/posts_controller.ts"
 import type { HttpContext } from '@adonisjs/core/http'
@@ -118,12 +134,13 @@ export default class PostsController {
 A few important things to know about controller actions:
 - The first parameter is always the **HTTPContext** object
 - You can destructure specific properties like `request`, `response`, `params`, `session`, or `auth`
-- You can also use the full context: `async index(ctx: HttpContext)`
 - Controller methods can return values directly (objects, arrays) or explicitly call `response.json()` or `response.send()`
 
-### Step 3: Connect the controller to a route
+:::
 
-Now bind your controller action to a route:
+:::step{title="Connect the controller to a route"}
+
+Now bind your controller action to a route.
 
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
@@ -135,16 +152,17 @@ router.get('/posts', [controllers.Posts, 'index'])
 
 The first argument (`controllers.Posts`) references your `PostsController` class, while the second argument (`'index'`) specifies which method to call. The controller is lazy-loaded, meaning it's only imported when the route is accessed.
 
+:::
 
-### Step 4: Test it out
+:::step{title="Test it out"}
 
-Start your development server if it's not already running:
+Start your development server if it's not already running.
 
 ```bash
 node ace serve --hmr
 ```
 
-Visit `http://localhost:3333/posts` in your browser. You should see the JSON response from your controller:
+Visit [`http://localhost:3333/posts`](http://localhost:3333/posts) in your browser. You should see the JSON response from your controller.
 
 ```json
 {
@@ -155,15 +173,18 @@ Visit `http://localhost:3333/posts` in your browser. You should see the JSON res
 }
 ```
 
+:::
+::::
+
 ## The barrel file
 
-The `#generated/controllers` import you used in the routing step is powered by a **barrel file** - a single file that consolidates all your controller imports into one convenient location. This barrel file is automatically generated and maintained by AdonisJS.
+The `#generated/controllers` import you used in the routing step is powered by a **barrel file** - a single file that consolidates all your controller imports into one convenient location. **This barrel file is automatically generated and maintained by AdonisJS**.
 
 The barrel file is located at `.adonisjs/server/controllers.ts` and is automatically created when you start your development server. It stays up-to-date as you add or remove controllers.
 
-Without the barrel file, you would need to manually import each controller individually in your routes file:
+Without the barrel file, you would need to manually import each controller individually in your routes file.
 
-```ts title="start/routes.ts (without barrel file)"
+```ts title="❌ Without barrel file"
 import router from '@adonisjs/core/services/router'
 
 const PostsController = () => import('#controllers/posts_controller')
@@ -176,9 +197,9 @@ router.get('/users', [UsersController, 'index'])
 router.get('/comments', [CommentsController, 'index'])
 ```
 
-The barrel file eliminates this repetition:
+The barrel file eliminates this repetition.
 
-```ts title="start/routes.ts (with barrel file)"
+```ts title="✅ With barrel file"
 import router from '@adonisjs/core/services/router'
 import { controllers } from '#generated/controllers'
 
@@ -188,26 +209,6 @@ router.get('/comments', [controllers.Comments, 'index'])
 ```
 
 See also: [Barrel files generation guide](../concepts/barrel_files.md) for detailed configuration options.
-
-## Common pitfalls
-
-### Using static imports instead of lazy imports
-
-Your editor's autocomplete might suggest importing a controller directly when you start typing. This creates a static import that breaks Hot Module Replacement (HMR):
-
-```ts
-import PostsController from '#controllers/posts_controller'
-router.get('/posts', [PostsController, 'index'])
-```
-
-When you use static imports, your controller changes won't be reflected until you restart the server, even with HMR enabled. This slows down development significantly.
-
-**The solution**: Always use the lazy import pattern with the `#generated/controllers` barrel file to ensure your controller changes are hot-reloaded during development without restarting the server:
-
-```ts
-import { controllers } from '#generated/controllers'
-router.get('/posts', [controllers.Posts, 'index'])
-```
 
 ## Understanding controller lifecycle
 
@@ -224,11 +225,11 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class PostsController {
   // This property is unique to each request
-  private requestId = Math.random()
+  #requestId = Math.random()
 
   async index({ response }: HttpContext) {
     // Each request will see a different requestId
-    return response.json({ requestId: this.requestId })
+    return response.json({ requestId: this.#requestId })
   }
 }
 ```
@@ -248,8 +249,9 @@ import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import UserService from '#services/user_service'
 
-@inject()
+@inject() // [!code highlight]
 export default class UsersController {
+  // [!code highlight]
   constructor(protected userService: UserService) {}
 
   async index(ctx: HttpContext) {
@@ -267,14 +269,12 @@ export default class UsersController {
 }
 ```
 
-The `@inject()` decorator tells AdonisJS to use dependency injection for this controller. Dependencies are type-hinted in the constructor parameters, and the IoC container automatically resolves and injects them when the controller is instantiated. Using `protected` or `private` access modifiers makes the service available to all methods in the controller.
+- The `@inject()` decorator tells AdonisJS to use dependency injection for this controller. 
+- Dependencies are type-hinted in the constructor parameters, and the IoC container automatically resolves and injects them when the controller is instantiated.
 
 ### Method injection
 
-Method injection injects dependencies into individual controller methods. Use this when:
-- Only **specific methods** need certain dependencies
-- Different methods require **different dependencies**
-- You want to keep the controller lightweight
+Method injection injects dependencies into individual controller methods. Use this when only specific methods need certain dependencies, or different methods require different dependencies.
 
 ```ts title="app/controllers/users_controller.ts"
 import { inject } from '@adonisjs/core'
@@ -284,16 +284,17 @@ import EmailService from '#services/email_service'
 
 export default class UsersController {
   async index(ctx: HttpContext) {
-    // No dependencies needed for simple listing
     return [{ id: 1, name: 'John' }]
   }
 
+  // [!code highlight:2]
   @inject()
   async store(ctx: HttpContext, userService: UserService) {
     const data = ctx.request.all()
     return userService.create(data)
   }
 
+// [!code highlight:6]
   @inject()
   async sendEmail(
     ctx: HttpContext,
@@ -307,7 +308,11 @@ export default class UsersController {
 }
 ```
 
-With method injection, the `@inject()` decorator is applied to individual methods rather than the class. The first parameter must always be HTTPContext, with dependencies following after. This allows each method to have different dependencies based on its specific needs.
+With method injection:
+
+- The `@inject()` decorator is applied to individual methods rather than the class.
+- The first parameter must always be HTTPContext, with dependencies following after. 
+- This allows each method to have different dependencies based on its specific needs.
 
 ## Resource-driven controllers
 
@@ -315,7 +320,7 @@ Resource-driven controllers follow RESTful conventions for handling CRUD (Create
 
 ### The seven resourceful actions
 
-A typical resourceful controller defines seven methods that handle all CRUD operations:
+A typical resourceful controller defines seven methods that handle all CRUD operations.
 
 ```ts title="app/controllers/posts_controller.ts"
 import type { HttpContext } from '@adonisjs/core/http'
@@ -392,7 +397,7 @@ export default class PostsController {
 
 ### Generating resourceful controllers
 
-Create a controller with all seven methods pre-filled using the `--resource` flag. This generates a controller with all seven method stubs already in place, saving you time and ensuring you follow RESTful conventions:
+Create a controller with all seven methods pre-filled using the `--resource` flag. This generates a controller with all seven method stubs already in place, saving you time and ensuring you follow RESTful conventions.
 
 ```bash
 node ace make:controller posts --resource
@@ -400,7 +405,7 @@ node ace make:controller posts --resource
 
 ### Registering resource routes
 
-Instead of manually defining seven individual routes, use the `router.resource()` method to create all seven routes in a single line:
+Instead of manually defining seven individual routes, use the `router.resource()` method to create all seven routes in a single line.
 
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
@@ -409,7 +414,7 @@ import { controllers } from '#generated/controllers'
 router.resource('posts', controllers.Posts)
 ```
 
-This generates the following routes:
+This generates the following routes.
 
 | HTTP Method | Path              | Controller Method | Purpose                  |
 | ----------- | ----------------- | ----------------- | ------------------------ |
@@ -423,7 +428,7 @@ This generates the following routes:
 
 ### Nested resources
 
-Nested resources represent hierarchical relationships between resources. For example, comments that belong to posts:
+Nested resources represent hierarchical relationships between resources. For example, comments that belong to posts.
 
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
@@ -432,7 +437,7 @@ import { controllers } from '#generated/controllers'
 router.resource('posts.comments', controllers.Comments)
 ```
 
-This creates routes with both parent and child IDs:
+This creates routes with both parent and child IDs.
 
 | HTTP Method | Path | Controller Method | Purpose |
 |-------------|------|-------------------|---------|
@@ -444,7 +449,7 @@ This creates routes with both parent and child IDs:
 | `PUT/PATCH` | `/posts/:post_id/comments/:id` | `update` | Update comment |
 | `DELETE` | `/posts/:post_id/comments/:id` | `destroy` | Delete comment |
 
-Your controller receives both parent and child parameters:
+Your controller receives both parent and child parameters.
 
 ```ts title="app/controllers/comments_controller.ts"
 import type { HttpContext } from '@adonisjs/core/http'
@@ -482,10 +487,10 @@ With shallow resources, the `show`, `edit`, `update`, and `destroy` actions omit
 | `GET` | `/posts/:post_id/comments` | `index` | Needs parent ID to list |
 | `GET` | `/posts/:post_id/comments/create` | `create` | Needs parent ID for form |
 | `POST` | `/posts/:post_id/comments` | `store` | Needs parent ID to create |
-| `GET` | `/comments/:id` | `show` | âš¡ No parent ID needed |
-| `GET` | `/comments/:id/edit` | `edit` | âš¡ No parent ID needed |
-| `PUT/PATCH` | `/comments/:id` | `update` | âš¡ No parent ID needed |
-| `DELETE` | `/comments/:id` | `destroy` | âš¡ No parent ID needed |
+| `GET` | `/comments/:id` | `show` | No parent ID needed |
+| `GET` | `/comments/:id/edit` | `edit` | No parent ID needed |
+| `PUT/PATCH` | `/comments/:id` | `update` | No parent ID needed |
+| `DELETE` | `/comments/:id` | `destroy` | No parent ID needed |
 
 Use shallow nesting when the child resource has a globally unique identifier and doesn't require the parent ID for lookup. This creates cleaner, shorter URLs while maintaining the hierarchical relationship where needed (creation and listing).
 
@@ -498,7 +503,7 @@ For example, `router.resource('posts', controllers.Posts)` generates route names
 - `posts.show`
 - `posts.store`
 
-You can customize the route names using the `.as()` method:
+You can customize the route names using the `.as()` method.
 
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
@@ -509,7 +514,7 @@ router
   .as('articles')
 ```
 
-This changes the route names while keeping the URL paths the same:
+This changes the route names while keeping the URL paths the same.
 
 | Resource | Action name | Route name |
 |----------|-------------|------------|
@@ -519,9 +524,7 @@ This changes the route names while keeping the URL paths the same:
 | posts | update | articles.update |
 | posts | destroy | articles.destroy |
 
-Naming routes is important because it allows you to reference routes by name rather than hardcoding URLs throughout your application.
-
-See also: [Route identifiers](./routing.md#route-identifier) to understand why naming routes matters.
+[Naming routes](./routing.md#route-identifiers) is important because it allows you to reference routes by name rather than hardcoding URLs throughout your application.
 
 ### Filtering resource routes
 
@@ -542,7 +545,7 @@ router.resource('posts', controllers.Posts).apiOnly()
 
 For more granular control, use the `.only()` or `.except()` methods. These methods accept an array of action names.
 
-The `.only()` method creates only the specified routes:
+The `.only()` method creates only the specified routes.
 
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
@@ -553,7 +556,7 @@ router
   .only(['index', 'store', 'destroy'])
 ```
 
-The `.except()` method creates all routes except the specified ones:
+The `.except()` method creates all routes except the specified ones.
 
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
@@ -585,7 +588,7 @@ This changes the URL parameters from `:id` to `:post`:
 | `/posts/:id/edit`             | `/posts/:post/edit`             |
 | `/posts/:id` (update/destroy) | `/posts/:post` (update/destroy) |
 
-The same approach works for nested resources, generating URLs like `/posts/:post/comments/:comment`:
+The same approach works for nested resources, generating URLs like `/posts/:post/comments/:comment`.
 
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
@@ -598,7 +601,7 @@ router
 
 ### Assigning middleware to resources
 
-You can apply middleware to specific resource routes using the `.use()` method. This method accepts an array of action names and the middleware to apply. For example, to apply authentication middleware only to routes that modify data (create, store, update, destroy) while leaving read-only routes (index, show) public:
+You can apply middleware to specific resource routes using the `.use()` method. This method accepts an array of action names and the middleware to apply. For example, to apply authentication middleware only to routes that modify data (create, store, update, destroy) while leaving read-only routes (index, show) public.
 
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
@@ -613,7 +616,7 @@ router
   )
 ```
 
-To apply middleware to all resource routes, use the wildcard `*` to ensure all routes in the resource require authentication:
+To apply middleware to all resource routes, use the wildcard `*` to ensure all routes in the resource require authentication.
 
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
@@ -631,7 +634,9 @@ Controllers work out of the box with no initial configuration required. However,
 
 ### Customizing controller location
 
-By default, controllers are stored in the `app/controllers` directory. You can change this location in your `adonisrc.ts` file:
+By default, controllers are stored in the `app/controllers` directory. You can change this location in your `adonisrc.ts` file.
+
+See also: [AdonisRC reference](../../reference/adonisrc_file.md)
 
 ```ts title="adonisrc.ts"
 import { defineConfig } from '@adonisjs/core/app'
@@ -643,11 +648,11 @@ export default defineConfig({
 })
 ```
 
-See also: [adonisrc reference](../reference/adonisrc_file.md) for complete configuration options.
-
 ### Barrel file configuration
 
 The auto-generated barrel file at `#generated/controllers` can be customized to control which controllers are included or excluded, and how the file is generated.
+
+See also: [Barrel files generation guide](../concepts/barrel_files.md)
 
 ```ts title="adonisrc.ts"
 import { defineConfig } from '@adonisjs/core/app'
@@ -661,13 +666,3 @@ export default defineConfig({
   }
 })
 ```
-
-See also: [Barrel files generation guide](../concepts/barrel_files.md) for detailed configuration options.
-
-## See also
-
-- [Routing guide](./routing.md) - Prerequisite for understanding controllers
-- [Dependency Injection](../concepts/dependency_injection.md) - Deep dive into the IoC container and DI patterns
-- [Barrel files generation](../concepts/barrel_files.md) - Customize the auto-generated controller imports
-- [adonisrc reference](../reference/adonisrc_file.md) - Configure controller directory and other project settings
-- [make:controller command](../reference/commands.md#makecontroller) - Complete command reference with all options

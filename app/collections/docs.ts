@@ -1,15 +1,31 @@
 import vine from '@vinejs/vine'
-import { dirname, relative, resolve } from 'node:path'
+import { dirname, resolve } from 'node:path'
 import app from '@adonisjs/core/services/app'
 import { Collection } from '@adonisjs/content'
 import { type Infer } from '@vinejs/vine/types'
-import { loaders } from '@adonisjs/content/loaders'
 import vite from '@adonisjs/vite/services/main'
+import { loaders } from '@adonisjs/content/loaders'
+
+const noSnakeCase = vine.createRule((value, _, field) => {
+  if ((value as string).includes('_')) {
+    field.report(
+      `The value for (${field.parent.title}) cannot be in snakecase`,
+      'no_snake_case',
+      field
+    )
+  }
+})
+const noDashCase = vine.createRule((value, _, field) => {
+  if ((value as string).includes('-')) {
+    field.report('The field value cannot be in dashcase', 'no_dash_case', field)
+  }
+})
 
 const singleDoc = vine.object({
   title: vine.string(),
-  permalink: vine.string(),
-  contentPath: vine.string().toAbsolutePath(),
+  permalink: vine.string().use(noSnakeCase()),
+  oldUrls: vine.array(vine.string()).optional(),
+  contentPath: vine.string().use(noDashCase()).toAbsolutePath(),
 })
 
 const categoryDocs = vine.object({
@@ -18,97 +34,83 @@ const categoryDocs = vine.object({
 })
 
 const menuSchema = vine.array(categoryDocs)
-const ZONES = ['guides', 'start'] as const
 
-export const docsZones = ZONES.reduce(
-  (collections, zone) => {
-    const ZONE_DB_FILE = app.makePath('content', zone, 'db.json')
-
-    collections[zone] = Collection.create({
-      schema: menuSchema.clone(),
-      cache: app.inProduction,
-      loader: loaders.jsonLoader(ZONE_DB_FILE),
-      views: {
-        permalinksTree(data) {
-          return data.reduce<Record<string, Infer<typeof singleDoc>>>((result, node) => {
-            node.children.forEach((doc) => {
-              result[doc.permalink] = doc
-            })
-            return result
-          }, {})
-        },
-        contentPathsTree(data) {
-          return data.reduce<Record<string, Infer<typeof singleDoc>>>((result, node) => {
-            node.children.forEach((doc) => {
-              result[doc.contentPath] = doc
-            })
-            return result
-          }, {})
-        },
-        findByPermalink(data, permalink) {
-          return this.permalinksTree(data)[permalink] ?? this.permalinksTree(data)[`/${permalink}`]
-        },
-        findByContentPath(data, contentPath) {
-          return this.contentPathsTree(data)[contentPath]
-        },
+const sectionsNames: ['guides', 'start', 'reference'] = ['guides', 'start', 'reference']
+const docsSections = Collection.multi(sectionsNames, (section) => {
+  return Collection.create({
+    schema: menuSchema.clone(),
+    cache: app.inProduction,
+    loader: loaders.jsonLoader(app.makePath('content', section, 'db.json')),
+    views: {
+      menu(data: Infer<typeof menuSchema>) {
+        return data.map((node) => {
+          return {
+            category: node.category,
+            isChild(permalink: string): boolean {
+              return !!node.children.find((child) => child.permalink === permalink)
+            },
+            children: node.children,
+          }
+        })
       },
-    })
+      permalinksTree(data: Infer<typeof menuSchema>) {
+        return data.reduce<Record<string, Infer<typeof singleDoc>>>((result, node) => {
+          node.children.forEach((doc) => {
+            result[doc.permalink] = doc
+          })
+          return result
+        }, {})
+      },
+      contentPathsTree(data: Infer<typeof menuSchema>) {
+        return data.reduce<Record<string, Infer<typeof singleDoc>>>((result, node) => {
+          node.children.forEach((doc) => {
+            result[doc.contentPath] = doc
+          })
+          return result
+        }, {})
+      },
+      findByPermalink(data: Infer<typeof menuSchema>, permalink: string) {
+        return this.permalinksTree(data)[permalink] ?? this.permalinksTree(data)[`/${permalink}`]
+      },
+      has(data: Infer<typeof menuSchema>, permalink: string) {
+        return !!this.findByPermalink(data, permalink)
+      },
+      findByContentPath(data: Infer<typeof menuSchema>, contentPath: string) {
+        return this.contentPathsTree(data)[contentPath]
+      },
+    },
+  })
+})
 
-    return collections
-  },
-  {} as {
-    [K in 'guides' | 'start']: Collection<
-      typeof menuSchema,
-      {
-        permalinksTree(data: Infer<typeof menuSchema>): Record<string, Infer<typeof singleDoc>>
-        contentPathsTree(data: Infer<typeof menuSchema>): Record<string, Infer<typeof singleDoc>>
-        findByPermalink(
-          data: Infer<typeof menuSchema>,
-          permalink: string
-        ): Infer<typeof singleDoc> | undefined
-        findByContentPath(
-          data: Infer<typeof menuSchema>,
-          contentPath: string
-        ): Infer<typeof singleDoc> | undefined
+export async function findDoc(permalink: string) {
+  const sections = await docsSections.load()
+
+  for (const sectionName of sectionsNames) {
+    const section = sections[sectionName]
+    const doc = section.findByPermalink(permalink)
+    if (doc) {
+      return {
+        doc,
+        section,
+        sections,
       }
-    >
-  }
-)
-
-const start = await docsZones.start.load()
-const guides = await docsZones.guides.load()
-
-export function findDoc(permalink: string) {
-  let doc = start.findByPermalink(permalink)
-  if (doc) {
-    return {
-      doc,
-      zone: start,
-    }
-  }
-
-  doc = guides.findByPermalink(permalink)
-  if (doc) {
-    return {
-      doc,
-      zone: guides,
     }
   }
 
   return null
 }
 
-export function resolveLink(fromFile: string, toFile: string) {
+export async function resolveLink(fromFile: string, toFile: string) {
   const contentFilePath = app.makePath(resolve(dirname(fromFile), toFile))
-  let doc = start.findByContentPath(contentFilePath)
-  if (!doc) {
-    doc = guides.findByContentPath(contentFilePath)
-  }
+  const sections = await docsSections.load()
 
-  if (doc) {
-    return doc.permalink
+  for (const sectionName of sectionsNames) {
+    const section = sections[sectionName]
+    const doc = section.findByContentPath(contentFilePath)
+    if (doc) {
+      return `/${doc.permalink}`
+    }
   }
-
   return null
 }
 
