@@ -934,7 +934,7 @@ The `<Link>` component's `route` prop is fully typed - TypeScript ensures you us
 
 ### TanStack Query integration
 
-The `@tuyau/tanstack-query` package provides React hooks that integrate Tuyau with TanStack Query (formerly React Query) for data fetching, caching, and state management. See the [TanStack Query guide](./tanstack-query.md) for instructions on setting up and using these hooks in your React components.
+The `@tuyau/tanstack-query` package provides React hooks that integrate Tuyau with TanStack Query (formerly React Query) for data fetching, caching, and state management. See the [TanStack Query guide](./tanstack_query.md) for instructions on setting up and using these hooks in your React components.
 
 ### Starter kits
 

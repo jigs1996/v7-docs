@@ -37,13 +37,27 @@ import { createTuyauReactQueryClient } from '@tuyau/react-query'
 export const queryClient = new QueryClient()
 
 export const client = createTuyau({ baseUrl: import.meta.env.VITE_API_URL, registry })
-export const tuyau = createTuyauReactQueryClient({
-  client,
-  queryClient,
-})
+export const tuyau = createTuyauReactQueryClient({ client })
 ```
 
 The `tuyau` object provides access to all your routes with type-safe query and mutation options. The `queryClient` is the standard TanStack Query client used for cache management and invalidation.
+
+### Retry behavior
+
+Tuyau is built on [Ky](https://github.com/sindresorhus/ky), which has automatic retry enabled by default for failed requests. When using `@tuyau/react-query`, Ky's retry mechanism is automatically disabled to let TanStack Query handle retries instead, since it also has built-in retry functionality.
+
+This prevents double retries (Ky retrying, then TanStack Query retrying on top) and gives you full control over retry behavior through TanStack Query's configuration:
+
+```ts
+const postsQuery = useQuery(
+  tuyau.posts.index.queryOptions(
+    {},
+    {
+      retry: 3, // TanStack Query handles retries
+    }
+  )
+)
+```
 
 ## Basic queries
 
