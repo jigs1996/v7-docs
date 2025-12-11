@@ -309,6 +309,11 @@
         "title": "Transmit",
         "permalink": "guides/digging-deeper/transmit",
         "contentPath": "./digging_deeper/transmit.md"
+      },
+      {
+        "title": "OpenTelemetry",
+        "permalink": "guides/digging-deeper/opentelemetry",
+        "contentPath": "./digging_deeper/opentelemetry.md"
       }
     ]
   },

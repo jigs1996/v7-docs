@@ -535,8 +535,7 @@ export const listPostsValidator = vine.compile(
 )
 ```
 
-```ts
-// title: app/controllers/posts_controller.ts
+```ts title="app/controllers/posts_controller.ts"
 export default class PostsController {
   async index({ request }: HttpContext) {
     const filters = await request.validateUsing(listPostsValidator)
