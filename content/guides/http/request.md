@@ -15,7 +15,7 @@ The Request class holds all the information related to an HTTP request, includin
 
 ## Reading request body and files
 
-The request body contains data sent by the client, typically from HTML forms or API requests. AdonisJS uses the [bodyparser]() to automatically parse the request body based on the `Content-Type` header, converting JSON, form data, and multipart data into JavaScript objects you can easily work with.
+The request body contains data sent by the client, typically from HTML forms or API requests. AdonisJS uses the [bodyparser](./body_parser.md) to automatically parse the request body based on the `Content-Type` header, converting JSON, form data, and multipart data into JavaScript objects you can easily work with.
 
 ### Accessing the entire request body
 

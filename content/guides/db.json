@@ -45,6 +45,11 @@
         "contentPath": "./http/file_uploads.md"
       },
       {
+        "title": "Body parser",
+        "permalink": "guides/http/body-parser",
+        "contentPath": "./http/body_parser.md"
+      },
+      {
         "title": "Session",
         "permalink": "guides/http/session",
         "oldUrls": ["guides/basics/session"],
