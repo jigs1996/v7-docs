@@ -35,14 +35,6 @@
 }
 
 @font-face {
-    font-family: 'Display';
-    src: url('../fonts/DisplayMedium.woff') format('woff');    
-    font-weight: 500;    
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
     font-family: 'JetBrains Mono';
     src: url('../fonts/JetBrainsMono-Regular.woff2') format('woff2'),
         url('../fonts/JetBrainsMono-Regular.woff') format('woff');

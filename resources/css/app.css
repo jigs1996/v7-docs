@@ -21,9 +21,6 @@
   --font-sans:
     'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-display:
-    'Display', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-    'Segoe UI Symbol', 'Noto Color Emoji';
   --font-mono: 'JetBrains Mono';
 
   --text-11: 0.6875rem;
@@ -71,15 +68,6 @@
   border-radius: 10px;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: var(--font-display);
-}
-
 .container {
   max-width: 1360px;
 }
@@ -109,4 +97,8 @@ h6 {
 
 .menu-group.expanded > button svg {
   rotate: 90deg;
+}
+
+.header-search span {
+  @apply hidden sm:block;
 }

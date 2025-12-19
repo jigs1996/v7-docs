@@ -1,0 +1,22 @@
+[
+  {
+    "logo": "./logos/route4me.svg",
+    "url": "https://route4me.com/"
+  },
+  {
+    "logo": "./logos/galaxy.svg",
+    "url": "https://galaxycloud.app/"
+  },
+  {
+    "logo": "./logos/ezycourse.svg",
+    "url": "https://ezycourse.com/"
+  },
+  {
+    "logo": "./logos/relancer.svg",
+    "url": "https://relancer.com/"
+  },
+  {
+    "logo": "./logos/lambdatest.svg",
+    "url": "https://www.lambdatest.com/"
+  }
+]

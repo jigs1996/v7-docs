@@ -6,12 +6,12 @@
     variants: {
       color: {
         primary: 'bg-indigo-600 hover:bg-indigo-700 focus:bg-indigo-700 text-white font-mono',
-        secondary: 'bg-white hover:bg-neutral-100 text-neutral-900 dark:text-neutral-100 dark:bg-neutral-800 dark:hover:bg-neutral-700 border ',
+        secondary: 'text-woodsmoke-300 border border-woodsmoke-800/80 hover:border-woodsmoke-700 focus:border-woodsmoke-700 font-mono text-12 px-2.5 py-1.5',
         danger: 'bg-red-500 hover:bg-red-600 focus:bg-red-600',
       },
       size: {
         sm: 'px-3.5 py-1.5 text-xs',
-        md: 'px-5 py-2.5 text-base',
+        md: 'px-6 py-2.5 text-14',
         lg: 'px-7 py-3 text-base',
         xl: 'px-4 py-3 text-base h-12.5',
       },
@@ -28,22 +28,28 @@
 
 @if($props.get('href'))
   <a
-    {{ $props.except(['text', 'size', 'color', 'radius', 'class']).merge({ class: buttonClasses }).toAttrs() }}
+    {{ $props.except(['text', 'size', 'color', 'radius', 'external', 'class']).merge({ class: buttonClasses }).toAttrs() }}
   >
     @if(slotContent)
       {{{ slotContent }}}
     @else
       {{ text }}
     @end
+    @if(external) 
+      @svg('mynaui:arrow-up-right', { class: 'w-4 h-4 ml-2' })
+    @end
   </a>
 @else
   <button
-    {{ $props.except(['text', 'size', 'color', 'radius', 'class']).merge({ class: buttonClasses }).toAttrs() }}
+    {{ $props.except(['text', 'size', 'color', 'radius', 'external', 'class']).merge({ class: buttonClasses }).toAttrs() }}
   >
     @if(slotContent)
       {{{ slotContent }}}
     @else
       {{ text }}
+    @end
+    @if(external) 
+      @svg('mynaui:arrow-up-right', { class: 'w-4 h-4 ml-2' })
     @end
   </button>
 @end

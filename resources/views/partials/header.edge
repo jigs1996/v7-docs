@@ -1,46 +1,18 @@
-@let(navItems = [
-  {
-    text: 'Packages',
-    href: 'https://adonisjs.com/packages'
-  },
-  {
-    text: 'Sponsor',
-    href: 'https://adonisjs.com/sponsor'
-  },
-  {
-    text: 'About',
-    href: 'https://adonisjs.com/about'
-  }
-])
-
-<header class="sticky inset-x-0 top-0 border-b border-woodsmoke-800/70 z-2 backdrop-blur-3xl bg-woodsmoke-950/60" up-fixed="top">
-  <div class="container-full mx-auto px-5 sm:px-10 py-4 flex items-center justify-between h-18">
-    <div class="text-white">
-      <a href="/" class="block">
+<header class="sticky inset-x-0 top-0 border-b border-woodsmoke-900 z-2 backdrop-blur-3xl bg-woodsmoke-950/60" up-fixed="top">
+  <div class="container-full mx-auto px-5 lg:px-10 py-4 flex md:grid grid-cols-3 xl:grid-cols-[350px_616px_1fr] items-center justify-between h-18 gap-2 sm:gap-8">
+    <div class="flex text-white flex-1 sm:flex-none">
+      <a href="/">
         @!logos.adonisjs()
       </a>
     </div>
 
-    <div class="flex items-center gap-14">
-      <div class="w-36 lg:w-44">
-        @!search({ text: 'Search', color: 'primary', radius: 'full', size: 'md' })
-      </div>
+    <div class="sm:flex-1">
+      @!search({ text: 'Search', color: 'primary', radius: 'full', size: 'md', class: 'header-search px-2 sm:px-4 border-0 sm:border bg-transparent sm:bg-woodsmoke-900/60' })
+    </div>
 
+    <div class="flex items-center justify-end">
       <nav class="flex items-center gap-5">
-        <ul class="hidden md:flex items-center gap-4">
-          @each(item in navItems)
-            <li>
-              <a
-                href="{{ item.href }}"
-                class="text-sm hover:text-white transition-colors"
-              >
-                {{ item.text }}
-              </a>
-            </li>
-          @end
-        </ul>
-
-        <ul class="flex items-center gap-4">
+        <ul class="flex flex-row-reverse md:flex-row items-center gap-5">
           <li>
             <div class="relative">
               <span class="absolute -top-0.5 -left-0.5">
@@ -68,9 +40,7 @@
           <li>
             <a href="https://github.com/adonisjs/core" target="_blank" class="block">
               @svg('uiw:github', {
-                width: '24px',
-                height: '24px',
-                class: 'text-woodsmoke-400 hover:text-white transition-colors'
+                class: 'size-4.5 md:size-6 text-woodsmoke-400 hover:text-white transition-colors'
               })
             </a>
           </li>

@@ -7,9 +7,35 @@
 }))
 
 @layout()
-  <div class="container-full mx-auto px-5 sm:px-10">
-    <div class="md:border-l md:border-r border-woodsmoke-800/70 md:bg-[url('/resources/assets/docs-hero-bg.svg')] bg-no-repeat bg-top-bottom lg:grid xl:grid-cols-[260px_1fr_230px] lg:grid-cols-[270px_1fr] gap-4">
-      @include('partials/docs/sidebar')
+  <div class="container-full mx-auto lg:px-10 relative" x-data>
+    <button @click.prevent="$dispatch('toggle-mobile-nav')" class="w-full lg:hidden py-3 backdrop-blur-3xl bg-woodsmoke-950/60 border-b border-woodsmoke-900 flex items-center justify-between sticky top-18 z-1 px-5">
+      <div class="text-13 flex items-center gap-2.5 text-white font-medium">
+        <span class="text-woodsmoke-500">HTTP</span>
+        @svg('mynaui:chevron-right', {class: 'size-4'})
+        <span>Controllers</span>
+      </div>
+      <div>
+        @svg('mynaui:menu', {class: 'size-6 text-woodsmoke-200'})
+      </div>
+    </button>
+    <div class="px-5 lg:px-0 lg:border-l lg:border-r border-woodsmoke-900 bg-[url('/resources/assets/docs-hero-bg.svg')] bg-no-repeat bg-top-bottom lg:grid xl:grid-cols-[260px_1fr_230px] lg:grid-cols-[270px_1fr] gap-4">
+      {{-- webview --}}
+      <div class="pl-8 pr-3 hidden lg:block sticky top-23 pt-10 pb-11 max-h-[calc(100dvh-(var(--spacing)*16))] overflow-y-auto">
+        @include('partials/docs/sidebar')
+      </div>
+      {{-- webview --}}
+
+      {{-- mobile view --}}
+      <div x-data="{ isOpen: false }" @toggle-mobile-nav.window="isOpen = !isOpen" x-show="isOpen" class="fixed lg:hidden inset-0 z-2 bg-woodsmoke-950/45 backdrop-blur-3xl overflow-auto p-7 flex items-start">
+        <div class="flex-1">
+          @include('partials/docs/sidebar')
+        </div>
+        <button class="sticky top-0" @click.prevent="$dispatch('toggle-mobile-nav')">
+          @svg('mynaui:x', {class: 'size-6 text-woodsmoke-200'})
+        </button>
+      </div>
+      {{-- mobile view --}}
+
       @include('partials/docs/content')
       @include('partials/docs/toc')
     </div>

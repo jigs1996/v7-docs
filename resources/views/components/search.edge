@@ -1,7 +1,7 @@
 @let(slotContent = await $slots.main())
 @let(
   searchClasses = tv({
-    base: 'flex gap-2 items-center w-full max-w-96 px-4 py-2 mx-auto bg-woodsmoke-950 text-woodsmoke-400 border border-woodsmoke-800/70 hover:border-woodsmoke-700/70 group hover:text-woodsmoke-100 transition-colors',
+    base: 'flex gap-2 items-center w-full px-4 py-2 mx-auto bg-woodsmoke-950 text-woodsmoke-400 border border-woodsmoke-900 hover:border-woodsmoke-800/70 group hover:text-woodsmoke-100 transition-colors',
 
     variants: {
       color: {
@@ -38,13 +38,13 @@
   })($props.only(['size']))
 )
 
-<button
-{{ $props.except(['text', 'size', 'color', 'radius', 'class']).merge({ class: searchClasses }).toAttrs() }}
->
-@svg('mynaui:search', { width: 'auto', height: 'auto', class: searchIconClasses })
-@if(slotContent)
-  {{{ slotContent }}}
-@else
-  {{ text }}
-@end
+<button {{ $props.except(['text', 'size', 'color', 'radius', 'class']).merge({ class: searchClasses }).toAttrs() }}>
+  @svg('mynaui:search', { width: 'auto', height: 'auto', class: searchIconClasses })
+  <span>
+    @if(slotContent)
+      {{{ slotContent }}}
+    @else
+    {{ text }}
+    @end
+  </span>
 </button>
