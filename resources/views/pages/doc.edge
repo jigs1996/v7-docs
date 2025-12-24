@@ -26,7 +26,13 @@
       {{-- webview --}}
 
       {{-- mobile view --}}
-      <div x-data="{ isOpen: false }" @toggle-mobile-nav.window="isOpen = !isOpen" x-show="isOpen" class="fixed lg:hidden inset-0 z-2 bg-woodsmoke-950/45 backdrop-blur-3xl overflow-auto p-7 flex items-start">
+      <div
+        x-data="{ isOpen: false }"
+        @toggle-mobile-nav.window="isOpen = !isOpen"
+        @hide-mobile-nav.window="isOpen = false"
+        x-show="isOpen"
+        class="fixed lg:hidden inset-0 z-2 bg-woodsmoke-950/45 backdrop-blur-3xl overflow-auto p-7 flex items-start"
+      >
         <div class="flex-1">
           @include('partials/docs/sidebar')
         </div>

@@ -13,6 +13,12 @@
         "contentPath": "./basics/controllers.md"
       },
       {
+        "title": "HTTP context",
+        "permalink": "guides/basics/http-context",
+        "oldUrls": ["guides/concepts/http-context"],
+        "contentPath": "./basics/http_context.md"
+      },
+      {
         "title": "Middleware",
         "permalink": "guides/basics/middleware",
         "contentPath": "./basics/middleware.md"
@@ -224,11 +230,6 @@
         "title": "Barrel Files",
         "permalink": "guides/concepts/barrel-files",
         "contentPath": "./concepts/barrel_files.md"
-      },
-      {
-        "title": "HTTP context",
-        "permalink": "guides/concepts/http-context",
-        "contentPath": "./concepts/http_context.md"
       },
       {
         "title": "Extending AdonisJS",

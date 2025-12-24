@@ -58,7 +58,7 @@ router.post('/users', async ({ request }) => {
 
 Instead of inline callbacks, you can delegate request handling to a controller method. Controllers help organize logic into dedicated classes and make handlers reusable across multiple routes.
 
-See also: [Controllers guide](./controllers.md) and [HTTP Context documentation](../concepts/http_context.md)
+See also: [Controllers guide](./controllers.md) and [HTTP Context documentation](./http_context.md)
 
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
@@ -590,7 +590,7 @@ This redirects to `/articles?limit=20&page=1`.
 
 ## Accessing the current route
 
-You can access the currently matched route from the [HTTP context](../concepts/http_context.md) via `ctx.route`. This is useful for debugging, auditing, logging, or implementing route-aware logic like breadcrumbs or active navigation.
+You can access the currently matched route from the [HTTP context](./http_context.md) via `ctx.route`. This is useful for debugging, auditing, logging, or implementing route-aware logic like breadcrumbs or active navigation.
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
@@ -802,6 +802,6 @@ BriskRoute.getter('hasData', function (this: BriskRoute) {
 Now that you understand routing, you can:
 - Build [controllers](./controllers.md) to organize your route handlers
 - Add [middleware](./middleware.md) for authentication and request processing
-- Learn about [HTTP context](../concepts/http_context.md) to access request data
+- Learn about [HTTP context](./http_context.md) to access request data
 - Explore [validation](./validation.md) to secure route inputs
 - Study [exception handling](./exception_handling.md) for error responses

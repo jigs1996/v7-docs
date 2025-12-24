@@ -24,6 +24,9 @@ Alpine.data('ctc', function () {
 })
 
 up.viewport.config.revealPadding = 55
+up.on('up:location:changed', function () {
+  window.dispatchEvent(new CustomEvent('hide-mobile-nav'))
+})
 
 /**
  * Tracks the scrolling of windows and activates the
