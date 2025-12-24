@@ -99,9 +99,6 @@
 .prose a {
   font-weight: 500;
   @apply text-indigo-400;
-  /* border-bottom-style: solid;
-  border-bottom-width: 1px;
-  @apply border-indigo-300; */
 }
 
 .prose ul,

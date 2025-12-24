@@ -236,24 +236,9 @@
         "contentPath": "./concepts/extending_adonisjs.md"
       },
       {
-        "title": "Async Local Storage",
-        "permalink": "guides/concepts/async-local-storage",
-        "contentPath": "./concepts/async_local_storage.md"
-      },
-      {
-        "title": "Content Negotiation",
-        "permalink": "guides/concepts/content-negotiation",
-        "contentPath": "./concepts/content_negotiation.md"
-      },
-      {
         "title": "Assembler Hooks",
         "permalink": "guides/concepts/assembler-hooks",
         "contentPath": "./concepts/assembler_hooks.md"
-      },
-      {
-        "title": "TypeScript Build Process",
-        "permalink": "guides/concepts/typescript-build-process",
-        "contentPath": "./concepts/typescript_build_process.md"
       }
     ]
   },
