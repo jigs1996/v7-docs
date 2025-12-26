@@ -17,7 +17,7 @@ node ace list
 You should see something like this:
 
 :::media
-![](./node_ace_list.png)
+![](../hypermedia/node_ace_list.png)
 :::
 
 Notice how the commands are grouped together? 
