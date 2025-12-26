@@ -1,7 +1,9 @@
 import edge from 'edge.js'
+import { Socket } from 'node:net'
 import { dirname } from 'node:path'
 import { inject } from '@adonisjs/core'
 import { Router } from '@adonisjs/core/http'
+import { IncomingMessage } from 'node:http'
 import { type Infer } from '@vinejs/vine/types'
 import { BaseCommand } from '@adonisjs/core/ace'
 import { type singleDoc } from '#collections/docs'
@@ -18,8 +20,14 @@ export default class BuildStatic extends BaseCommand {
   }
 
   #createView(url: string) {
-    const request = new RequestFactory().create()
-    request.request.url = url
+    const req = new IncomingMessage(new Socket())
+    req.url = url
+
+    const request = new RequestFactory()
+      .merge({
+        req,
+      })
+      .create()
     return edge.share({ request })
   }
 
@@ -77,7 +85,10 @@ export default class BuildStatic extends BaseCommand {
 
     for (const group of [...guides.all(), ...start.all(), ...reference.all()]) {
       for (const doc of group.children) {
-        const action = this.logger.action(`Compiling ${doc.permalink}`)
+        const action = doc.permalink
+          ? this.logger.action(`Compiling ${doc.permalink}`)
+          : this.logger.action(`Compiling (${doc.variations?.map(({ permalink }) => permalink)})`)
+
         try {
           await this.#compileDoc(doc)
           action.succeeded()
