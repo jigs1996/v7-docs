@@ -41,7 +41,7 @@
   </nav>
 
   {{-- Section menu --}}
-  @each(group in section.menu(docVariant))
+  @each(group in section.menu(doc.variant))
     @let(isExpanded = true)
     <nav
       class="menu-group {{ isExpanded ? 'expanded' : '' }}"

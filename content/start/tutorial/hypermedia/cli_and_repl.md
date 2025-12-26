@@ -1,3 +1,5 @@
+:variantSelector{}
+
 # Command line and REPL
 
 You might be wondering why we're covering CLI and REPL instead of jumping straight into building features. Here's why: throughout this tutorial, you'll constantly use Ace commands to generate controllers, models, and other files. Getting familiar with the CLI now prevents us from interrupting the flow later.

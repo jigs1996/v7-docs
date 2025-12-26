@@ -2,6 +2,8 @@
 summary: Build a fully functional community showcase website with AdonisJS and learn how to create hypermedia-driven web applications.
 ---
 
+:variantSelector{}
+
 # Building DevShow - A Community showcase website
 
 In this tutorial, you will build DevShow. **DevShow is a small community showcase website where users can share what they've built.** Every user can create an account, publish a "showcase entry" (a project, tool, experiment, or anything they're proud of), and browse entries created by others.

@@ -76,44 +76,53 @@ export const docsSections = Collection.multi(sectionsNames, (section) => {
                 ...child,
                 permalink: matchingVariant?.permalink,
                 contentPath: matchingVariant?.contentPath,
+                variant: matchingVariant?.name,
               }
             }),
           }
         })
       },
       permalinksTree(data: Infer<typeof menuSchema>) {
-        return data.reduce<Record<string, Infer<typeof singleDoc>>>((result, node) => {
-          node.children.forEach((doc) => {
-            if (doc.permalink) {
-              result[doc.permalink] = doc
-            }
-            doc.variations?.forEach((variation) => {
-              result[variation.permalink] = {
-                ...doc,
-                permalink: variation.permalink,
-                contentPath: variation.contentPath,
+        return data.reduce<Record<string, Infer<typeof singleDoc> & { variant?: string }>>(
+          (result, node) => {
+            node.children.forEach((doc) => {
+              if (doc.permalink) {
+                result[doc.permalink] = doc
               }
+              doc.variations?.forEach((variation) => {
+                result[variation.permalink] = {
+                  ...doc,
+                  permalink: variation.permalink,
+                  variant: variation.name,
+                  contentPath: variation.contentPath,
+                }
+              })
             })
-          })
-          return result
-        }, {})
+            return result
+          },
+          {}
+        )
       },
       contentPathsTree(data: Infer<typeof menuSchema>) {
-        return data.reduce<Record<string, Infer<typeof singleDoc>>>((result, node) => {
-          node.children.forEach((doc) => {
-            if (doc.contentPath) {
-              result[doc.contentPath] = doc
-            }
-            doc.variations?.forEach((variation) => {
-              result[variation.contentPath] = {
-                ...doc,
-                permalink: variation.permalink,
-                contentPath: variation.contentPath,
+        return data.reduce<Record<string, Infer<typeof singleDoc> & { variant?: string }>>(
+          (result, node) => {
+            node.children.forEach((doc) => {
+              if (doc.contentPath) {
+                result[doc.contentPath] = doc
               }
+              doc.variations?.forEach((variation) => {
+                result[variation.contentPath] = {
+                  ...doc,
+                  permalink: variation.permalink,
+                  variant: variation.name,
+                  contentPath: variation.contentPath,
+                }
+              })
             })
-          })
-          return result
-        }, {})
+            return result
+          },
+          {}
+        )
       },
       findByPermalink(data: Infer<typeof menuSchema>, permalink: string) {
         return this.permalinksTree(data)[permalink] ?? this.permalinksTree(data)[`/${permalink}`]

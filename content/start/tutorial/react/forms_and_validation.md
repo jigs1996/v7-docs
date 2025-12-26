@@ -1,3 +1,5 @@
+:variantSelector{}
+
 # Forms and Validation
 
 In this chapter, you'll first add the ability for authenticated users to create new posts. Then, you'll apply the same pattern to let users leave comments on existing posts. Along the way, you'll be introduced to AdonisJS's validation layer and learn how to organize your code using separate controllers for different resources.

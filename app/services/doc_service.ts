@@ -12,11 +12,14 @@ export class DocService {
     }
 
     return view
-      .share({ resolveLink, resolveAsset, releaseBlocks: releases.groupedByMonth() })
-      .render('pages/doc', {
+      .share({
+        resolveLink,
+        resolveAsset,
+        releaseBlocks: releases.groupedByMonth(),
         ...doc,
         permalink,
       })
+      .render('pages/doc')
   }
 
   async retrieveLlmPath(permalink: string) {
@@ -24,6 +27,6 @@ export class DocService {
     if (!doc) {
       throw new errors.E_ROUTE_NOT_FOUND(['GET', permalink])
     }
-    return doc.doc.contentPath.replace('.md', '.llm.md')
+    return doc.doc.contentPath!.replace('.md', '.llm.md')
   }
 }

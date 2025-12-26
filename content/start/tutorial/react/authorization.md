@@ -1,3 +1,5 @@
+:variantSelector{}
+
 # Authorization
 
 In the previous chapter, we improved DevShow's navigation and styling. Now let's add the ability for users to edit and delete their own posts and comments. Right now, any logged-in user could modify anyone's content if we added those features. We need to add authorization checks to prevent this.

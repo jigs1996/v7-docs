@@ -1,3 +1,5 @@
+:variantSelector{}
+
 # Database and Models
 
 In this chapter, you will create models and migrations for the Post and Comment resources, establish relationships between them, generate dummy data using factories and seeders, and query your data using the REPL.

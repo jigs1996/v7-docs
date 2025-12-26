@@ -1,0 +1,32 @@
+@let(pattern = /\/(react|vue|hypermedia)\//)
+
+@let(variants = [{
+  title: 'Hypermedia',
+  active: doc.variant === 'Hypermedia',
+  url: request.url().replace(pattern, '/hypermedia/'),
+}, {
+  title: 'React',
+  active: doc.variant === 'React',
+  url: request.url().replace(pattern, '/react/'),
+}])
+{{-- , {
+  title: 'Vue',
+  active: doc.variant === 'Vue',
+  url: request.url().replace(pattern, '/vue/'),
+} --}}
+
+<div class="flex gap-3 mb-6 md:mb-8">
+  @each(variant in variants)
+    @!link({
+      href: variant.url,
+      class: [
+        'text-12', 'px-3.5', 'py-1.5', 'border', 'rounded-full',
+        {
+          'text-green-200! border-green-800/30 bg-green-900/30': variant.active,
+          'text-woodsmoke-300! border-woodsmoke-800/70 bg-woodsmoke-900/40': !variant.active,
+        }
+      ],
+      text: variant.title
+    })
+  @end
+</div>
