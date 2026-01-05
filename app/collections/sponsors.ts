@@ -23,8 +23,21 @@ export const sponsors = Collection.create({
     })
   ),
   views: {
-    filterd(data) {
-      return data.filter((sponsor) => sponsor.privacyLevel === 'PUBLIC')
+    active(data) {
+      return data.filter(
+        (sponsor) => sponsor.privacyLevel === 'PUBLIC' && sponsor.isActive === true
+      )
+    },
+    aggregates(data) {
+      return {
+        active: this.active(data).length,
+        past: this.past(data).length,
+      }
+    },
+    past(data) {
+      return data.filter(
+        (sponsor) => sponsor.privacyLevel === 'PUBLIC' && sponsor.isActive === false
+      )
     },
   },
 })
