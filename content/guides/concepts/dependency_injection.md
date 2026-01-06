@@ -101,9 +101,9 @@ export default class UsersController {
 Finally, connect your controller to a route. When you visit this endpoint, AdonisJS automatically constructs the controller using the container.
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
-const UsersController = () => import('#controllers/users_controller')
+import { controllers } from '#generated/controllers'
 
-router.post('/users', [UsersController, 'store'])
+router.post('/users', [controllers.Users, 'store'])
 ```
 
 The `@inject()` decorator is required on the controller class. Without it, the container won't know to resolve dependencies. The decorator uses TypeScript's reflection capabilities to detect constructor dependencies at runtime.
@@ -435,6 +435,7 @@ Now every call to `app.container.make(Cache)` returns the exact same `Cache` ins
 Aliases provide alternate string-based names for bindings, allowing you to request dependencies using descriptive names instead of class constructors.
 
 To create an alias, register it using `container.alias()` and update the `ContainerBindings` interface using TypeScript module augmentation for type safety.
+
 ```ts title="providers/cache_provider.ts"
 import type { ApplicationService } from '@adonisjs/core/types'
 import redis from '@adonisjs/redis/services/main'
@@ -471,6 +472,7 @@ export default class CacheProvider {
 ```
 
 Now you can request the cache using the string alias. TypeScript will know that `app.container.make('cache')` returns a `Cache` instance, giving you full autocomplete and type checking.
+
 ```ts
 import app from '@adonisjs/core/services/app'
 
@@ -479,6 +481,39 @@ import app from '@adonisjs/core/services/app'
  */
 const cache = await app.container.make('cache')
 ```
+
+### Binding existing values
+
+Sometimes you already have an instance and want to register it directly with the container rather than providing a factory function. The `bindValue` method binds an existing value to a class constructor or alias, and the container returns that exact value whenever it's requested.
+
+```ts title="providers/app_provider.ts"
+import type { ApplicationService } from '@adonisjs/core/types'
+import { Config } from '#services/config'
+
+export default class AppProvider {
+  constructor(protected app: ApplicationService) {}
+
+  register() {
+    /**
+     * Create the instance ourselves with specific configuration
+     */
+    const config = new Config({
+      environment: 'production',
+      debug: false,
+    })
+
+    /**
+     * Bind the existing instance directly.
+     * Every request for Config returns this exact object.
+     */
+    this.app.container.bindValue(Config, config)
+  }
+}
+```
+
+Unlike `bind` or `singleton` which accept factory functions, `bindValue` accepts the instance itself. This is useful when you need to register objects that were created outside the container, such as configuration objects parsed at startup or instances received from external libraries.
+
+The `bindValue` method is also available on the request-scoped resolver, which is how request-specific instances like `HttpContext` and `Logger` are registered during HTTP requests. See [Dependency injection during HTTP requests](#dependency-injection-during-http-requests) for an example.
 
 ## Dependency injection during HTTP requests
 
@@ -571,6 +606,7 @@ Notice that both implementations follow the exact same contract. Your applicatio
 ### Configuring which implementation to use
 
 Register a binding that tells the container which concrete implementation to inject when someone requests the abstract `PaymentService`. This is where you decide whether your application uses Stripe, PayPal, or any other provider.
+
 ```ts title="providers/app_provider.ts"
 import type { ApplicationService } from '@adonisjs/core/types'
 import PaymentService from '#services/payment_service'
@@ -594,6 +630,7 @@ export default class AppProvider {
 ### Using the abstraction in your code
 
 Now your business logic can depend on the abstract `PaymentService` without being coupled to any specific provider.
+
 ```ts title="app/controllers/checkout_controller.ts"
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
@@ -674,6 +711,7 @@ Both services type-hint `PaymentService`, but they need different implementation
 ### Registering contextual bindings
 
 Register contextual dependencies in a Service Provider using the `when().asksFor().provide()` API. This tells the container when a specific class asks for a dependency, provide a particular implementation.
+
 ```ts title="providers/app_provider.ts"
 import type { ApplicationService } from '@adonisjs/core/types'
 import PaymentService from '#services/payment_service'
@@ -714,6 +752,33 @@ export default class AppProvider {
 Now `SubscriptionService` automatically receives `StripeProvider` when it's constructed, while `OrderService` receives `PaypalProvider`, all through the same `PaymentService` type hint. This keeps your service code clean and focused on business logic while giving you fine-grained control over which dependencies are injected based on context.
 
 The contextual binding pattern is particularly powerful when combined with the adapter pattern from the previous section. Each service remains completely agnostic about which payment provider it's using, yet each gets exactly the implementation it needs for its specific use case.
+
+## Resolution priority
+
+When the container resolves a dependency, it checks multiple sources in a specific order. Understanding this priority helps you predict which implementation will be injected and debug unexpected behavior.
+
+The container resolves dependencies in this order, stopping at the first match:
+
+| Priority | Source | Description |
+|----------|--------|-------------|
+| 1 | Swaps | Test overrides registered with `container.swap()` |
+| 2 | Contextual bindings | Bindings registered with `when().asksFor().provide()` |
+| 3 | Resolver values | Values bound to a scoped resolver (e.g., request-scoped bindings) |
+| 4 | Container values | Values registered with `container.bindValue()` |
+| 5 | Container bindings | Factory functions registered with `container.bind()` or `container.singleton()` |
+| 6 | Auto-construction | The container constructs the class itself using `@inject()` |
+
+Swaps have the highest priority because they're designed for testing. When you swap a dependency, you want the fake implementation to be used regardless of any other bindings. This ensures your tests remain isolated and predictable.
+
+Contextual bindings come next because they represent intentional, context-specific overrides. When you explicitly say "when ClassA asks for ServiceB, provide this specific implementation," that intent should override general bindings.
+
+If no swap or contextual binding matches, the container checks for values bound to the current resolver scope. During HTTP requests, the `HttpContext` and request-scoped `Logger` are bound this way, ensuring each request gets its own instances.
+
+Container-level values and bindings are checked next. These are your application-wide singletons and factories registered in service providers.
+
+Finally, if no binding exists at all, the container attempts auto-construction. It uses TypeScript's reflection metadata to identify constructor dependencies marked with `@inject()` and recursively resolves them.
+
+This priority order means you can layer your dependency configuration: define general bindings in providers, override them contextually for specific classes, and swap them entirely during tests—all without modifying the original code.
 
 ## Swapping dependencies during testing
 
@@ -810,3 +875,4 @@ This event is fired for every resolution, including nested dependencies. For exa
 - [The IoC Container README](https://github.com/adonisjs/fold/blob/develop/README.md) - Comprehensive API documentation in a framework-agnostic context
 - [Why Do You Need an IoC Container?](https://github.com/thetutlage/meta/discussions/4) - The framework creator's reasoning for using dependency injection
 - [TypeScript Decorators](https://www.typescriptlang.org/docs/handbook/decorators.html) - Understanding the decorator syntax used by `@inject()`
+- [Container API docs](https://api.adonisjs.com/modules/_adonisjs_fold.index) - To get a full view of available classes, methods and properties.

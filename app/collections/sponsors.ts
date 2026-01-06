@@ -9,6 +9,7 @@ export const sponsors = Collection.create({
   loader: loaders.ghSponsors({
     login: 'thetutlage',
     isOrg: false,
+    includeInactive: true,
     outputPath: app.makePath('content/sponsors/db.json'),
     refresh: 'daily',
     ghToken: env.get('GH_TOKEN'),
