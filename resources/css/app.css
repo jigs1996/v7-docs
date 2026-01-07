@@ -5,7 +5,7 @@
 @import './markdown.css';
 
 @theme {
-  --color-woodsmoke-50: oklch(81.144% 0.0167 286.02);
+  /* --color-woodsmoke-50: oklch(81.144% 0.0167 286.02);
   --color-woodsmoke-100: oklch(77.744% 0.01971 285.93);
   --color-woodsmoke-200: oklch(70.544% 0.02748 285.67);
   --color-woodsmoke-300: oklch(63.426% 0.03273 285.43);
@@ -16,7 +16,20 @@
   --color-woodsmoke-800: oklch(28.113% 0.01826 285.17);
   --color-woodsmoke-900: oklch(20.245% 0.00989 285.48);
   --color-woodsmoke-950: oklch(16.048% 0.00628 285.67);
-  --color-woodsmoke-1000: oklch(15.048% 0.00628 285.67);
+  --color-woodsmoke-1000: oklch(15.048% 0.00628 285.67); */
+
+  --color-woodsmoke-50: #c0c0cc;
+  --color-woodsmoke-100: #b5b5c3;
+  --color-woodsmoke-200: #9e9eb1;
+  --color-woodsmoke-300: #88889e;
+  --color-woodsmoke-400: #72728c;
+  --color-woodsmoke-500: #5f5f75;
+  --color-woodsmoke-600: #4d4d5f;
+  --color-woodsmoke-700: #3b3b48;
+  --color-woodsmoke-800: #282832;
+  --color-woodsmoke-900: #16161b;
+  --color-woodsmoke-950: #0d0d10;
+  --color-woodsmoke-1000: #010101;
 
   --font-sans:
     'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
