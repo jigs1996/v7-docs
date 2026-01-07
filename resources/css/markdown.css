@@ -1,5 +1,5 @@
 .prose {
-  @apply lg:max-w-[616px] text-woodsmoke-300;
+  @apply lg:max-w-154 text-woodsmoke-300;
   @apply sm:min-h-[65vh];
 }
 
@@ -244,6 +244,10 @@
 .prose .option {
   margin-top: 18px;
   margin-bottom: 18px;
+}
+
+.prose .option > *:last-child {
+  margin-bottom: 8px;
 }
 
 .prose .code_snippet .code_snippet_header {
@@ -498,11 +502,11 @@
 }
 
 .prose .card .card-banner {
-  @apply w-full sm:w-[257px] h-[173px];
+  @apply w-full sm:w-64.25 h-43.25;
 }
 
 .prose .card p {
-  @apply text-sm leading-[22px];
+  @apply text-sm leading-5.5;
 }
 
 .prose .card a {
