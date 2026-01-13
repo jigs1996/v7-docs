@@ -185,7 +185,7 @@ Here's an important consideration: **Bouncer policies run in the backend environ
 
 The solution is to **pre-compute user permissions within transformers and send them as flags** to the frontend. Transformers run on the backend where they have access to policies, and can include permission checks in the serialized data.
 
-We'll use a **transformer variant** for this. Variants allow you to define multiple output shapes for the same resource. For example, you might want minimal data for list views but detailed data (including permissions) for detail views. Learn more about variants in the [Transformers documentation](../../../guides/basics/transformers.md#variants).
+We'll use a **transformer variant** for this. Variants allow you to define multiple output shapes for the same resource. For example, you might want minimal data for list views but detailed data (including permissions) for detail views. Learn more about variants in the [Transformers documentation](../../../guides/frontend/transformers.md#using-variants).
 
 Let's add a `forDetailedView` variant to the `PostTransformer`:
 ```ts title="app/transformers/post_transformer.ts"

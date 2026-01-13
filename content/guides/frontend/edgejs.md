@@ -146,6 +146,7 @@ For complete coverage of Edge's template syntax, including advanced features lik
 ## Working with layouts and components
 
 The `@layout()` component you saw in the first example wraps your page content with a complete HTML document structure. This component is stored at `resources/views/components/layout.edge` and contains the standard HTML boilerplate:
+
 ```edge title="resources/views/components/layout.edge"
 <!DOCTYPE html>
 <html lang="en">
@@ -185,130 +186,137 @@ Components can accept props (parameters) and have multiple named slots for more 
 
 ## Starter kit components
 
-The Hypermedia starter kit includes a collection of pre-built components for common UI patterns like forms, alerts, and form fields. These components are unstyled and render semantic HTML that you can style with your own CSS classes.
+The Hypermedia starter kit includes a collection of unstyled components for building forms and common UI patterns. Each component renders at most one HTML element and passes unknown props through as HTML attributes, allowing you to apply classes and other attributes directly.
 
-All components accept unknown props and apply them as HTML attributes to the rendered element, making it easy to add classes, data attributes, or other HTML attributes.
+### Layout
 
-### Alert components
+Renders the HTML document with head and body elements.
 
-Alert components display notification messages with optional auto-dismiss functionality.
+- **Props**: None
+- **Slots**: `main` (default)
 
 ```edge
-@alert.root({ variant: 'destructive', autoDismiss: true })
-  @!alert.title({ text: 'Unauthorized' })
-  @!alert.description({ text: 'You are not allowed to access this page' })
+@layout()
+  <main>Page content goes here</main>
 @end
 ```
 
-::::options
+### Form
 
-:::option{name="@alert.root" dataType="components/alert/root.edge"}
+Renders an HTML form element with automatic CSRF token injection.
 
-Container that defines context for child components. The component accepts the `variant` and `autoDismiss` props.
+| Prop | Type | Description |
+|------|------|-------------|
+| `action` | `string` | The form action URL |
+| `method` | `string` | HTTP method. Supports `PUT`, `PATCH`, and `DELETE` via method spoofing |
+| `route` | `string` | Compute action URL from a named route |
+| `routeParams` | `array` | Parameters for the named route |
+| `routeOptions` | `object` | Additional options for URL generation (e.g., query strings) |
 
-:::
-
-:::option{name="@alert.title" dataType="components/alert/title.edge"}
-
-Displays the alert title. Accepts the title via the `text` prop or as the main slot.
-
-:::
-
-:::option{name="@alert.description" dataType="components/alert/description.edge"}
-
-Displays the alert description. Accepts the title via the `text` prop or as the main slot.
-
-:::
-
-::::
-
-### Form component
-
-The form component renders an HTML form with an automatically included CSRF token for security.
-
-| Component | Location | Props | Description |
-|-----------|----------|-------|-------------|
-| `@form` | `components/form/index.edge` | `action`, `method`, `route`, `routeParams`, `routeOptions` | Renders a form with CSRF protection |
-
-**Props details:**
-- `action` - The form action URL
-- `method` - The HTTP method (supports `GET`, `POST`, `PUT`, `PATCH`, `DELETE`)
-- `route` - Compute the action URL from a route name
-- `routeParams` - Parameters for the route
-- `routeOptions` - Additional options for URL generation (like query strings)
-
-**Usage example:**
 ```edge
+@form({ route: 'posts.store', method: 'POST' })
+  {{-- Form fields --}}
+@end
+
 @form({ route: 'posts.update', method: 'PUT', routeParams: [post.id] })
-  {{-- Form fields go here --}}
+  {{-- Form fields --}}
 @end
 ```
 
-### Form field components
+### Field components
 
-Field components provide structure for form inputs with labels and error messages.
+Form field components work together to create accessible form inputs with labels and validation error display.
 
-| Component | Location | Props | Description |
-|-----------|----------|-------|-------------|
-| `@field.root` | `components/field/root.edge` | `name` | Container that defines context for label, input, and error |
-| `@field.label` | `components/field/label.edge` | `text` or main slot | Renders the field label |
-| `@field.error` | `components/field/error.edge` | None | Displays validation errors for the field |
+#### field.root
 
-**Usage example:**
+Container that establishes context for child field components.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `name` | `string` | Field name, used for error message lookup |
+| `id` | `string` | Element ID, used to associate labels with inputs |
+
+#### field.label
+
+Renders a label element associated with the field.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `text` | `string` | Label text (alternative to using the slot) |
+
+#### field.error
+
+Displays validation errors for the field. Automatically looks up errors by the field name.
+
 ```edge
 @field.root({ name: 'email' })
-  @!field.label({ text: 'Email' })
+  @!field.label({ text: 'Email address' })
   @!input.control({ type: 'email', autocomplete: 'email' })
   @!field.error()
 @end
 ```
 
-The `@field.error` component automatically displays validation errors associated with the field name.
+### Input control
 
-### Form controls
+Renders an input element. Must be a child of `@field.root`. It passes all props as HTML attributes to the input element.
 
-Form control components render standard HTML input elements with proper integration for validation errors and old input values.
-
-| Component | Location | Props | Description |
-|-----------|----------|-------|-------------|
-| `@input.control` | `components/input/control.edge` | Standard HTML input attributes | Renders an `<input>` element |
-| `@textarea.control` | `components/textarea/control.edge` | Standard HTML textarea attributes | Renders a `<textarea>` element |
-| `@select.control` | `components/select/control.edge` | `options` array + standard select attributes | Renders a `<select>` element |
-
-All form controls must be used within a `@field.root` component.
-
-**Usage examples:**
 ```edge
-@field.root({ name: 'email' })
-  @!input.control({ type: 'email', autocomplete: 'email' })
+@field.root({ name: 'username' })
+  @!field.label({ text: 'Username' })
+  @!input.control({ type: 'text', minlength: '3', maxlength: '20' })
+  @!field.error()
 @end
+```
 
-@field.root({ name: 'state' })
+### Select control
+
+Renders a select element with options. Must be a child of `@field.root`.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `options` | `array` | Array of objects with `name` and `value` properties |
+
+```edge
+@field.root({ name: 'country' })
+  @!field.label({ text: 'Country' })
   @!select.control({
-    options: states.map((state) => {
-      return {
-        name: state.name,
-        value: state.value
-      }
-    })
+    options: countries.map((country) => ({
+      name: country.name,
+      value: country.code
+    }))
   })
+  @!field.error()
 @end
+```
 
+### Textarea control
+
+Renders a textarea element. Must be a child of `@field.root`. It passes all props as HTML attributes to the textarea element.
+
+```edge
 @field.root({ name: 'bio' })
-  @!textarea.control()
+  @!field.label({ text: 'Biography' })
+  @!textarea.control({ rows: '4' })
+  @!field.error()
 @end
 ```
 
 ### Checkbox components
 
-Checkbox components render checkbox inputs with proper grouping for multiple selections.
+Checkbox components create checkbox inputs with shared naming for form submission.
 
-| Component | Location | Props | Description |
-|-----------|----------|-------|-------------|
-| `@checkbox.group` | `components/checkbox/group.edge` | `name` | Container for checkbox controls with a shared name |
-| `@checkbox.control` | `components/checkbox/control.edge` | Standard HTML checkbox attributes | Renders a checkbox input |
+#### checkbox.group
 
-**Usage example:**
+Container that establishes the shared name for child checkboxes.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `name` | `string` | Shared name for all checkboxes in the group |
+
+#### checkbox.control
+
+Renders a checkbox input. Must be nested within both `@checkbox.group` and `@field.root`. It passes all props as HTML attributes. Use `value` to set the checkbox value.
+
 ```edge
 @checkbox.group({ name: 'services' })
   @field.root({ id: 'design' })
@@ -330,14 +338,20 @@ Checkbox components render checkbox inputs with proper grouping for multiple sel
 
 ### Radio components
 
-Radio components render radio button inputs for single-selection scenarios.
+Radio components create mutually exclusive options within a group.
 
-| Component | Location | Props | Description |
-|-----------|----------|-------|-------------|
-| `@radio.group` | `components/radio/group.edge` | `name` | Container for radio controls with a shared name |
-| `@radio.control` | `components/radio/control.edge` | Standard HTML radio attributes | Renders a radio input |
+#### radio.group
 
-**Usage example:**
+Container that establishes the shared name for child radio buttons.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `name` | `string` | Shared name for all radio buttons in the group |
+
+#### radio.control
+
+Renders a radio input. Must be nested within both `@radio.group` and `@field.root`. It passes all props as HTML attributes. Use `value` to set the radio value.
+
 ```edge
 @radio.group({ name: 'payment_plan' })
   @field.root({ id: 'free' })
@@ -357,53 +371,93 @@ Radio components render radio button inputs for single-selection scenarios.
 @end
 ```
 
-### Button component
+### Alert components
 
-The button component renders a button element with optional text content.
+Alert components display notification messages with optional auto-dismiss behavior.
 
-| Component | Location | Props | Description |
-|-----------|----------|-------|-------------|
-| `@button` | `components/button.edge` | `text` or main slot, standard HTML button attributes | Renders a button element |
+#### alert.root
 
-**Usage example:**
+Container that establishes context for alert title and description.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `variant` | `string` | Alert variant (e.g., `destructive`, `success`) |
+| `autoDismiss` | `boolean` | Whether the alert should dismiss automatically |
+
+#### alert.title
+
+Renders the alert heading.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `text` | `string` | Title text (alternative to using the slot) |
+
+#### alert.description
+
+Renders the alert body text.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `text` | `string` | Description text (alternative to using the slot) |
+
 ```edge
-@!button({ text: 'Sign up', type: 'submit' })
-```
-
-You can customize this component to accept additional props for variants (primary, secondary) and sizes (small, large) when implementing your design system.
-
-### Link component
-
-The link component renders an anchor tag with support for route-based URL generation.
-
-| Component | Location | Props | Description |
-|-----------|----------|-------|-------------|
-| `@link` | `components/link.edge` | `route`, `routeParams`, `text` or main slot | Renders an `<a>` element with route support |
-
-**Usage examples:**
-```edge
-@!link({ route: 'posts.show', routeParams: [post.id], text: 'View post' })
-
-@link({ route: 'posts.show', routeParams: [post.id] })
-  <span>View post</span>
-  <svg>{{-- Icon --}}</svg>
+@alert.root({ variant: 'destructive', autoDismiss: true })
+  @!alert.title({ text: 'Unauthorized' })
+  @!alert.description({ text: 'You are not allowed to access this page' })
 @end
 ```
 
-### Avatar component
+### Button
 
-The avatar component renders user avatars using either an image URL or text initials.
+Renders a button element.
 
-| Component | Location | Props | Description |
-|-----------|----------|-------|-------------|
-| `@avatar` | `components/avatar.edge` | `src` or `initials` | Renders an avatar image or initials |
+| Prop | Type | Description |
+|------|------|-------------|
+| `text` | `string` | Button text (alternative to using the slot) |
 
-**Usage examples:**
 ```edge
-{{-- Render avatar with image --}}
-@!avatar({ src: user.avatarUrl })
+@!button({ text: 'Sign up', type: 'submit' })
 
-{{-- Render avatar with initials --}}
+@button({ type: 'button', class: 'btn-secondary' })
+  <span>Cancel</span>
+@end
+```
+
+### Link
+
+Renders an anchor element with route-based URL generation.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `text` | `string` | Link text (alternative to using the slot) |
+| `route` | `string` | Compute href from a named route |
+| `routeParams` | `array` | Parameters for the named route |
+| `routeOptions` | `object` | Additional options for URL generation |
+| `href` | `string` | Direct URL (use instead of route) |
+
+```edge
+@!link({ route: 'posts.show', routeParams: [post.id], text: 'View post' })
+
+@link({ route: 'posts.edit', routeParams: [post.id] })
+  <span>Edit</span>
+  <svg>{{-- icon --}}</svg>
+@end
+```
+
+### Avatar
+
+Renders either an image or initials for user avatars.
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `src` | `string` | Avatar image URL (renders an `img` element) |
+| `initials` | `string` | Fallback initials (renders a `span` element) |
+
+```edge
+{{-- With image --}}
+@!avatar({ src: user.avatarUrl, alt: user.name })
+
+{{-- With initials --}}
 @!avatar({ initials: user.initials })
 ```
 
@@ -412,11 +466,13 @@ The avatar component renders user avatars using either an image URL or text init
 When working with templates, you may need to inspect the data available in your template or debug why certain values aren't displaying as expected. Edge provides the `@dump` tag for this purpose.
 
 The `@dump` tag pretty-prints the value of a variable, making it easy to inspect data structures:
+
 ```edge
 @dump(posts)
 ```
 
 To view the entire template state (all variables available in your template), use:
+
 ```edge
 @dump(state)
 ```

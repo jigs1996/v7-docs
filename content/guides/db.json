@@ -352,9 +352,9 @@
         "contentPath": "./testing/introduction.md"
       },
       {
-        "title": "HTTP Tests",
-        "permalink": "guides/testing/http-tests",
-        "contentPath": "./testing/http_tests.md"
+        "title": "API Tests",
+        "permalink": "guides/testing/api-tests",
+        "contentPath": "./testing/api_tests.md"
       },
       {
         "title": "Browser Tests",
@@ -367,7 +367,7 @@
         "contentPath": "./testing/console_tests.md"
       },
       {
-        "title": "Database Tests",
+        "title": "Database",
         "permalink": "guides/testing/database",
         "contentPath": "./testing/database.md"
       },
