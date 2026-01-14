@@ -38,13 +38,58 @@
   })($props.only(['size']))
 )
 
-<button {{ $props.except(['text', 'size', 'color', 'radius', 'class']).merge({ class: searchClasses }).toAttrs() }}>
-  @svg('mynaui:search', { width: 'auto', height: 'auto', class: searchIconClasses })
-  <span>
-    @if(slotContent)
-      {{{ slotContent }}}
-    @else
-    {{ text }}
-    @end
-  </span>
-</button>
+<div data-pf-theme="dark">
+  <pagefind-modal-trigger></pagefind-modal-trigger>
+  <pagefind-modal>
+    <pagefind-modal-header>
+      <pagefind-input></pagefind-input>
+    </pagefind-modal-header>
+    <pagefind-modal-body>
+      <pagefind-summary></pagefind-summary>
+      <pagefind-results>
+        @raw
+          <script type="text/pagefind-template">
+            <li class="pf-result">
+              <div class="pf-result-card">
+                {{#if and(options.show_images, meta.image)}}
+                <img class="pf-result-image" src="{{ meta.image }}" alt="{{ meta.image_alt | default(meta.title) }}">
+                {{/if}}
+                <div class="pf-result-content">
+                  <p class="pf-result-title">
+                    <a class="pf-result-link" href="{{ meta.url | default(url) | safeUrl | replace('.html', '') }}"{{#if options.link_target}} target="{{ options.link_target }}"{{/if}}>{{ meta.title }}</a>
+                  </p>
+                  {{#if excerpt}}
+                  <p class="pf-result-excerpt">{{+ excerpt +}}</p>
+                  {{/if}}
+                </div>
+              </div>
+              {{#if sub_results}}
+              <ul class="pf-heading-chips">
+                {{#each sub_results as sub}}
+                <li class="pf-heading-chip">
+                  <a class="pf-heading-link" href="{{ sub.url | safeUrl }}">{{ sub.title }}</a>
+                  <p class="pf-heading-excerpt">{{+ sub.excerpt +}}</p>
+                </li>
+                {{/each}}
+              </ul>
+              {{/if}}
+            </li>
+          </script>
+        @end
+      </pagefind-results>
+    </pagefind-modal-body>
+    <pagefind-modal-footer>
+      <pagefind-keyboard-hints></pagefind-keyboard-hints>
+    </pagefind-modal-footer>
+  </pagefind-modal>
+  {{-- <button {{ $props.except(['text', 'size', 'color', 'radius', 'class']).merge({ class: searchClasses }).toAttrs() }} @click="open">
+    @svg('mynaui:search', { width: 'auto', height: 'auto', class: searchIconClasses })
+    <span>
+      @if(slotContent)
+        {{{ slotContent }}}
+      @else
+      {{ text }}
+      @end
+    </span>
+  </button> --}}
+</div>

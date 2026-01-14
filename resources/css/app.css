@@ -3,6 +3,7 @@
 
 @import './font.css';
 @import './markdown.css';
+@import './search.css';
 
 @theme {
   /* --color-woodsmoke-50: oklch(81.144% 0.0167 286.02);

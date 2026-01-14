@@ -117,12 +117,7 @@
     "category": "Data Layer",
     "children": [
       {
-        "title": "Introduction",
-        "permalink": "guides/database/introduction",
-        "contentPath": "./database/introduction.md"
-      },
-      {
-        "title": "Lucid ORM",
+        "title": "SQL ORM",
         "permalink": "guides/database/lucid",
         "contentPath": "./database/lucid.md"
       },
@@ -259,12 +254,14 @@
       {
         "title": "Cache",
         "permalink": "guides/digging-deeper/cache",
-        "contentPath": "./digging_deeper/cache.md"
+        "contentPath": "./digging_deeper/cache.md",
+        "draft": true
       },
       {
         "title": "Drive",
         "permalink": "guides/digging-deeper/drive",
-        "contentPath": "./digging_deeper/drive.md"
+        "contentPath": "./digging_deeper/drive.md",
+        "draft": true
       },
       {
         "title": "Emitter",
@@ -284,7 +281,8 @@
       {
         "title": "Locks",
         "permalink": "guides/digging-deeper/locks",
-        "contentPath": "./digging_deeper/locks.md"
+        "contentPath": "./digging_deeper/locks.md",
+        "draft": true
       },
       {
         "title": "Logger",
@@ -375,21 +373,6 @@
         "title": "Mocks & Fakes",
         "permalink": "guides/testing/mocks-and-fakes",
         "contentPath": "./testing/mocks_and_fakes.md"
-      }
-    ]
-  },
-  {
-    "category": "Deployment",
-    "children": [
-      {
-        "title": "Environment Variables",
-        "permalink": "guides/environment-variables",
-        "contentPath": "./operations_and_deployment/environment_variables.md"
-      },
-      {
-        "title": "Deployment",
-        "permalink": "guides/deployment",
-        "contentPath": "./operations_and_deployment/deployment.md"
       }
     ]
   }

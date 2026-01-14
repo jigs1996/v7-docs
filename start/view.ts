@@ -62,3 +62,40 @@ edge.global('parseCodeblockTitle', function (title: string) {
     title,
   }
 })
+
+import { type TagContract } from 'edge.js/types'
+
+/**
+ * Defining a tag
+ */
+const rawTag: TagContract = {
+  block: true,
+  seekable: false,
+  tagName: 'raw',
+  compile(_, buffer, token) {
+    token.children.forEach((child) => {
+      switch (child.type) {
+        case 'raw':
+          buffer.outputRaw(child.value)
+          break
+        case 'newline':
+          buffer.outputRaw('\n')
+          break
+        case 'comment':
+          buffer.outputRaw(child.value)
+          break
+        case 's__mustache':
+          buffer.outputRaw(`{{{${child.properties.jsArg}}}}`)
+          break
+        case 'mustache':
+          buffer.outputRaw(`{{${child.properties.jsArg}}}`)
+          break
+      }
+    })
+  },
+}
+
+/**
+ * Registering it with Edge
+ */
+edge.registerTag(rawTag)

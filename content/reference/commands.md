@@ -10,7 +10,7 @@ In this guide, we cover the usage of all the commands shipped with the framework
 node ace list
 ```
 
-![](../ace/ace_help_screen.jpeg)
+![](../guides/ace/node_ace_list.png)
 
 :::note
 

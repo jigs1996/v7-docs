@@ -34,6 +34,7 @@ export const singleDoc = vine.object({
     )
     .optional()
     .requiredIfMissing('permalink'),
+  draft: vine.boolean().optional(),
   oldUrls: vine.array(vine.string()).optional(),
   contentPath: vine
     .string()
@@ -64,21 +65,25 @@ export const docsSections = Collection.multi(sectionsNames, (section) => {
             isChild(permalink: string): boolean {
               return !!node.children.find((child) => child.permalink === permalink)
             },
-            children: node.children.map((child) => {
-              if (child.permalink) {
-                return child
-              }
-              const matchingVariant =
-                child.variations!.find((variant) => variant.name === variation) ??
-                child.variations?.[0]
+            children: node.children
+              .filter((child) => {
+                return child.draft === undefined || child.draft === false
+              })
+              .map((child) => {
+                if (child.permalink) {
+                  return child
+                }
+                const matchingVariant =
+                  child.variations!.find((variant) => variant.name === variation) ??
+                  child.variations?.[0]
 
-              return {
-                ...child,
-                permalink: matchingVariant?.permalink,
-                contentPath: matchingVariant?.contentPath,
-                variant: matchingVariant?.name,
-              }
-            }),
+                return {
+                  ...child,
+                  permalink: matchingVariant?.permalink,
+                  contentPath: matchingVariant?.contentPath,
+                  variant: matchingVariant?.name,
+                }
+              }),
           }
         })
       },

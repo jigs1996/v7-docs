@@ -32,22 +32,17 @@ node ace add @adonisjs/vite
 ```
 
 :::disclosure{title="See steps performed by the configure command"}
-
 1. Registers the following service provider inside the `adonisrc.ts` file.
-
-    ```ts
-    {
-      providers: [
-        // ...other providers
-        () => import('@adonisjs/vite/vite_provider')
-      ]
-    }
-    ```
-
+  ```ts
+  {
+    providers: [
+      // ...other providers
+      () => import('@adonisjs/vite/vite_provider')
+    ]
+  }
+  ```
 2. Creates `vite.config.ts` and `config/vite.ts` configuration files.
-
 3. Creates the frontend entry point file at `resources/js/app.js`.
-
 :::
 
 After installation, add the following to your `adonisrc.ts` file to integrate Vite with the build process.

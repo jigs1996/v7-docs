@@ -4,6 +4,8 @@ import 'unpoly'
 import Alpine from 'alpinejs'
 import '@github/tab-container-element'
 import collapse from '@alpinejs/collapse'
+import '@pagefind/component-ui'
+import '@pagefind/component-ui/css'
 
 import.meta.glob('../../content/**/*.(png|jpg|jpeg)')
 import.meta.glob('../assets/**/*.(svg|jpg|png|jpeg)')
