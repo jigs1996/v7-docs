@@ -1,45 +1,61 @@
-@let(cards = [
-  {
-    href: '/introduction',
-    title: 'Tutorial',
-    description: 'Start by preparing your environment, then follow the full hands-on tutorial from scratch',
-    icon: 'mynaui:rocket-solid'
-  },
-  {
-    href: '/guides/basics/routing',
-    title: 'Guides',
-    description: 'Learn core concepts, best practices, and how to use AdonisJS effectively in real projects',
-    icon: 'mynaui:book-dot-solid'
-  },
-  {
-    href: 'https://adocasts.com/',
-    target: '_blank',
-    title: 'Adocasts',
-    description: 'Watch practical screencasts and learn AdonisJS through real, guided video lessons',
-    icon: 'mynaui:video-solid'
-  },
-  {
-    href: 'https://plus.adonisjs.com/',
-    target: '_blank',
-    title: 'AdonisJS Kit',
-    description: 'A premium collection of full-stack components to help you build polished features faster',
-    icon: 'mynaui:box-solid',
-    badgeIcon: 'mynaui:star-solid'
- }
-])
+<div class="grid sm:grid-cols-2 md:grid-cols-3">
+  <div class="px-5 lg:px-15 py-10 sm:py-5 lg:py-15 border-r border-b border-woodsmoke-900">
+    <div class="flex items-center justify-center group bg-woodsmoke-800/40 rounded-md border border-woodsmoke-800/30 h-37 relative mb-7">
+      <div class="absolute inset-0 bg-[url('/resources/assets/round.png')] bg-size-[7px] opacity-40 rounded-md"></div>
+      @svg('mynaui:rocket-solid', { class: 'size-14 text-woodsmoke-400 z-1' })
+    </div>
+    <label class="mb-2.5 leading-none text-xl font-medium text-woodsmoke-50 block">Learn</label>
+    <p class="text-15 text-woodsmoke-400 leading-6">Start by preparing your environment, then follow the full hands-on tutorial from scratch</p>
+    <ul class="mt-4 text-indigo-400 text-15 space-y-2">
+      <li>
+        <a href="/introduction" class="flex items-center gap-0.5">
+          <span>Tutorial</span>
+          @svg('mynaui:chevron-right', {class: 'size-5'})
+        </a>
+      </li>
+      <li>
+        <a href="/guides/basics/routing" class="flex items-center gap-0.5">
+          <span>Guides</span>
+          @svg('mynaui:chevron-right', {class: 'size-5'})
+        </a>
+      </li>
+    </ul>
+  </div>
 
-<div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-  @each(card in cards)
-    <a href="{{ card.href }}" {{ card.target ? `target=${card.target}` : '' }}>
-      <div class="flex items-center justify-center group bg-woodsmoke-900 rounded-md border border-woodsmoke-800/40 h-47 relative">
-        <div class="absolute inset-0 bg-[url('/resources/assets/round.png')] bg-size-[7px] opacity-23 rounded-md"></div>
-        @!svg(card.icon, { width: '70px', height: '70px', class: 'text-woodsmoke-400 scale-90 transition-transform duration-300 z-1 group-hover:scale-105' })
-        @if(card.badgeIcon)
-          @!svg(card.badgeIcon, { width: '32px', height: '32px', class: 'text-amber-300 z-1 absolute -right-4 -top-3 rotate-15' })
-        @end
-      </div>
-      <label class="mt-6 mb-3 leading-none text-18 text-woodsmoke-50 block">{{card.title}}</label>
-      <p class="text-15 text-woodsmoke-400 leading-6">{{card.description}}</p>
-    </a>
-  @end
+  <div class="px-5 lg:px-15 py-10 sm:py-5 lg:py-15 border-r border-b border-woodsmoke-900">
+    <div
+      class="flex items-center justify-center group bg-woodsmoke-800/40 rounded-md border border-woodsmoke-800/30 h-37 relative mb-7">
+      <div class="absolute inset-0 bg-[url('/resources/assets/round.png')] bg-size-[7px] opacity-40 rounded-md"></div>
+      @svg('mynaui:video-solid', { class: 'size-14 text-woodsmoke-400 z-1' })
+    </div>
+    <label class="mb-2.5 leading-none text-xl font-medium text-woodsmoke-50 block">Screencasts</label>
+    <p class="text-15 text-woodsmoke-400 leading-6">Watch practical screencasts and learn AdonisJS through real, guided video lessons</p>
+    <ul class="mt-4 text-indigo-400 text-15 space-y-2">
+      <li>
+        <a href="https://adocasts.com/" target="_blank" class="flex items-center gap-0.5">
+          <span>Adocasts</span>
+          @svg('mynaui:chevron-right', {class: 'size-5'})
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="px-5 lg:px-15 py-10 sm:py-5 lg:py-15 border-r lg:border-r-0 border-b border-woodsmoke-900">
+    <div
+      class="flex items-center justify-center group bg-woodsmoke-800/40 rounded-md border border-woodsmoke-800/30 h-37 relative mb-7">
+      <div class="absolute inset-0 bg-[url('/resources/assets/round.png')] bg-size-[7px] opacity-40 rounded-md"></div>
+      @svg('mynaui:box-solid', { class: 'size-14 text-woodsmoke-400 z-1' })
+      @svg('mynaui:star-solid', { class: 'size-8 text-amber-300 z-1 absolute -right-4 -top-3 rotate-15' })
+    </div>
+    <label class="mb-2.5 leading-none text-xl font-medium text-woodsmoke-50 block">Plus</label>
+    <p class="text-15 text-woodsmoke-400 leading-6">A premium collection of full-stack components to help you build polished features faster</p>
+    <ul class="mt-4 text-indigo-400 text-15 space-y-2">
+      <li>
+        <a href="https://plus.adonisjs.com/" target="_blank" class="flex items-center gap-0.5">
+          <span>Full-stack components</span>
+          @svg('mynaui:chevron-right', {class: 'size-5'})
+        </a>
+      </li>
+    </ul>
+  </div>
 </div>
