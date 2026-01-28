@@ -1,5 +1,5 @@
 {
-  "lastFetched": "2026-01-20T05:16:47.865Z",
+  "lastFetched": "2026-01-28T16:55:17.693Z",
   "sponsors": [
     {
       "id": "S_kwDOABoJjc4AAwox",
@@ -834,6 +834,19 @@
       "sponsorUrl": "https://github.com/Dolu89"
     },
     {
+      "id": "S_kwDOABoJjc4ABjK2",
+      "createdAt": "2026-01-25T10:55:48Z",
+      "isActive": true,
+      "privacyLevel": "PUBLIC",
+      "tierName": "$19 a month",
+      "tierMonthlyPriceInCents": 1900,
+      "sponsorType": "User",
+      "sponsorLogin": "movy",
+      "sponsorName": null,
+      "sponsorAvatarUrl": "https://avatars.githubusercontent.com/u/4336560?u=ed1c16d173bc9b76739dbc141815876e47032ec9&v=4",
+      "sponsorUrl": "https://github.com/movy"
+    },
+    {
       "id": "S_kwDOABoJjc4ABfOB",
       "createdAt": "2025-12-01T15:26:37Z",
       "isActive": true,
@@ -1070,7 +1083,7 @@
     {
       "id": "S_kwDOABoJjc4ABgkr",
       "createdAt": "2025-12-20T13:56:45Z",
-      "isActive": true,
+      "isActive": false,
       "privacyLevel": "PUBLIC",
       "tierName": "$19 a month",
       "tierMonthlyPriceInCents": 1900,
@@ -1900,6 +1913,19 @@
       "sponsorUrl": "https://github.com/jikkai"
     },
     {
+      "id": "S_kwDOABoJjc4ABiz3",
+      "createdAt": "2026-01-20T16:29:52Z",
+      "isActive": true,
+      "privacyLevel": "PUBLIC",
+      "tierName": "$19 a month",
+      "tierMonthlyPriceInCents": 1900,
+      "sponsorType": "User",
+      "sponsorLogin": "Meiyo40",
+      "sponsorName": "Meiyo",
+      "sponsorAvatarUrl": "https://avatars.githubusercontent.com/u/14098687?u=7c6e9d7928b55d7830e93b12142606bc03b0001c&v=4",
+      "sponsorUrl": "https://github.com/Meiyo40"
+    },
+    {
       "id": "S_kwDOABoJjc4AA08Y",
       "createdAt": "2023-11-23T17:09:28Z",
       "isActive": false,
@@ -2045,7 +2071,7 @@
     {
       "id": "S_kwDOABoJjc4AAwDw",
       "createdAt": "2023-08-24T09:39:46Z",
-      "isActive": true,
+      "isActive": false,
       "privacyLevel": "PUBLIC",
       "tierName": "$19 a month",
       "tierMonthlyPriceInCents": 1900,
@@ -2065,7 +2091,7 @@
       "sponsorType": "User",
       "sponsorLogin": "luzzbe",
       "sponsorName": "Timothée Lebourdais",
-      "sponsorAvatarUrl": "https://avatars.githubusercontent.com/u/19195247?v=4",
+      "sponsorAvatarUrl": "https://avatars.githubusercontent.com/u/19195247?u=4b22c04fcb04fa3627135ba40bcc25ee067e1eda&v=4",
       "sponsorUrl": "https://github.com/luzzbe"
     },
     {
@@ -2688,7 +2714,7 @@
       "tierMonthlyPriceInCents": 2900,
       "sponsorType": "User",
       "sponsorLogin": "crbast",
-      "sponsorName": "Bastien",
+      "sponsorName": "crbast",
       "sponsorAvatarUrl": "https://avatars.githubusercontent.com/u/31575093?u=55823ec1c68423326a327be692cf181a3de15209&v=4",
       "sponsorUrl": "https://github.com/crbast"
     },
@@ -2743,6 +2769,19 @@
       "sponsorName": "WP",
       "sponsorAvatarUrl": "https://avatars.githubusercontent.com/u/32625530?u=4fe11c387395baec564bf2fe0c5d7b0bcc9930ae&v=4",
       "sponsorUrl": "https://github.com/petchpool"
+    },
+    {
+      "id": "S_kwDOABoJjc4AA1BW",
+      "createdAt": "2023-11-25T06:41:02Z",
+      "isActive": false,
+      "privacyLevel": "PUBLIC",
+      "tierName": "$19 a month",
+      "tierMonthlyPriceInCents": 1900,
+      "sponsorType": "User",
+      "sponsorLogin": "Fabio-web",
+      "sponsorName": "Fabio",
+      "sponsorAvatarUrl": "https://avatars.githubusercontent.com/u/33074345?u=f2a1011b5e7268d36b558f000dc40a6ef188ce46&v=4",
+      "sponsorUrl": "https://github.com/Fabio-web"
     },
     {
       "id": "S_kwDOABoJjc4AAhCy",
@@ -3642,6 +3681,19 @@
       "sponsorUrl": "https://github.com/Ziut3k-dev"
     },
     {
+      "id": "S_kwDOABoJjc4ABjJX",
+      "createdAt": "2026-01-25T05:05:05Z",
+      "isActive": false,
+      "privacyLevel": "PUBLIC",
+      "tierName": "$19 a month",
+      "tierMonthlyPriceInCents": 1900,
+      "sponsorType": "User",
+      "sponsorLogin": "mdthansil",
+      "sponsorName": "Muhammed Thansil",
+      "sponsorAvatarUrl": "https://avatars.githubusercontent.com/u/67552710?u=edae462322f04fd2394109a8b64746df5a585901&v=4",
+      "sponsorUrl": "https://github.com/mdthansil"
+    },
+    {
       "id": "S_kwDOABoJjc4AAc9R",
       "createdAt": "2022-08-08T08:26:01Z",
       "isActive": false,
@@ -3709,7 +3761,7 @@
     {
       "id": "S_kwDOABoJjc4ABg5L",
       "createdAt": "2025-12-26T05:42:11Z",
-      "isActive": true,
+      "isActive": false,
       "privacyLevel": "PUBLIC",
       "tierName": "$5 one time",
       "tierMonthlyPriceInCents": 500,
@@ -3783,6 +3835,19 @@
       "sponsorName": "Amir Hossein",
       "sponsorAvatarUrl": "https://avatars.githubusercontent.com/u/78794786?v=4",
       "sponsorUrl": "https://github.com/muteusers"
+    },
+    {
+      "id": "S_kwDOABoJjc4ABjZI",
+      "createdAt": "2026-01-28T15:23:39Z",
+      "isActive": true,
+      "privacyLevel": "PUBLIC",
+      "tierName": "$19 a month",
+      "tierMonthlyPriceInCents": 1900,
+      "sponsorType": "User",
+      "sponsorLogin": "OrlS15",
+      "sponsorName": null,
+      "sponsorAvatarUrl": "https://avatars.githubusercontent.com/u/78907050?u=6b6f32ac2d4eeafe18ff72151c25c7aba66ad524&v=4",
+      "sponsorUrl": "https://github.com/OrlS15"
     },
     {
       "id": "S_kwDOABoJjc4AA915",
@@ -3978,6 +4043,19 @@
       "sponsorName": null,
       "sponsorAvatarUrl": "https://avatars.githubusercontent.com/u/96966738?v=4",
       "sponsorUrl": "https://github.com/ChristopherFritz"
+    },
+    {
+      "id": "S_kwDOABoJjc4ABi49",
+      "createdAt": "2026-01-21T18:45:22Z",
+      "isActive": true,
+      "privacyLevel": "PUBLIC",
+      "tierName": "$5 a month",
+      "tierMonthlyPriceInCents": 500,
+      "sponsorType": "User",
+      "sponsorLogin": "pradyumna-r",
+      "sponsorName": "Pradyumna Ramesh",
+      "sponsorAvatarUrl": "https://avatars.githubusercontent.com/u/97592605?u=3d292080828dc6b4e974f4e972e20e1450637e3b&v=4",
+      "sponsorUrl": "https://github.com/pradyumna-r"
     },
     {
       "id": "S_kwDOABoJjc4ABbWz",
@@ -4381,6 +4459,19 @@
       "sponsorName": "neonex",
       "sponsorAvatarUrl": "https://avatars.githubusercontent.com/u/202722076?u=d18e23860b413f7ce94fea8750a94dfba7987b62&v=4",
       "sponsorUrl": "https://github.com/neonextechnologies"
+    },
+    {
+      "id": "S_kwDOABoJjc4ABjBV",
+      "createdAt": "2026-01-23T14:41:02Z",
+      "isActive": true,
+      "privacyLevel": "PUBLIC",
+      "tierName": "$29 a month",
+      "tierMonthlyPriceInCents": 2900,
+      "sponsorType": "Organization",
+      "sponsorLogin": "Studio-Prats",
+      "sponsorName": "Studio Prats",
+      "sponsorAvatarUrl": "https://avatars.githubusercontent.com/u/210821905?v=4",
+      "sponsorUrl": "https://github.com/Studio-Prats"
     },
     {
       "id": "S_kwDOABoJjc4ABUMt",
