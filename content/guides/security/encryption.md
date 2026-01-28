@@ -21,10 +21,6 @@ AdonisJS provides an encryption service with built-in support for three industry
 
 The encryption service produces output in a structured format that includes the driver identifier, ciphertext, initialization vector, and authentication tag. This self-describing format allows you to switch algorithms or rotate keys while maintaining the ability to decrypt older values.
 
-:::note
-The encryption service requires an `APP_KEY` environment variable. This key must be kept secret and should never be committed to version control. If you lose or change your app key, all previously encrypted data becomes permanently unreadable.
-:::
-
 ## Basic usage
 
 The encryption service provides two primary methods: `encryption.encrypt` for encrypting values and `encryption.decrypt` for retrieving the original data.
@@ -97,11 +93,17 @@ export default class TokenService {
      * The purpose option specifies the encryption purpose.
      * This token can only be decrypted with the same purpose.
      */
-    return encryption.encrypt({ userId }, { purpose: 'password-reset' })
+    return encryption.encrypt(
+      { userId },
+      { purpose: 'password-reset' } // [!code highlight]
+    )
   }
 
   createEmailVerificationToken(userId: number) {
-    return encryption.encrypt({ userId }, { purpose: 'email-verification' })
+    return encryption.encrypt(
+      { userId },
+      { purpose: 'email-verification' } // [!code highlight]
+    )
   }
 
   verifyPasswordResetToken(token: string) {
@@ -117,12 +119,16 @@ export default class TokenService {
 Without purpose binding, an attacker who obtains a password reset token could potentially reuse it as an email verification token if both contain the same data structure. Purpose-bound encryption prevents this attack by cryptographically binding the purpose to the encrypted value.
 
 ```ts title="app/services/token_service.ts"
+const token = encryption.encrypt(
+  { userId: 1 },
+  { purpose: 'password-reset' }
+)
+
+encryption.decrypt(token, 'password-reset')     // => { userId: 1 }
+
 /**
  * Attempting to decrypt with the wrong purpose returns null.
  */
-const token = encryption.encrypt({ userId: 1 }, { purpose: 'password-reset' })
-
-encryption.decrypt(token, 'password-reset')     // => { userId: 1 }
 encryption.decrypt(token, 'email-verification') // => null
 encryption.decrypt(token)                       // => null
 ```
@@ -136,12 +142,9 @@ import encryption from '@adonisjs/core/services/encryption'
 
 export default class InvitationService {
   createInvitationLink(email: string, teamId: number) {
-    /**
-     * The second parameter sets the expiration.
-     * Supports human-readable durations like '1h', '30m', '7d'.
-     */
-    const token = encryption.encrypt({ email, teamId }, '24h')
-
+    const token = encryption.encrypt({ email, teamId }, {
+      expiresIn: '24h' // [!code highlight]
+    })
     return `https://app.example.com/invitations/${token}`
   }
 
@@ -151,7 +154,6 @@ export default class InvitationService {
      * even if the encrypted data is still valid.
      */
     const payload = encryption.decrypt(token)
-
     if (!payload) {
       return { error: 'Invalid or expired invitation' }
     }
@@ -186,6 +188,32 @@ const token = encryption.encrypt(
  * Returns null if expired or purpose doesn't match.
  */
 const payload = encryption.decrypt(token, 'password-reset')
+```
+
+## Encrypting database columns
+
+Encrypt sensitive data before storing it in your database.
+
+```ts title="app/models/user.ts"
+import { UserSchema } from '#database/schema'
+import { beforeSave } from '@adonisjs/lucid/orm'
+import encryption from '@adonisjs/core/services/encryption'
+
+export default class User extends UserSchema {
+  @beforeSave()
+  static encryptSensitiveData(user: User) {
+    if (user.$dirty.ssn && user.ssn) {
+      user.ssn = encryption.encrypt(user.ssn)
+    }
+  }
+
+  decryptSsn(): string | null {
+    if (!this.ssn) {
+      return null
+    }
+    return encryption.decrypt(this.ssn)
+  }
+}
 ```
 
 ## Choosing an algorithm
@@ -259,7 +287,7 @@ export default defineConfig({
   list: {
     chacha: drivers.chacha20poly1305({
       id: 'chacha',
-      keys: [env.get('APP_KEY').release()],
+      keys: [env.get('APP_KEY')],
     }),
 
     /**
@@ -267,7 +295,7 @@ export default defineConfig({
      */
     // gcm: drivers.aes256gcm({
     //   id: 'gcm',
-    //   keys: [env.get('APP_KEY').release()],
+    //   keys: [env.get('APP_KEY')],
     // }),
 
     /**
@@ -275,7 +303,7 @@ export default defineConfig({
      */
     // cbc: drivers.aes256cbc({
     //   id: 'cbc',
-    //   keys: [env.get('APP_KEY').release()],
+    //   keys: [env.get('APP_KEY')],
     // }),
 
     /**
@@ -294,11 +322,11 @@ export default defineConfig({
 All drivers accept the same configuration options.
 
 ::::options
-:::option{name="id" dataType="string" required}
+:::option{name="id" dataType="string"}
 A unique identifier for this driver configuration. This ID is embedded in the encrypted output, allowing the decryption process to identify which driver was used.
 :::
 
-:::option{name="keys" dataType="string[]" required}
+:::option{name="keys" dataType="string[]"}
 An array of secret keys. The first key is used for encryption, while all keys are tried during decryption. This enables seamless key rotation.
 :::
 ::::
@@ -317,9 +345,10 @@ export default defineConfig({
   list: {
     chacha: drivers.chacha20poly1305({
       id: 'chacha',
+      // [!code highlight:4]
       keys: [
-        env.get('APP_KEY').release(),     // New key: used for encryption
-        env.get('OLD_APP_KEY').release(), // Old key: only used for decryption
+        env.get('APP_KEY'),     // New key: used for encryption
+        env.get('OLD_APP_KEY'), // Old key: only used for decryption
       ],
     }),
   },
@@ -445,182 +474,6 @@ node ace generate:key
 
 This command generates a random 32-character key and writes it to your `.env` file. The key uses a cryptographically secure random number generator to ensure it cannot be predicted or guessed.
 
-:::warning
 The `APP_KEY` is critical to your application's security. If this key is compromised, attackers can decrypt all your encrypted data and forge signed cookies. Store it securely, never commit it to version control, and use different keys for each environment.
 
 If you change or lose your `APP_KEY`, all existing encrypted data becomes permanently unreadable. Cookies signed with the old key will be rejected, and encrypted database values cannot be recovered. Always back up your production keys securely.
-:::
-
-## Error handling
-
-The encryption service is designed to return `null` on decryption failures rather than throwing exceptions. This approach prevents timing attacks and simplifies error handling.
-
-```ts title="app/services/token_service.ts"
-import encryption from '@adonisjs/core/services/encryption'
-
-export default class TokenService {
-  validateToken(token: string) {
-    const payload = encryption.decrypt(token)
-
-    /**
-     * A null result means decryption failed.
-     * This could be due to:
-     * - Invalid or corrupted token
-     * - Token encrypted with a different key
-     * - Token has expired
-     * - Purpose doesn't match (if using purpose-bound encryption)
-     * - Token has been tampered with
-     */
-    if (payload === null) {
-      return { valid: false, error: 'Invalid or expired token' }
-    }
-
-    return { valid: true, data: payload }
-  }
-}
-```
-
-The service intentionally doesn't distinguish between these failure cases. Providing specific error messages could help attackers understand why their forgery attempts are failing, making it easier to craft valid attacks.
-
-## Testing
-
-During testing, you may want to inspect encrypted values or use predictable encryption. You can access the encryption service directly in your tests.
-
-```ts title="tests/functional/tokens.spec.ts"
-import { test } from '@japa/runner'
-import encryption from '@adonisjs/core/services/encryption'
-
-test.group('Token validation', () => {
-  test('accepts valid tokens', async ({ assert }) => {
-    const token = encryption.encrypt({ userId: 1 })
-    const payload = encryption.decrypt(token)
-
-    assert.deepEqual(payload, { userId: 1 })
-  })
-
-  test('rejects expired tokens', async ({ assert }) => {
-    /**
-     * Create a token that expires immediately for testing.
-     * In practice, you might use time mocking instead.
-     */
-    const token = encryption.encrypt({ userId: 1 }, '0s')
-
-    /**
-     * Wait a moment to ensure expiration.
-     */
-    await new Promise(resolve => setTimeout(resolve, 10))
-
-    const payload = encryption.decrypt(token)
-    assert.isNull(payload)
-  })
-
-  test('rejects tokens with wrong purpose', async ({ assert }) => {
-    const token = encryption.encrypt({ userId: 1 }, { purpose: 'password-reset' })
-
-    const wrongPurpose = encryption.decrypt(token, 'email-verification')
-    const correctPurpose = encryption.decrypt(token, 'password-reset')
-
-    assert.isNull(wrongPurpose)
-    assert.deepEqual(correctPurpose, { userId: 1 })
-  })
-})
-```
-
-## Common use cases
-
-### Encrypting database columns
-
-Encrypt sensitive data before storing it in your database.
-
-```ts title="app/models/user.ts"
-import { BaseModel, beforeSave, column } from '@adonisjs/lucid/orm'
-import encryption from '@adonisjs/core/services/encryption'
-
-export default class User extends BaseModel {
-  @column()
-  declare email: string
-
-  @column()
-  declare ssn: string | null
-
-  @beforeSave()
-  static encryptSensitiveData(user: User) {
-    if (user.$dirty.ssn && user.ssn) {
-      user.ssn = encryption.encrypt(user.ssn)
-    }
-  }
-
-  decryptSsn(): string | null {
-    if (!this.ssn) {
-      return null
-    }
-    return encryption.decrypt(this.ssn)
-  }
-}
-```
-
-### Creating secure API tokens
-
-Generate tokens that contain embedded data and can be validated without database lookups.
-
-```ts title="app/services/api_token_service.ts"
-import encryption from '@adonisjs/core/services/encryption'
-
-export default class ApiTokenService {
-  create(userId: number, scopes: string[], expiresIn = '30d') {
-    return encryption.encrypt({ userId, scopes }, { expiresIn, purpose: 'api-token' })
-  }
-
-  validate(token: string) {
-    const payload = encryption.decrypt(token, 'api-token')
-
-    if (!payload) {
-      return null
-    }
-
-    return payload as { userId: number; scopes: string[] }
-  }
-}
-```
-
-### Secure URL parameters
-
-Pass sensitive data through URLs without exposing it.
-
-```ts title="app/controllers/reports_controller.ts"
-import type { HttpContext } from '@adonisjs/core/http'
-import encryption from '@adonisjs/core/services/encryption'
-
-export default class ReportsController {
-  async generateDownloadLink({ response, auth }: HttpContext) {
-    const user = auth.getUserOrFail()
-
-    /**
-     * Embed user info in the download token.
-     * Expires in 5 minutes to limit exposure.
-     */
-    const token = encryption.encrypt(
-      { userId: user.id, reportId: 123 },
-      { expiresIn: '5m', purpose: 'report-download' }
-    )
-
-    return response.json({
-      downloadUrl: `/reports/download/${token}`
-    })
-  }
-
-  async download({ params, response }: HttpContext) {
-    const payload = encryption.decrypt(params.token, 'report-download')
-
-    if (!payload) {
-      return response.unauthorized('Invalid or expired download link')
-    }
-
-    const { userId, reportId } = payload as { userId: number; reportId: number }
-
-    // Generate and return the report...
-  }
-}
-```
-
-See also: [Hashing](./hashing.md) for password storage, [Signed URLs](../basics/url_builder.md#signed-urls) for URL-based verification.
