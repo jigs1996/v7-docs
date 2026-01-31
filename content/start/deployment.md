@@ -16,7 +16,7 @@ This guide covers deploying AdonisJS applications to production. You will learn 
 
 AdonisJS applications are written in TypeScript and must be compiled to JavaScript before running in production. The build process creates a **standalone build**, which means the compiled output contains everything needed to run your application without the original TypeScript source files.
 
-Since AdonisJS apps run on the Node.js runtime, your deployment platform must support Node.js version 22 or later. The build process compiles your TypeScript code, bundles frontend assets (if using Vite), and copies necessary files to a `build` directory that you can deploy directly to your production server.
+Since AdonisJS apps run on the Node.js runtime, your deployment platform must support Node.js version 24 or later. The build process compiles your TypeScript code, bundles frontend assets (if using Vite), and copies necessary files to a `build` directory that you can deploy directly to your production server.
 
 ## Understanding the standalone build
 

@@ -276,9 +276,39 @@ export default class RateLimitMiddleware {
 
 Middleware execute in two phases: the **downstream phase** and the **upstream phase**. Understanding this flow is crucial for knowing where to place your logic within a middleware.
 
-The downstream phase occurs before the `await next()` call. During this phase, the request travels through each middleware in order: Server middleware → Router middleware → Named middleware → Route handler.
+The downstream phase occurs before the `await next()` call. During this phase, the request travels through each middleware in order. 
 
-The upstream phase occurs after the `await next()` call. During this phase, the response travels back through the middleware in reverse order: Route handler → Named middleware → Router middleware → Server middleware.
+```sh
+Downstream (Request →)
+
+  Server middleware
+        │
+        ▼
+  Router middleware
+        │
+        ▼
+  Named middleware
+        │
+        ▼
+   Route handler
+```
+
+The upstream phase occurs after the `await next()` call. During this phase, the response travels back through the middleware in reverse order.
+
+```sh
+Upstream (Response ←)
+
+  Server middleware
+        ▲
+        │
+  Router middleware
+        ▲
+        │
+  Named middleware
+        ▲
+        │
+   Route handler
+```
 
 ![](./middleware_execution_flow.jpeg)
 

@@ -758,17 +758,72 @@ The Response class automatically serializes response bodies and sets appropriate
 
 When you send a response, AdonisJS performs two operations: it serializes the value into a string format suitable for HTTP transmission, and it sets the appropriate `content-type` and `content-length` headers.
 
-| Data Type | Serialization Behavior | Content-Type |
-|-----------|------------------------|--------------|
-| Arrays and objects | Stringified using safe stringify (like `JSON.stringify()` but removes circular references and serializes BigInt) | `application/json` |
-| HTML fragments (strings starting with `<`) | Sent as-is | `text/html` |
-| Numbers and booleans | Converted to string | `text/plain` |
-| Date instances | Converted to ISO string using `toISOString()` | `text/plain` |
-| Regular expressions | Converted to string using `toString()` | `text/plain` |
-| Error objects | Converted to string using `toString()` | `text/plain` |
-| JSONP responses | Stringified appropriately | `text/javascript` |
-| Other plain strings | Sent as-is | `text/plain` |
-| Other data types | Results in an exception | - |
+::::options
+
+:::option{name="Arrays and objects"}
+
+- **Content-Type:** `application/json`
+- **Serialization Behavior:** Stringified using safe stringify (like `JSON.stringify()` but removes circular references and serializes BigInt)
+
+:::
+
+:::option{name="HTML fragments"}
+
+- **Content-Type:** `text/html`
+- **Serialization Behavior:** Sent as-is (strings starting with `<`)
+
+:::
+
+:::option{name="Numbers and booleans"}
+
+- **Content-Type:** `text/plain`
+- **Serialization Behavior:** Converted to string
+
+:::
+
+:::option{name="Date instances"}
+
+- **Content-Type:** `text/plain`
+- **Serialization Behavior:** Converted to ISO string using `toISOString()`
+
+:::
+
+:::option{name="Regular expressions"}
+
+- **Content-Type:** `text/plain`
+- **Serialization Behavior:** Converted to string using `toString()`
+
+:::
+
+:::option{name="Error objects"}
+
+- **Content-Type:** `text/plain`
+- **Serialization Behavior:** Converted to string using `toString()`
+
+:::
+
+:::option{name="JSONP responses"}
+
+- **Content-Type:** `text/javascript`
+- **Serialization Behavior:** Stringified appropriately
+
+:::
+
+:::option{name="Other plain strings"}
+
+- **Content-Type:** `text/plain`
+- **Serialization Behavior:** Sent as-is
+
+:::
+
+:::option{name="Other data types"}
+
+- **Content-Type:** `-`
+- **Serialization Behavior:** Results in an exception
+
+:::
+
+::::
 
 This automatic handling means you rarely need to manually set content-type headers.
 

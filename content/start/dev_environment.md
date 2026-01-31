@@ -1,11 +1,16 @@
 ---
-title: 'Development Environment Setup'
+title: 'Development environment setup'
 description: 'Learn how to configure an efficient development environment for building applications with AdonisJS.'
 ---
 
-# Development Environment Setup
+# Development environment setup
 
-This guide covers the recommended development environment for AdonisJS applications. You will learn about pre-configured TypeScript settings, ESLint and Prettier integration, recommended code editor extensions for improved productivity, and database options for local development.
+This guide covers the recommended development environment for AdonisJS applications. You will learn how to:
+
+- Configure TypeScript with required compiler options
+- Set up ESLint and Prettier for code quality
+- Install recommended code editor extensions
+- Choose a database for local development
 
 ## Overview
 
@@ -13,7 +18,7 @@ AdonisJS applications come with a fully configured development environment out o
 
 This guide explains what's already configured in your project, recommends optional editor extensions that enhance the development experience, and provides guidance on choosing a database for local development. Understanding these configurations helps you leverage the full capabilities of the framework and maintain consistency across your team.
 
-## Code Editors and Extensions
+## Code editors and extensions
 
 AdonisJS works with any modern code editor that supports **TypeScript**. The framework does not rely on custom domain-specific languages (DSLs), so most editors provide full language support out of the box. The only framework-specific syntax is the **Edge templating engine**, which benefits from dedicated syntax highlighting extensions.
 
@@ -51,15 +56,15 @@ links:
 Full syntax highlighting and basic autocomplete for Edge template files.
 :::
 
-## TypeScript Setup
+## TypeScript setup
 
 TypeScript is a first-class citizen in AdonisJS. Every application is created and runs using TypeScript by default, with all configuration handled automatically. Understanding how TypeScript works in development versus production, and the required compiler options, helps you make informed decisions about deployment and tooling.
 
-### Required TypeScript Configuration
+### Required TypeScript configuration
 
 AdonisJS requires specific TypeScript compiler options to function correctly. The framework relies heavily on **experimental decorators** for dependency injection, model definitions, and Ace commands.
 
-The following `tsconfig.json` configuration represents the bare minimum required for AdonisJS applications:
+The following `tsconfig.json` configuration represents the bare minimum required for AdonisJS applications.
 
 ::::tabs
 
@@ -111,7 +116,7 @@ The following `tsconfig.json` configuration represents the bare minimum required
 
 ::::
 
-### Development Mode (JIT Compilation)
+### Development mode (JIT compilation)
 
 In development, AdonisJS uses a **Just-in-Time (JIT) compiler** provided by the `@poppinss/ts-exec` package. This approach executes TypeScript files directly without a separate compilation step, enabling instant feedback when you save changes.
 
@@ -122,7 +127,7 @@ This differs from Node.js' native TypeScript support because AdonisJS requires:
 
 Since Node.js' built-in TypeScript loader does not support these features, [`@poppinss/ts-exec`](https://github.com/poppinss/ts-exec) provides the necessary compatibility layer.
 
-### Production Mode (Ahead-of-Time Compilation)
+### Production mode (ahead-of-time compilation)
 
 For production deployments, AdonisJS compiles your TypeScript code into JavaScript using the official TypeScript compiler (`tsc`). This process generates a `build/` directory containing transpiled `.js` files optimized for the Node.js runtime.
 
@@ -136,16 +141,15 @@ The compiled output includes:
 - Copied static assets and templates
 - The `package.json` and your package manager lock file. You must `cd` into the build directory, install dependencies and start the production server.
 
-See also: [Deploying to production](./deploying-to-production.md)
+See also: [Deploying to production](./deployment.md)
 
-## ESLint and Prettier Configuration
+## ESLint and Prettier configuration
 
 AdonisJS projects include pre-configured **ESLint** and **Prettier** setups that enforce TypeScript best practices and maintain consistent code formatting across your team.
 
 :::tip
 Most code editors support running ESLint and Prettier automatically on file save. Configuring this in your editor eliminates manual formatting steps and catches linting issues immediately.
 :::
-
 
 ### ESLint
 
@@ -180,16 +184,16 @@ npm run format
 
 See also: [ESLint configuration reference](https://github.com/adonisjs/tooling-config/tree/main/packages/eslint-config), [Prettier configuration reference](https://github.com/adonisjs/tooling-config/tree/main/packages/prettier-config)
 
-## Database Setup
+## Database setup
 
 AdonisJS applications are pre-configured with **SQLite**, a lightweight file-based database. SQLite requires no installation and stores data in a local `tmp/database.sqlite` file, allowing you to start building immediately without setting up external database servers.
 
-However, most applications use PostgreSQL or MySQL in production. We recommend [switching to your production database]() engine early in development to avoid schema differences and driver-specific behavior that can cause deployment issues.
+However, most applications use PostgreSQL or MySQL in production. We recommend [switching to your production database](../guides/database/lucid.md#configuration) engine early in development to avoid schema differences and driver-specific behavior that can cause deployment issues.
 
 ### Local database tools
 
 You can use the following tools to run PostgreSQL or MySQL locally:
 
-- [Dbngin](https://dbngin.com/) – GUI for managing PostgreSQL and MySQL on macOS and Windows
-- [Docker](https://www.docker.com/) – Run databases in containers for isolated environments
-- [Postgres.app](https://postgresapp.com/) – Native PostgreSQL for macOS
+- [Dbngin](https://dbngin.com/) (macOS and Windows) for managing PostgreSQL and MySQL through a GUI
+- [Docker](https://www.docker.com/) for running databases in isolated containers
+- [Postgres.app](https://postgresapp.com/) for native PostgreSQL on macOS

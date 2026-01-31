@@ -32,7 +32,7 @@ router.post('/signup', ({ request }) => {
 ```
 
 :::note
-**Type safety and validation:** The request body data is not type-safe because the bodyparser only collects and parses the raw request data — it does not validate it. Use the [validation system](./validation.md) to ensure both runtime safety and TypeScript type safety for your request data.
+**Type safety and validation:** The request body data is not type-safe because the bodyparser only collects and parses the raw request data, it does not validate it. Use the [validation system](./validation.md) to ensure both runtime safety and TypeScript type safety for your request data.
 :::
 
 ### Accessing specific fields
@@ -433,7 +433,7 @@ router.get('/welcome', ({ request }) => {
 | `encoding(encodings)` | Returns the best matching encoding or null |
 | `encodings()` | Returns all accepted encodings in preference order |
 
-## Trusting Proxy Servers
+## Trusting proxy servers
 
 When your application runs behind a reverse proxy (like Nginx) or load balancer, you need to configure which proxy IP addresses to trust. This allows AdonisJS to correctly read the `X-Forwarded-*` headers that proxies add to requests.
 
@@ -464,7 +464,7 @@ trustProxy: proxyAddr.compile(['127.0.0.1', '192.168.1.1'])
 trustProxy: proxyAddr.compile('10.0.0.0/8')
 ```
 
-## Custom IP Address Extraction
+## Custom IP address extraction
 
 By default, AdonisJS extracts the client IP address from the request using standard methods. However, when running behind proxies or CDNs like Cloudflare, you may need to extract the IP from custom headers.
 

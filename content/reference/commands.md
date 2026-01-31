@@ -10,12 +10,8 @@ In this guide, we cover the usage of all the commands shipped with the framework
 node ace list
 ```
 
+:::media{alt="The output of the help screen is formatted as per the http://docopt.org standard"}
 ![](../guides/ace/node_ace_list.png)
-
-:::note
-
-The output of the help screen is formatted as per the [docopt](http://docopt.org/) standard.
-
 :::
 
 ## serve
@@ -33,90 +29,39 @@ node ace --no-warnings --inspect serve --hmr
 
 Following is the list of available options you can pass to the `serve` command. Alternatively, use the `--help` flag to view the command's help.
 
-<dl>
+::::options
 
-<dt>
-
---hmr
-
-</dt>
-
-<dd>
+:::option{name="--hmr"}
 
 Watch the filesystem and reload the server in HMR mode.
 
-</dd>
+:::
 
-<dt>
-
---watch
-
-</dt>
-
-<dd>
+:::option{name="--watch"}
 
 Watch the filesystem and always restart the process on file change.
 
-</dd>
+:::
 
-<dt>
-
---poll
-
-</dt>
-
-<dd>
+:::option{name="--poll"}
 
 Use polling to detect filesystem changes. You might want to use polling when using a Docker container for development.
 
-</dd>
+:::
 
-<dt>
-
---clear | --no-clear
-
-</dt>
-
-<dd>
+:::option{name="--clear | --no-clear"}
 
 Clear the terminal after every file change and before displaying the new logs. Use the `--no-clear` flag to retain old logs.
 
-</dd>
+:::
 
-<dt>
+::::
 
---assets | --no-assets
-
-</dt>
-
-<dd>
-
-Start the assets bundle development server alongside the AdonisJS HTTP server. Use the `--no-assets` flag to turn off the assets bundler dev server.
-
-</dd>
-
-<dt>
-
---assets-args
-
-</dt>
-
-<dd>
-
-Pass commandline arguments to the asset manager child process. For example, if you use vite, you can define its options as follows.
-
-```sh
-node ace serve --hmr --assets-args="--cors --open"
-```
-
-</dd>
-
-</dl>
 
 ## build
 The `build` command uses the [@adonisjs/assembler](https://github.com/adonisjs/assembler?tab=readme-ov-file#bundler) package to create the production build of your AdonisJS application. The following steps are performed to generate the build.
 
-See also: [TypeScript build process](../concepts/typescript_build_process.md).
+See also: [Creating the production build](../start/deployment.md#creating-the-production-build).
 
 ```sh
 node ace build
@@ -124,63 +69,23 @@ node ace build
 
 Following is the list of available options you can pass to the `build` command. Alternatively, use the `--help` flag to view the command's help.
 
-<dl>
+::::options
 
-<dt>
-
---ignore-ts-errors
-
-</dt>
-
-<dd>
+:::option{name="--ignore-ts-errors"}
 
 The build command terminates the build process when your project has TypeScript errors. However, you can ignore those errors and finish the build using the `--ignore-ts-errors` flag.
 
-</dd>
+:::
 
-<dt>
+:::option{name="--package-manager"}
 
---package-manager
+The build command copies the `package.json` file alongside the lock file of the package manager your application is using.
 
-</dt>
+We detect the package manager using the `@antfu/install-pkg` package. However, you can turn off detection by explicitly providing the package manager's name.
 
-<dd>
+:::
 
-The build command copies the `package.json` file alongside the lock file of the package manager your application is using. 
-
-We detect the package manager using the [@antfu/install-pkg](https://github.com/antfu/install-pkg) package. However, you can turn off detection by explicitly providing the package manager's name.
-
-</dd>
-
-<dt>
-
---assets | --no-assets
-
-</dt>
-
-<dd>
-
-Bundle frontend assets alongside your backend application. Use the `--no-assets` flag to turn off the assets bundler dev server.
-
-</dd>
-
-<dt>
-
---assets-args
-
-</dt>
-
-<dd>
-
-Pass commandline arguments to the asset manager child process. For example, if you use vite, you can define its options as follows.
-
-```sh
-node ace build --assets-args="--sourcemap --debug"
-```
-
-</dd>
-
-</dl>
+::::
 
 ## add
 
@@ -735,7 +640,9 @@ node ace list:routes
 
 Also, you can see the routes list from the VSCode activity bar if you are using our [official VSCode extension](https://marketplace.visualstudio.com/items?itemName=jripouteau.adonis-vscode-extension).
 
+:::media
 ![](../basics/vscode_routes_list.png)
+:::
 
 <dl>
 

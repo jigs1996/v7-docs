@@ -479,7 +479,7 @@ First, enable SSR in your Vite configuration. This tells Vite to create a separa
 ```ts title="vite.config.ts"
 export default defineConfig({
   plugins: [
-    // [!code highlight:5]
+    // [!code highlight:6]
     inertia({
       ssr: {
         enabled: true,

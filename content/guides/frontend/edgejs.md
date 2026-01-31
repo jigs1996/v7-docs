@@ -18,14 +18,21 @@ Edge has comprehensive documentation at [edgejs.dev](https://edgejs.dev), which 
 
 Let's create a simple page that displays a list of blog posts. This example demonstrates the fundamental workflow of rendering templates in AdonisJS.
 
-First, create a template file using the Ace command.
+::::steps
+
+:::step{title="Create the template file"}
+
+Generate a new template using the Ace command.
 
 ```bash
 node ace make:view pages/posts/index
 # CREATE: resources/views/pages/posts/index.edge
 ```
+:::
 
-The template file is created inside `resources/views/pages/posts/index.edge`. Open this file and add the following content.
+:::step{title="Add the template content"}
+
+Open `resources/views/pages/posts/index.edge` and add the following content.
 
 ```edge title="resources/views/pages/posts/index.edge"
 @layout()
@@ -50,7 +57,11 @@ A few important things to understand about this template:
 
 - The double curly braces `{{ }}` evaluate and output a JavaScript expression. The triple curly braces `{{{ }}}` do the same but don't escape HTML, which is useful for rendering rich content.
 
-Now, create a route and controller to render this template. Define the route in your routes file.
+:::
+
+:::step{title="Define the route"}
+
+Create a route to handle requests to the posts page.
 
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
@@ -59,7 +70,11 @@ import { controllers } from '#generated/controllers'
 router.get('posts', [controllers.PostsController, 'index'])
 ```
 
-Create the controller:
+:::
+
+:::step{title="Create the controller"}
+
+Create a controller that renders the template with post data.
 
 ```ts title="app/controllers/posts_controller.ts"
 import Post from '#models/post'
@@ -79,6 +94,14 @@ export default class PostsController {
 }
 ```
 
+:::
+
+:::step{title="View the result"}
+Visit `http://localhost:3333/posts` in your browser to see the rendered page.
+:::
+
+::::
+
 You can also render templates directly from routes without using a controller.
 
 ```ts title="start/routes.ts"
@@ -90,8 +113,6 @@ import router from '@adonisjs/core/services/router'
  */
 router.on('/').render('pages/home')
 ```
-
-Visit `http://localhost:3333/posts` in your browser to see the rendered page.
 
 ## Understanding template state
 

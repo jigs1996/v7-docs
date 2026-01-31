@@ -21,13 +21,13 @@
         "contentPath": "./installation.md"
       },
       {
-        "title": "Folder Structure",
+        "title": "Folder structure",
         "permalink": "folder-structure",
         "oldUrls": ["guides/getting-started/folder-structure"],
         "contentPath": "./folder_structure.md"
       },
       {
-        "title": "Development Environment Setup",
+        "title": "Development environment setup",
         "permalink": "dev-environment",
         "oldUrls": ["guides/concepts/tooling-config"],
         "contentPath": "./dev_environment.md"

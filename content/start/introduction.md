@@ -43,7 +43,7 @@ AdonisJS is designed for real-world backend applications:
 
 Whether you're building a startup MVP or a production system serving thousands of users, AdonisJS provides the foundation without getting in your way.
 
-## Practical, Not Overengineered
+## Practical, not overengineered
 
 Many frameworks introduce enterprise abstractions that complicate projects without adding clarity. AdonisJS focuses on a different approach.
 
@@ -63,7 +63,7 @@ AdonisJS APIs are functional and modern. You can use class-based components wher
 
 Choose AdonisJS when you want the productivity of a full-featured framework without the complexity of enterprise patterns or the fragmentation of minimal frameworks.
 
-## MVC with Configurable View Layer
+## MVC with a configurable view layer
 
 AdonisJS uses the **Model-View-Controller (MVC)** pattern to keep data, logic, and presentation separate. The view layer is optional and can be configured to fit your needs.
 
@@ -79,11 +79,11 @@ Most backend code, such as routing, controllers, models, and middleware, stays t
 
 AdonisJS has been in active development since 2015, with version 7 representing years of real-world usage and refinement. The framework is maintained by its creator full-time, with support from the core team members and an active community.
 
-The ecosystem includes official packages for common backend needs, all maintained by the core team with the same quality standards. Community packages extend functionality for specific needs like payment processing, cloud storage, and third-party integrations.
+The ecosystem includes [official packages](https://adonisjs.com/packages) for common backend needs, all maintained by the core team with the same quality standards. Community packages extend functionality for specific needs like payment processing, cloud storage, and third-party integrations.
 
 All documentation, tooling, and packages follow semantic versioning, ensuring stable upgrades and long-term maintainability.
 
-## Next Steps
+## Next steps
 
 AdonisJS documentation is organized to guide both new and experienced developers:
 

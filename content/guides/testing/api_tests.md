@@ -2,7 +2,7 @@
 summary: Learn how to test JSON API endpoints in AdonisJS using Japa's API client
 ---
 
-# API Testing
+# API tests
 
 This guide covers testing JSON API endpoints in AdonisJS applications. You will learn how to:
 
@@ -16,7 +16,7 @@ This guide covers testing JSON API endpoints in AdonisJS applications. You will 
 
 ## Overview
 
-API testing in AdonisJS uses Japa's API client to make real HTTP requests against your application. Unlike mocked or simulated requests, the API client boots your AdonisJS server and sends actual network requests from outside in. This approach tests your entire HTTP layer—routes, middleware, controllers, and responses—exactly as they would behave in production.
+API testing in AdonisJS uses [Japa's API client](https://japa.dev/docs/plugins/api-client) to make real HTTP requests against your application. Unlike mocked or simulated requests, the API client boots your AdonisJS server and sends actual network requests from outside in. This approach tests your entire HTTP layer—routes, middleware, controllers, and responses—exactly as they would behave in production.
 
 The API client integrates with AdonisJS features like sessions and authentication through dedicated plugins, making it straightforward to test protected endpoints and stateful interactions.
 
@@ -26,8 +26,13 @@ The `api` starter kit comes pre-configured with three plugins in the `tests/boot
 
 ```ts title="tests/bootstrap.ts"
 import { apiClient } from '@japa/api-client'
-import { sessionApiClient } from '@adonisjs/session/plugins/api_client'
 import { authApiClient } from '@adonisjs/auth/plugins/api_client'
+import { sessionApiClient } from '@adonisjs/session/plugins/api_client'
+import type { Registry } from '../.adonisjs/client/registry/schema.d.ts'
+
+declare module '@japa/api-client/types' {
+  interface RoutesRegistry extends Registry {}
+}
 
 export const plugins: Config['plugins'] = [
   assert(),
@@ -145,6 +150,8 @@ test.group('Auth signup', () => {
 
 Tests that create database records need cleanup between runs to ensure isolation. The `testUtils.db().truncate()` hook migrates the database and truncates all tables after each test.
 
+See also: [Database testing utilities](./resetting_state_between_tests.md) for additional methods like migrations and seeders.
+
 ```ts title="tests/functional/auth/signup.spec.ts"
 import { test } from '@japa/runner'
 import testUtils from '@adonisjs/core/services/test_utils'
@@ -170,7 +177,7 @@ The API client provides two approaches for making HTTP requests: using route nam
 
 ### Using route names
 
-The `client.visit()` method accepts a route name and looks up the HTTP method and URL pattern from your router. This keeps your tests in sync with route changes.
+The `client.visit()` method accepts a route name and looks up the HTTP method and URL pattern from your router. This keeps your tests in sync with route changes and also provides type-safety within tests.
 
 ```ts
 const response = await client.visit('posts.store')

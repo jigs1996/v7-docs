@@ -2,7 +2,7 @@
 summary: Learn how to write end-to-end browser tests for hypermedia and Inertia applications using Playwright.
 ---
 
-# Browser testing
+# Browser tests
 
 This guide covers end-to-end browser testing for hypermedia and Inertia applications. You will learn how to:
 
@@ -188,7 +188,7 @@ This test fails because no posts exist in the database. The failure message indi
 
 Tests should start with a known database state. Use the `testUtils.db().truncate()` hook to clear tables after each test, then create the specific records your test needs.
 
-See also: [Database testing utilities](./database.md) for additional methods like migrations and seeders.
+See also: [Database testing utilities](./resetting_state_between_tests.md) for additional methods like migrations and seeders.
 
 ```ts title="tests/browser/posts/index.spec.ts"
 import Post from '#models/post'

@@ -1,5 +1,5 @@
 .prose {
-  @apply lg:max-w-154 text-woodsmoke-300;
+  @apply lg:max-w-145 text-woodsmoke-300;
   @apply sm:min-h-[65vh];
 }
 

@@ -59,6 +59,10 @@ In an API-only setup:
 - Your frontend and backend are separate deployments with their own build processes, repositories (or monorepo), and deployment pipelines.
 - The two communicate exclusively through HTTP requests to your API endpoints.
 
+:::note
+In monorepos, you can use a [type-safe fetch client](../guides/frontend/tuyau.md) for true end-to-end typing across backend and frontend. [Transformers](../guides/frontend/transformers.md) also produce reusable, independent response types, so your UI can rely directly on the serialized API contract.
+:::
+
 This approach covers a wide variety of applications: APIs for mobile apps (iOS, Android), web applications built with any frontend framework, desktop applications, or even multiple frontends (web and mobile) consuming the same API. The separation provides flexibility in how you deploy and scale each layer independently.
 
 Choose this approach when you're building an API that serves multiple client applications, your team prefers working with separate frontend and backend repositories, you need independent deployment and scaling of frontend and backend, or you're building a public API that external developers will consume.
@@ -103,11 +107,16 @@ router.get('posts', [controllers.Posts, 'index'])
 ```ts title="app/controllers/posts_controller.ts"
 import Post from '#models/post'
 import { HttpContext } from '@adonisjs/core/http'
+ // [!code highlight]
+import PostTransformer from '#transformers/post_transformer'
 
 export default class PostsController {
   async index({ inertia }: HttpContext) {
     const posts = await Post.all()
-    return inertia.render('posts/index', { posts }) // [!code highlight]
+    // [!code highlight:3]
+    return inertia.render('posts/index', {
+      posts: PostTransformer.transform(posts)
+    })
   }
 }
 ```
@@ -126,11 +135,16 @@ router.get('posts', [controllers.Posts, 'index'])
 ```ts title="app/controllers/posts_controller.ts"
 import Post from '#models/post'
 import { HttpContext } from '@adonisjs/core/http'
+ // [!code highlight]
+import PostTransformer from '#transformers/post_transformer'
 
 export default class PostsController {
-  async index({ response }: HttpContext) {
+  async index({ serialize }: HttpContext) {
     const posts = await Post.all()
-    return response.json({ posts }) // [!code highlight]
+     // [!code highlight:3]
+    return serialize({
+      posts: PostTransformer.transform(posts)
+    })
   }
 }
 ```
@@ -142,6 +156,10 @@ export default class PostsController {
 ## What NOT to expect
 
 If you're coming from meta-frameworks, there are some patterns you won't find in AdonisJS. These differences are intentional and provide clarity about how your application works.
+
+:::note
+AdonisJS is designed to be the backend that powers your frontend applications, not a replacement for meta-frameworks. You can confidently use AdonisJS alongside frameworks like TanStack Start, Nuxt, Next.js, or others, with clear boundaries and well-defined API contracts between the two.
+:::
 
 **No file-based routing**: AdonisJS uses explicit route definitions in your route files. Routes are declared using the router API, giving you full control and visibility over your application's URL structure. This makes it easy to see all your routes in one place and apply middleware or constraints as needed.
 
@@ -159,9 +177,10 @@ These starter kits include properly **configured build tools**, **authentication
 
 This gives you a **"flexible but not on your own"** experience. You get to choose your stack, but once you've chosen, you get a fully configured setup that works out of the box.
 
-- [Hypermedia starter kit](http://github.com/adonisjs/web-starter-kit)
-- [React starter kit](http://github.com/adonisjs/react-starter-kit)
-- [View starter kit](http://github.com/adonisjs/vue-starter-kit)
+- [Hypermedia starter kit](https://github.com/adonisjs/starter-kits/tree/main/hypermedia)
+- [React starter kit](https://github.com/adonisjs/starter-kits/tree/main/inertia-react)
+- [Vue starter kit](https://github.com/adonisjs/starter-kits/tree/main/inertia-vue)
+- [API monorepo](https://github.com/adonisjs/starter-kits/tree/main/api)
 
 ## Next steps
 

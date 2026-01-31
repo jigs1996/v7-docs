@@ -23,7 +23,7 @@ Controllers organize route handlers into dedicated JavaScript classes, solving t
 
 A typical controller represents a resource (like Users, Posts, or Comments) and defines actions for creating, reading, updating, and deleting that resource. Controllers keep your routes file clean and readable, enable dependency injection for services and other dependencies, and follow RESTful conventions for resource-based CRUD operations.
 
-Without controllers, your routes file becomes cluttered with inline handlers:
+Without controllers, your routes file becomes cluttered with inline handlers.
 
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
@@ -46,7 +46,7 @@ router.post('/posts', async ({ request }) => {
 // This file becomes unmanageable as routes grow
 ```
 
-With controllers, you organize handlers into reusable classes:
+With controllers, you organize handlers into reusable classes.
 
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
@@ -62,19 +62,19 @@ router.post('/posts', [controllers.Posts, 'store'])
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class PostsController {
-  async index({ response }: HttpContext) {
+  async index({ serialize }: HttpContext) {
     // Logic to fetch all posts
-    return response.json({ posts: [] })
+    return serialize({ posts: [] })
   }
 
-  async show({ params }: HttpContext) {
+  async show({ params, serialize }: HttpContext) {
     // Logic to fetch a single post
-    return { post: {} }
+    return serialize({ post: {} })
   }
 
-  async store({ request }: HttpContext) {
+  async store({ request, serialize }: HttpContext) {
     // Logic to create a post
-    return { post: {} }
+    return serialize({ post: {} })
   }
 }
 ```
@@ -414,15 +414,65 @@ router.resource('posts', controllers.Posts)
 
 This generates the following routes.
 
-| HTTP Method | Path              | Controller Method | Purpose                  |
-| ----------- | ----------------- | ----------------- | ------------------------ |
-| `GET`       | `/posts`          | `index`           | List all posts           |
-| `GET`       | `/posts/create`   | `create`          | Show form to create post |
-| `POST`      | `/posts`          | `store`           | Create new post          |
-| `GET`       | `/posts/:id`      | `show`            | Display single post      |
-| `GET`       | `/posts/:id/edit` | `edit`            | Show form to edit post   |
-| `PUT/PATCH` | `/posts/:id`      | `update`          | Update existing post     |
-| `DELETE`    | `/posts/:id`      | `destroy`         | Delete post              |
+::::options
+
+:::option{name="GET /posts"}
+
+- **Action:** `PostsController.index`
+- **Name:** `posts.index`
+- **Purpose:** Display a list of all posts
+
+:::
+
+:::option{name="GET /posts/create"}
+
+- **Action:** `PostsController.create`
+- **Name:** `posts.create`
+- **Purpose:** Show form to create a new post
+
+:::
+
+:::option{name="POST /posts"}
+
+- **Action:** `PostsController.store`
+- **Name:** `posts.store`
+- **Purpose:** Store a newly created post
+
+:::
+
+:::option{name="GET /posts/:id"}
+
+- **Action:** `PostsController.show`
+- **Name:** `posts.show`
+- **Purpose:** Display a specific post
+
+:::
+
+:::option{name="GET /posts/:id/edit"}
+
+- **Action:** `PostsController.edit`
+- **Name:** `posts.edit`
+- **Purpose:** Show form to edit a post
+
+:::
+
+:::option{name="PUT|PATCH /posts/:id"}
+
+- **Action:** `PostsController.update`
+- **Name:** `posts.update`
+- **Purpose:** Update a specific post
+
+:::
+
+:::option{name="DELETE /posts/:id"}
+
+- **Action:** `PostsController.destroy`
+- **Name:** `posts.destroy`
+- **Purpose:** Delete a specific post
+
+:::
+
+::::
 
 ### Nested resources
 
@@ -437,15 +487,16 @@ router.resource('posts.comments', controllers.Comments)
 
 This creates routes with both parent and child IDs.
 
-| HTTP Method | Path | Controller Method | Purpose |
-|-------------|------|-------------------|---------|
-| `GET` | `/posts/:post_id/comments` | `index` | List all comments for a post |
-| `GET` | `/posts/:post_id/comments/create` | `create` | Show form to create comment |
-| `POST` | `/posts/:post_id/comments` | `store` | Create new comment for a post |
-| `GET` | `/posts/:post_id/comments/:id` | `show` | Display single comment |
-| `GET` | `/posts/:post_id/comments/:id/edit` | `edit` | Show form to edit comment |
-| `PUT/PATCH` | `/posts/:post_id/comments/:id` | `update` | Update comment |
-| `DELETE` | `/posts/:post_id/comments/:id` | `destroy` | Delete comment |
+```sh
+GET        /posts/:post_id/comments
+GET        /posts/:post_id/comments/create
+POST       /posts/:post_id/comments
+
+GET        /posts/:post_id/comments/:id
+GET        /posts/:post_id/comments/:id/edit
+PUT/PATCH  /posts/:post_id/comments/:id
+DELETE     /posts/:post_id/comments/:id
+```
 
 Your controller receives both parent and child parameters.
 
@@ -480,15 +531,17 @@ router.shallowResource('posts.comments', controllers.Comments)
 
 With shallow resources, the `show`, `edit`, `update`, and `destroy` actions omit the parent ID since a comment can be looked up by its own ID:
 
-| HTTP Method | Path | Controller Method | Notes |
-|-------------|------|-------------------|-------|
-| `GET` | `/posts/:post_id/comments` | `index` | Needs parent ID to list |
-| `GET` | `/posts/:post_id/comments/create` | `create` | Needs parent ID for form |
-| `POST` | `/posts/:post_id/comments` | `store` | Needs parent ID to create |
-| `GET` | `/comments/:id` | `show` | No parent ID needed |
-| `GET` | `/comments/:id/edit` | `edit` | No parent ID needed |
-| `PUT/PATCH` | `/comments/:id` | `update` | No parent ID needed |
-| `DELETE` | `/comments/:id` | `destroy` | No parent ID needed |
+```sh
+GET        /posts/:post_id/comments
+GET        /posts/:post_id/comments/create
+POST       /posts/:post_id/comments
+
+# Without parent ID
+GET        /comments/:id
+GET        /comments/:id/edit
+PUT/PATCH  /comments/:id
+DELETE     /comments/:id
+```
 
 Use shallow nesting when the child resource has a globally unique identifier and doesn't require the parent ID for lookup. This creates cleaner, shorter URLs while maintaining the hierarchical relationship where needed (creation and listing).
 

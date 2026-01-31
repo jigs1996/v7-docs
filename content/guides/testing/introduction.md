@@ -2,7 +2,7 @@
 summary: Learn how testing is configured in AdonisJS applications using Japa, and how to create, run, and filter tests.
 ---
 
-# Introduction to Testing
+# Introduction to testing
 
 This guide covers the testing setup in AdonisJS applications. You will learn:
 
@@ -17,7 +17,7 @@ This guide covers the testing setup in AdonisJS applications. You will learn:
 
 AdonisJS has built-in support for testing, and all starter kits come pre-configured with a complete testing setup. You can start writing tests immediately without any additional configuration.
 
-The testing layer is powered by Japa, a testing framework we've built and maintained for over seven years. Unlike general-purpose test runners like Jest or Vitest, Japa is purpose-built for backend applications. It runs natively in Node.js without transpilers and includes plugins specifically designed for backend testing, such as an API client for testing JSON endpoints and a filesystem plugin for managing temporary files during tests.
+The testing layer is powered by [Japa](https://japa.dev), a testing framework we've built and maintained for over seven years. Unlike general-purpose test runners like Jest or Vitest, Japa is purpose-built for backend applications. It runs natively in Node.js without transpilers and includes plugins specifically designed for backend testing, such as an API client for testing JSON endpoints and a filesystem plugin for managing temporary files during tests.
 
 We chose to build and maintain our own testing framework to avoid the churn that's common in the JavaScript ecosystem. Having seen the community shift from Mocha to Jest to Vitest, we're glad we invested in tooling we control and can evolve alongside AdonisJS.
 
@@ -27,13 +27,11 @@ Japa integrates deeply with AdonisJS through the `@japa/plugin-adonisjs` package
 
 The integration means you write tests that feel native to AdonisJS rather than bolting on a generic test runner that doesn't understand your application's structure.
 
-See also: [Japa documentation](https://japa.dev)
-
 ## Project structure
 
-AdonisJS organizes tests into suites, where each suite represents a category of tests with its own configuration. A typical project structure looks like this:
+AdonisJS organizes tests into suites, where each suite represents a category of tests with its own configuration. A typical project structure looks like this.
 
-```
+```sh
 tests/
 ├── bootstrap.ts
 ├── unit/
@@ -50,10 +48,10 @@ A test suite groups related tests that share common characteristics. For example
 
 Hypermedia and Inertia starter kits come with two suites pre-configured:
 
-- **unit** - For testing isolated pieces of code like services, utilities, and models
-- **browser** - For end-to-end testing with Playwright, simulating real user interactions
+- **unit** tests isolated pieces of code like services, utilities, and models
+- **browser** tests run end-to-end with Playwright, simulating real user interactions
 
-Suites are defined in your `adonisrc.ts` file:
+Suites are defined in your `adonisrc.ts` file.
 
 ```ts title="adonisrc.ts"
 {
@@ -79,7 +77,7 @@ Each suite specifies a glob pattern for locating test files, a name for filterin
 
 ### Configuring plugins and hooks
 
-The `tests/bootstrap.ts` file is where you configure Japa plugins and define lifecycle hooks that run before and after your test suites:
+The `tests/bootstrap.ts` file is where you configure Japa plugins and define lifecycle hooks that run before and after your test suites.
 
 ```ts title="tests/bootstrap.ts"
 import { assert } from '@japa/assert'
@@ -127,20 +125,19 @@ The `configureSuite` function allows you to add setup logic specific to certain 
 
 ## Creating your first test
 
-Generate a new test file using the `make:test` command:
+Generate a new test file using the `make:test` command.
 
 ```sh
 node ace make:test posts/index --suite=browser
 ```
 
-This creates a test file at `tests/browser/posts/index.spec.ts` with the following structure:
+This creates a test file at `tests/browser/posts/index.spec.ts` with the following structure.
 
 ```ts title="tests/browser/posts/index.spec.ts"
 import { test } from '@japa/runner'
 
 test.group('Posts index', () => {
-  test('display a list of all posts', async ({ assert }) => {
-  })
+  test('display a list of all posts', async ({ assert }) => {})
 })
 ```
 
@@ -148,13 +145,13 @@ Tests are organized into groups using `test.group()`, which helps structure rela
 
 ## Running tests
 
-Run your entire test suite with:
+Run your entire test suite with the following command.
 
 ```sh
 node ace test
 ```
 
-To run a specific suite, pass the suite name as an argument:
+To run a specific suite, pass the suite name as an argument.
 
 ```sh
 node ace test unit
@@ -163,17 +160,21 @@ node ace test browser
 
 ### Filtering tests
 
-Japa provides several flags for running a subset of tests:
+Japa provides several flags for running a subset of tests.
 
-| Flag | Description |
-|------|-------------|
-| `--tests` | Filter by exact test title |
-| `--files` | Filter by test filename (matches against the end of the filename without `.spec.ts`) |
-| `--groups` | Filter by exact group name |
-| `--tags` | Filter by tags (prefix with `~` to exclude) |
-| `--matchAll` | Require all specified tags to match instead of any | 
+::::options
 
-The `--files` flag supports wildcards for running all tests in a directory:
+:::option{name="--tests"}
+Filter by exact test title.
+
+```sh
+# Run tests with exact title match
+node ace test --tests="can list all posts"
+```
+:::
+
+:::option{name="--files"}
+Filter by test filename (matches against the end of the filename without `.spec.ts`). The `--files` flag supports wildcards for running all tests in a directory.
 
 ```sh
 # Run a specific test file
@@ -182,20 +183,30 @@ node ace test --files="posts/index"
 # Run all tests in the posts directory
 node ace test --files="posts/*"
 ```
+:::
 
-Filter by test title or group name for precise control:
+:::option{name="--groups"}
+Filter by exact group name.
 
 ```sh
-# Run tests with exact title match
-node ace test --tests="can list all posts"
-
 # Run all tests in a specific group
 node ace test --groups="Posts index"
 ```
+:::
+
+:::option{name="--tags"}
+Filter by tags (prefix with `~` to exclude).
+:::
+
+:::option{name="--matchAll"}
+Require all specified tags to match instead of any.
+:::
+
+::::
 
 ### Watch mode
 
-During development, use watch mode to automatically re-run tests when files change:
+During development, use watch mode to automatically re-run tests when files change.
 
 ```sh
 node ace test --watch
@@ -205,15 +216,11 @@ When a test file changes, only that file's tests are re-run. When a source file 
 
 :::tip
 If you're iterating on a single test, combine watch mode with the `--files` filter. This ensures any file change runs only the tests you're focused on, providing faster feedback.
-
-```sh
-node ace test --watch --files="posts/index"
-```
 :::
 
 ### Additional flags
 
-Two flags are particularly useful during development:
+Two flags are particularly useful during development.
 
 ```sh
 # Stop on first failure
@@ -229,7 +236,7 @@ The `--bail` flag helps when debugging a failing test by preventing subsequent t
 
 AdonisJS automatically loads a `.env.test` file when running tests, merging its values with your standard `.env` file. Any variable defined in `.env.test` overrides the corresponding value from `.env`.
 
-Create a `.env.test` file in your project root to configure test-specific settings:
+Create a `.env.test` file in your project root to configure test-specific settings.
 
 ```dotenv title=".env.test"
 SESSION_DRIVER=memory
@@ -241,7 +248,8 @@ The memory session driver is commonly used in tests because it doesn't persist s
 
 Now that you understand how testing is configured in AdonisJS, explore the specific testing guides:
 
-- [Unit testing](./unit_tests.md) - Testing services, utilities, and isolated logic
+<!-- - [Unit testing](./unit_tests.md) - Testing services, utilities, and isolated logic -->
+
 - [Browser tests](./browser_tests.md) - Browser testing with Playwright for Hypermedia and Inertia applications
 - [Testing APIs](./api_tests.md) - HTTP testing for JSON APIs
 - [CLI tests](./console_tests.md) - Testing Ace commands

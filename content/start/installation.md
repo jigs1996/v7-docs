@@ -9,7 +9,7 @@ This guide explains how to set up a new AdonisJS application from scratch. It co
 
 ## Prerequisites
 
-Before you begin, make sure you have the following tools installed:
+Before you begin, make sure you have the following tools installed.
 
 - **Node.js ≥ 24.x**
 - **npm ≥ 11.x**
@@ -35,9 +35,9 @@ npm create adonisjs@latest [project-name]
 
 This command starts an interactive setup and asks you to select a starter kit.
 
-### Available Starter Kits
+### Available starter kits
 
-AdonisJS offers three official starter kits. Each kit sets up a different type of application, depending on how you want to build your user interface and manage interactivity.
+AdonisJS offers four official starter kits. Each kit sets up a different type of application, depending on how you want to build your user interface and manage interactivity.
 
 - **Hypermedia Starter Kit**. Uses Edge as the server-side templating engine and integrates Alpine.js to add lightweight, reactive behavior to your frontend. Ideal for applications that primarily render HTML on the server and only need minimal frontend logic.
 
@@ -45,9 +45,11 @@ AdonisJS offers three official starter kits. Each kit sets up a different type o
 
 - **Vue Starter Kit**. Similar to the React setup, but with Vue as the frontend framework. It utilizes Inertia.js and provides the same full-stack capabilities, including backend-driven routing, shared state, and SPA support.
 
+- **API Starter Kit**. A monorepo setup with two apps: an AdonisJS backend and an empty frontend project where you can configure any frontend framework of your choice (TanStack Start, Nuxt, Next.js, or others). End-to-end type-safety and shared transformer types are already configured between the backend and frontend.
+
 All starter kits come pre-configured with sensible defaults, streamlined development workflows, and ready-to-use authentication features. For a detailed comparison and usage guidance, see the [Pick your path](./pick_your_path.md) guide.
 
-## Project Defaults
+## Project defaults
 
 Every newly created AdonisJS application includes:
 
@@ -58,7 +60,7 @@ Every newly created AdonisJS application includes:
 
 These features help you get started quickly. You can customize, extend, or remove them as your project grows.
 
-## Starting the Development Server
+## Starting the development server
 
 After creating your app, move into your project directory and start the development server.
 
@@ -69,32 +71,35 @@ node ace serve --hmr
 Once the development server is running, open your browser and visit [http://localhost:3333
 ](http://localhost:3333). You should see the AdonisJS welcome page confirming your installation was successful.
 
-## What You Just Installed
+## What you just installed
 
 Your starter kit includes:
 
-- **Working authentication**: Try creating an account at [http://localhost:3333/signup](http://localhost:3333/signup) and logging in at [http://localhost:3333/login](http://localhost:3333/login). The authentication system is fully functional and the `users` table already exists in your SQLite database (`tmp/db.sqlite`).
+- **Working authentication**. Try creating an account at [http://localhost:3333/signup](http://localhost:3333/signup) and logging in at [http://localhost:3333/login](http://localhost:3333/login). The authentication system is fully functional and the `users` table already exists in your SQLite database (`tmp/db.sqlite`).
 
-- **Pre-configured development environment**: TypeScript, ESLint, Prettier, and Vite are set up with sensible defaults.
+- **Pre-configured development environment**. TypeScript, ESLint, Prettier, and Vite are set up with sensible defaults.
 
-- **Database setup**: Lucid ORM is configured with SQLite, ready for you to start building models and running migrations.
+- **Database setup**. Lucid ORM is configured with SQLite, ready for you to start building models and running migrations.
 
-**Next Steps:**
-- **New to AdonisJS?** Follow the [Tutorial](./tutorial/hypermedia/overview.md) to build a complete application and learn how everything works together.
-- **Want to understand the codebase first?** Read [Folder Structure](./folder_structure.md) to see how the project is organized.
+- **Organized project structure**. Routes are defined in `start/routes.ts`, models live in `app/models/`, controllers are in `app/controllers/`, and middleware resides in `app/middleware/`. This convention keeps your codebase organized as it grows.
 
 ### Dev-server modes
 
-- **Hot Module replacement (--hmr)**. This is the recommended approach for most development scenarios. HMR updates your application in the browser without requiring a full page reload, preserving your application's state while reflecting code changes instantly. This provides the fastest development feedback loop, especially when working on frontend components or styles.
+- **Hot Module Replacement (--hmr)**. This is the recommended approach for most development scenarios. HMR updates your application in the browser without requiring a full page reload, preserving your application's state while reflecting code changes instantly. This provides the fastest development feedback loop, especially when working on frontend components or styles.
 
 - **File watching (--watch)**. This mode automatically restarts the entire server process when you make changes to your code. While this approach takes slightly longer than HMR since it requires a full restart, it ensures a clean application state with every change and can be useful when working on server-side logic or when HMR updates aren't sufficient.
 
-## Exploring Other Commands
+## Exploring other commands
 
 The `ace` command-line tool includes many commands for development and production workflows.
 
-To see all available commands, run:
+To see all available commands, run the following.
 
 ```bash
 node ace
 ```
+
+## Next steps
+
+- **New to AdonisJS?** Follow the [Tutorial](./tutorial/hypermedia/overview.md) to build a complete application and learn how everything works together.
+- **Want to understand the codebase first?** Read [Folder Structure](./folder_structure.md) to see how the project is organized.

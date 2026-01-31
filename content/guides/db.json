@@ -365,14 +365,16 @@
         "contentPath": "./testing/console_tests.md"
       },
       {
-        "title": "Database",
-        "permalink": "guides/testing/database",
-        "contentPath": "./testing/database.md"
+        "title": "Resetting state between tests",
+        "permalink": "guides/testing/resetting-state-between-tests",
+        "oldUrls": ["guides/testing/database"],
+        "contentPath": "./testing/resetting_state_between_tests.md"
       },
       {
-        "title": "Mocks & Fakes",
-        "permalink": "guides/testing/mocks-and-fakes",
-        "contentPath": "./testing/mocks_and_fakes.md"
+        "title": "Test doubles",
+        "permalink": "guides/testing/test-doubles",
+        "oldUrls": ["guides/basics/mocks-and-fakes"],
+        "contentPath": "./testing/test_doubles.md"
       }
     ]
   }

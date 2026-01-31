@@ -1,12 +1,13 @@
 ---
-title: 'Folder Structure'
+title: 'Folder structure'
 description: 'Understand the default folder structure of an AdonisJS application and the role of each file and directory.'
 ---
 
-# Folder Structure
+# Folder structure
 
 When you create a new AdonisJS application, it comes with a thoughtful default folder structure designed to keep projects tidy, predictable, and easy to refactor.  
-This structure reflects conventions that work well for most projects, but AdonisJS does not lock you into them — you are free to reorganize files and directories to suit your team's workflow.
+
+This structure reflects conventions that work well for most projects, but AdonisJS does not lock you into them. You are free to reorganize files and directories to suit your team's workflow.
 
 Depending on the starter kit you select, some files or directories may differ. For example, the **Inertia** starter kit contains a top-level `inertia` folder, whereas the **Hypermedia** starter kit does not include this folder.
 
@@ -91,9 +92,9 @@ All application and third-party configuration files live inside the `config` dir
 
 The `database` directory holds artifacts related to the database layer. By default, AdonisJS ships with Lucid ORM configured for SQLite; switching databases does not require reorganizing this folder. 
 
-- `migrations/` — versioned schema changes
-- `seeders/` — scripts to insert initial or test data
-- `factories/` — blueprints for generating model instances in tests or seeders
+- `migrations/` - versioned schema changes
+- `seeders/` - scripts to insert initial or test data
+- `factories/` - blueprints for generating model instances in tests or seeders
 
 See also: [Lucid documentation](https://lucid.adonisjs.com)
 
@@ -159,9 +160,9 @@ For applications using Inertia (alongside Vue or React), the frontend code is ke
 
 The `inertia` directory exists only in projects using the Inertia starter kit. It represents a sub-application containing the frontend source code, including React or Vue components, pages, and supporting utilities.
 
-- `pages/` — stores your Inertia pages written in React or Vue.
-- `app.(tsx|vue)` — the main entry point for the client-side application.
-- `ssr.(tsx|vue)` — the entry point for server-side rendering (SSR).
+- `pages/` - stores your Inertia pages written in React or Vue.
+- `app.(tsx|vue)` - the main entry point for the client-side application.
+- `ssr.(tsx|vue)` - the entry point for server-side rendering (SSR).
 - `tsconfig.json` - The TypeScript config file for the frontend codebase. The defaults are optimized for browser environments, JSX/TSX syntax, and Vite-based builds
 
 You are free to create additional subfolders, such as `components/`, `layouts/`, or `utils/`, to organize your frontend code.
@@ -182,7 +183,7 @@ You are free to create additional subfolders, such as `components/`, `layouts/`,
 
 AdonisJS maintains a clear boundary between the backend and the frontend. You should **never import backend code** (such as models, services, or transformers) into your frontend application.
 
-In practice, your frontend communicates with the backend through HTTP requests and **receives plain JSON data**. AdonisJS encourages you to model this reality explicitly — data is fetched and transformed via API responses, rather than being hidden behind shared abstractions.
+In practice, your frontend communicates with the backend through HTTP requests and **receives plain JSON data**. AdonisJS encourages you to model this reality explicitly. Data is fetched and transformed via API responses, rather than being hidden behind shared abstractions.
 
 ### Shared types
 
@@ -247,8 +248,8 @@ This file configures ESLint for the project. The default rules are tuned for Typ
 
 ## `package.json` and `package-lock.json`
 
-- `package.json` — project metadata, scripts, and dependency declarations.
-- `package-lock.json` — locks exact dependency versions for consistent installs.
+- `package.json` - project metadata, scripts, and dependency declarations.
+- `package-lock.json` - locks exact dependency versions for consistent installs.
 
 ## `tsconfig.json`
 
@@ -301,7 +302,7 @@ The following configuration options are required for AdonisJS internals to work 
   // [!code ++:5]
   "references": [
     {
-      "path": "./inertia/tsconfig.json"
+      "path": "./tsconfig.inertia.json"
     }
   ],
   "include": ["**/*", ".adonisjs/server/**/*"]

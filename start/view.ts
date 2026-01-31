@@ -24,6 +24,7 @@ edge.use(edgeMarkdown, {
       'tsx',
       'handlebars',
       'vue',
+      'dockerfile',
     ],
     theme: 'github-dark',
   },

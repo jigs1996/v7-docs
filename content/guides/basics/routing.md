@@ -62,9 +62,9 @@ See also: [Controllers guide](./controllers.md) and [HTTP Context documentation]
 
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
-const PostsController = () => import('#controllers/posts_controller')
+import { controllers } from '#generated/controllers'
 
-router.get('/posts/:id', [PostsController, 'show'])
+router.get('/posts/:id', [controllers.Posts, 'show'])
 ```
 
 ## Viewing registered routes
@@ -162,7 +162,7 @@ When a param fails validation, the router skips that route and continues searchi
 
 ### Why validate params
 
-Without validation, you need to manually check and convert params in every handler:
+Without validation, you need to manually check and convert params in every handler.
 
 ```ts title="❌ Without param validation"
 router.get('/posts/:id', ({ params, response }) => {
@@ -174,7 +174,7 @@ router.get('/posts/:id', ({ params, response }) => {
 })
 ```
 
-With param validation, the router handles this automatically before your handler runs:
+With param validation, the router handles this automatically before your handler runs.
 
 ```ts title="✅ With param validation"
 router
@@ -225,24 +225,29 @@ For common patterns like numbers, UUIDs, and slugs, AdonisJS provides shorthand 
 | `uuid()` | Valid UUID v4 format | `string` | Public resource identifiers, secure IDs |
 | `slug()` | URL-safe strings (`/^[a-z0-9-_]+$/`) | `string` | SEO-friendly URLs, article slugs |
 
-```ts title="start/routes.ts"
+```ts title="Numeric IDs"
 import router from '@adonisjs/core/services/router'
 
-// Numeric IDs
 router
   .get('/posts/:id', ({ params }) => {
     console.log(typeof params.id) // 'number'
   })
   .where('id', router.matchers.number())
+```
 
-// UUID identifiers
+```ts title="UUID identifiers"
+import router from '@adonisjs/core/services/router'
+
 router
   .get('/users/:userId', ({ params }) => {
     console.log(params.userId) // '550e8400-e29b-41d4-a716-446655440000'
   })
   .where('userId', router.matchers.uuid())
+```
 
-// URL-friendly slugs
+```ts title="URL-friendly slugs"
+import router from '@adonisjs/core/services/router'
+
 router
   .get('/articles/:slug', ({ params }) => {
     console.log(params.slug) // 'getting-started-with-adonisjs'
@@ -344,7 +349,7 @@ router
 
 ## Route identifiers
 
-Each route can have a unique **name** that you can use to generate URLs or redirects without hardcoding paths. This keeps your URLs maintainable—if you change a route's path, all references automatically update when using the name.
+Each route can have a unique **name** that you can use to generate URLs or redirects without hardcoding paths. This keeps your URLs maintainable, if you change a route's path, all references automatically update when using the name.
 
 Named routes are essential for:
 - Generating URLs in templates without hardcoding paths
@@ -352,7 +357,11 @@ Named routes are essential for:
 - Building navigation menus programmatically
 - Organizing routes with meaningful identifiers
 
-You can provide unique names to routes using the `.as` method. When using controllers, routes are automatically named after the `controller+method` name.
+You can provide unique names to routes using the `.as` method.
+
+:::note
+When using controllers, routes are automatically named after the `controller+method` name.
+:::
 
 See also: [URL builder](./url_builder.md)
 
@@ -468,15 +477,65 @@ import { controllers } from '#generated/controllers'
 router.resource('posts', controllers.Posts)
 ```
 
-| Route Name      | HTTP Method | URL               | Controller Action | Purpose                        |
-| --------------- | ----------- | ----------------- | ----------------- | ------------------------------ |
-| `posts.index`   | GET         | `/posts`          | `index`           | Display a list of all posts    |
-| `posts.create`  | GET         | `/posts/create`   | `create`          | Show form to create a new post |
-| `posts.store`   | POST        | `/posts`          | `store`           | Store a newly created post     |
-| `posts.show`    | GET         | `/posts/:id`      | `show`            | Display a specific post        |
-| `posts.edit`    | GET         | `/posts/:id/edit` | `edit`            | Show form to edit a post       |
-| `posts.update`  | PUT/PATCH   | `/posts/:id`      | `update`          | Update a specific post         |
-| `posts.destroy` | DELETE      | `/posts/:id`      | `destroy`         | Delete a specific post         |
+::::options
+
+:::option{name="GET /posts"}
+
+- **Action:** `PostsController.index`
+- **Name:** `posts.index`
+- **Purpose:** Display a list of all posts
+
+:::
+
+:::option{name="GET /posts/create"}
+
+- **Action:** `PostsController.create`
+- **Name:** `posts.create`
+- **Purpose:** Show form to create a new post
+
+:::
+
+:::option{name="POST /posts"}
+
+- **Action:** `PostsController.store`
+- **Name:** `posts.store`
+- **Purpose:** Store a newly created post
+
+:::
+
+:::option{name="GET /posts/:id"}
+
+- **Action:** `PostsController.show`
+- **Name:** `posts.show`
+- **Purpose:** Display a specific post
+
+:::
+
+:::option{name="GET /posts/:id/edit"}
+
+- **Action:** `PostsController.edit`
+- **Name:** `posts.edit`
+- **Purpose:** Show form to edit a post
+
+:::
+
+:::option{name="PUT|PATCH /posts/:id"}
+
+- **Action:** `PostsController.update`
+- **Name:** `posts.update`
+- **Purpose:** Update a specific post
+
+:::
+
+:::option{name="DELETE /posts/:id"}
+
+- **Action:** `PostsController.destroy`
+- **Name:** `posts.destroy`
+- **Purpose:** Delete a specific post
+
+:::
+
+::::
 
 ## Registering routes for specific domains
 

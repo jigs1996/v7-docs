@@ -44,9 +44,9 @@ TypeScript compiles away during the build process, so there's no runtime overhea
 
 ## Who maintains AdonisJS?
 
-AdonisJS is primarily maintained by Harminder Virk , who created the framework in 2015 and continues to lead its development. The framework also has a [small core team](https://adonisjs.com/core-team) of contributors who help with specific areas like documentation, package maintenance, and community support.
+AdonisJS is primarily maintained by Harminder Virk , who created the framework in 2015 and continues to lead its development. The framework also has a [small core team](https://adonisjs.com/team) of contributors who help with specific areas like documentation, package maintenance, and community support.
 
-Harminder works on AdonisJS full-time as his primary professional focus, not as a side project. This ensures consistent attention, timely issue responses, and regular feature development. The framework receives financial support through the [Insiders and Partners programs](https://adonisjs.com/sponsor), enabling sustainable full-time maintenance.
+Harminder works on AdonisJS full-time as his primary professional focus, not as a side project. This ensures consistent attention, timely issue responses, and regular feature development. The framework receives financial support through the [Insiders](https://adonisjs.com/insiders) and [Partners](https://adonisjs.com/partner) programs, enabling sustainable full-time maintenance.
 
 While some developers worry about frameworks maintained primarily by one person, this model has proven sustainable for nearly a decade. A single maintainer ensures coherent vision, consistent code quality, and fast decision-making. Many successful open-source projects (Linux, Ruby on Rails, Laravel, Vue.js) have followed similar models successfully.
 
@@ -63,13 +63,3 @@ To get better answers faster, provide clear context, share relevant code snippet
 ## Can I use AdonisJS for building APIs?
 
 Yes, AdonisJS is excellent for building APIs and many developers choose it primarily for API development. The framework provides extensive built-in features specifically designed for APIs, including RESTful resource routing, built-in validation with VineJS, multiple authentication schemes, transformers for serializing data, CORS handling, and rate limiting support.
-
-## How is AdonisJS funded?
-
-AdonisJS is funded through the Insiders program and Partners program. The Insiders program is available for individuals at $19/month and companies at $99/month, providing early access to framework features before they're released publicly. This allows supporters to stay ahead with new functionality while contributing to sustainable development.
-
-The Partners program is designed for companies at $499/month who want to showcase their products and brand to the AdonisJS developer community. Partners receive visibility and recognition while supporting the framework's ongoing development and maintenance.
-
-This funding model enables the maintainer to work on AdonisJS full-time rather than as a side project, ensuring consistent development, maintenance, and community support. The framework remains fully open source under the MIT license with no artificial limitations, while supporters gain additional benefits for their contributions.
-
-Visit [adonisjs.com/sponsor](https://adonisjs.com/sponsor) to learn more about sponsorship options and how you can support AdonisJS development.
