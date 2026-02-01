@@ -260,8 +260,7 @@
       {
         "title": "Drive",
         "permalink": "guides/digging-deeper/drive",
-        "contentPath": "./digging_deeper/drive.md",
-        "draft": true
+        "contentPath": "./digging_deeper/drive.md"
       },
       {
         "title": "Emitter",

@@ -331,6 +331,10 @@
   @apply border border-woodsmoke-800/70 rounded-lg;
 }
 
+.prose p + .disclosure {
+  margin-top: -10px;
+}
+
 .prose .disclosure_summary {
   position: relative;
   anchor-name: --summary;
