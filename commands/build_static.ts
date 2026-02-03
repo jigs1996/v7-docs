@@ -121,6 +121,6 @@ export default class BuildStatic extends BaseCommand {
     const outputPath = this.app.makePath('build/public/_redirects')
     const action = this.logger.action('Generating _redirects file')
     await writeFile(outputPath, redirects.join('\n') + '\n')
-    action.succeeded(`${redirects.length} redirects written`)
+    action.succeeded()
   }
 }

@@ -641,7 +641,7 @@ node ace list:routes
 Also, you can see the routes list from the VSCode activity bar if you are using our [official VSCode extension](https://marketplace.visualstudio.com/items?itemName=jripouteau.adonis-vscode-extension).
 
 :::media
-![](../basics/vscode_routes_list.png)
+![](../guides/basics/vscode_routes_list.png)
 :::
 
 <dl>
