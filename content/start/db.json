@@ -17,7 +17,10 @@
       {
         "title": "Installation",
         "permalink": "installation",
-        "oldUrls": ["guides/getting-started/installation", "guides/concepts/hot-module-replacement"],
+        "oldUrls": [
+          "guides/getting-started/installation",
+          "guides/concepts/hot-module-replacement"
+        ],
         "contentPath": "./installation.md"
       },
       {
@@ -45,7 +48,10 @@
       {
         "title": "Deployment",
         "permalink": "deployment",
-        "oldUrls": ["guides/getting-started/deployment", "guides/concepts/typescript-build-process"],
+        "oldUrls": [
+          "guides/getting-started/deployment",
+          "guides/concepts/typescript-build-process"
+        ],
         "contentPath": "./deployment.md"
       },
       {
@@ -105,7 +111,7 @@
         ]
       },
       {
-        "title": "Routes, Controllers and Views",
+        "title": "Routes, controllers and views",
         "variations": [
           {
             "name": "Hypermedia",
@@ -120,7 +126,7 @@
         ]
       },
       {
-        "title": "Forms and Validation",
+        "title": "Forms and validation",
         "variations": [
           {
             "name": "Hypermedia",
@@ -135,7 +141,7 @@
         ]
       },
       {
-        "title": "Styling and Cleanup",
+        "title": "Styling and cleanup",
         "variations": [
           {
             "name": "Hypermedia",

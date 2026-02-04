@@ -1,6 +1,6 @@
 :variantSelector{}
 
-# Routes, Controllers and Views
+# Routes, controllers and views
 
 In the previous chapter, we created the Post and Comment models with their database tables and relationships. Now we'll bring those models to life by building pages where users can actually see posts.
 

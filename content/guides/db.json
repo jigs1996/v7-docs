@@ -15,7 +15,11 @@
       {
         "title": "HTTP context",
         "permalink": "guides/basics/http-context",
-        "oldUrls": ["guides/concepts/http-context", "guides/concepts/async-local-storage", "guides/concepts/http-overview"],
+        "oldUrls": [
+          "guides/concepts/http-context",
+          "guides/concepts/async-local-storage",
+          "guides/concepts/http-overview"
+        ],
         "contentPath": "./basics/http_context.md"
       },
       {
@@ -70,7 +74,7 @@
         "contentPath": "./basics/debugging.md"
       },
       {
-        "title": "Static File Server",
+        "title": "Static file server",
         "permalink": "guides/basics/static-file-server",
         "contentPath": "./basics/static_file_server.md"
       }
@@ -102,7 +106,7 @@
         "contentPath": "./frontend/tuyau.md"
       },
       {
-        "title": "TanStack Query",
+        "title": "TanStack query",
         "permalink": "guides/frontend/tanstack-query",
         "contentPath": "./frontend/tanstack_query.md"
       },
@@ -139,32 +143,32 @@
         "contentPath": "./auth/introduction.md"
       },
       {
-        "title": "Verifying User Credentials",
+        "title": "Verifying user credentials",
         "permalink": "guides/auth/verifying-user-credentials",
         "contentPath": "./auth/verifying_user_credentials.md"
       },
       {
-        "title": "Session Guard",
+        "title": "Session guard",
         "permalink": "guides/auth/session-guard",
         "contentPath": "./auth/session_guard.md"
       },
       {
-        "title": "Access Tokens Guard",
+        "title": "Access tokens guard",
         "permalink": "guides/auth/access-tokens-guard",
         "contentPath": "./auth/access_tokens_guard.md"
       },
       {
-        "title": "Basic Auth Guard",
+        "title": "Basic auth guard",
         "permalink": "guides/auth/basic-auth-guard",
         "contentPath": "./auth/basic_auth_guard.md"
       },
       {
-        "title": "Custom Auth Guard",
+        "title": "Custom auth guard",
         "permalink": "guides/auth/custom-auth-guard",
         "contentPath": "./auth/custom_auth_guard.md"
       },
       {
-        "title": "Social Authentication",
+        "title": "Social authentication",
         "permalink": "guides/auth/social-authentication",
         "contentPath": "./auth/social_authentication.md"
       },
@@ -194,12 +198,12 @@
         "contentPath": "./security/cors.md"
       },
       {
-        "title": "Securing SSR Apps",
+        "title": "Securing SSR apps",
         "permalink": "guides/security/securing-ssr-applications",
         "contentPath": "./security/securing_ssr_applications.md"
       },
       {
-        "title": "Rate Limiting",
+        "title": "Rate limiting",
         "permalink": "guides/security/rate-limiting",
         "contentPath": "./security/rate_limiting.md"
       }
@@ -209,12 +213,12 @@
     "category": "Core Concepts",
     "children": [
       {
-        "title": "Application Lifecycle",
+        "title": "Application lifecycle",
         "permalink": "guides/concepts/application-lifecycle",
         "contentPath": "./concepts/application_lifecycle.md"
       },
       {
-        "title": "Dependency Injection",
+        "title": "Dependency injection",
         "permalink": "guides/concepts/dependency-injection",
         "contentPath": "./concepts/dependency_injection.md"
       },
@@ -224,17 +228,17 @@
         "contentPath": "./concepts/service_providers.md"
       },
       {
-        "title": "Container Services",
+        "title": "Container services",
         "permalink": "guides/concepts/container-services",
         "contentPath": "./concepts/container_services.md"
       },
       {
-        "title": "Barrel Files",
+        "title": "Barrel files",
         "permalink": "guides/concepts/barrel-files",
         "contentPath": "./concepts/barrel_files.md"
       },
       {
-        "title": "Assembler Hooks",
+        "title": "Assembler hooks",
         "permalink": "guides/concepts/assembler-hooks",
         "contentPath": "./concepts/assembler_hooks.md"
       },
@@ -270,7 +274,7 @@
         "contentPath": "./digging_deeper/emitter.md"
       },
       {
-        "title": "Health Checks",
+        "title": "Health checks",
         "permalink": "guides/digging-deeper/health-checks",
         "contentPath": "./digging_deeper/health_checks.md"
       },
@@ -280,7 +284,7 @@
         "contentPath": "./digging_deeper/i18n.md"
       },
       {
-        "title": "Atomic Locks",
+        "title": "Atomic locks",
         "permalink": "guides/digging-deeper/locks",
         "contentPath": "./digging_deeper/locks.md"
       },
@@ -310,17 +314,17 @@
         "contentPath": "./ace/introduction.md"
       },
       {
-        "title": "Creating Commands",
+        "title": "Creating commands",
         "permalink": "guides/ace/creating-commands",
         "contentPath": "./ace/creating_commands.md"
       },
       {
-        "title": "Command Arguments",
+        "title": "Command arguments",
         "permalink": "guides/ace/arguments",
         "contentPath": "./ace/args.md"
       },
       {
-        "title": "Command Flags",
+        "title": "Command flags",
         "permalink": "guides/ace/flags",
         "contentPath": "./ace/flags.md"
       },
@@ -350,17 +354,17 @@
         "contentPath": "./testing/introduction.md"
       },
       {
-        "title": "API Tests",
+        "title": "API tests",
         "permalink": "guides/testing/api-tests",
         "contentPath": "./testing/api_tests.md"
       },
       {
-        "title": "Browser Tests",
+        "title": "Browser tests",
         "permalink": "guides/testing/browser-tests",
         "contentPath": "./testing/browser_tests.md"
       },
       {
-        "title": "Console Tests",
+        "title": "Console tests",
         "permalink": "guides/testing/console-tests",
         "contentPath": "./testing/console_tests.md"
       },

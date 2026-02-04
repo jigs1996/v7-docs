@@ -1,4 +1,4 @@
-# Resetting State Between Tests
+# Resetting state between tests
 
 This guide covers managing application state during testing in AdonisJS. You will learn how to:
 
@@ -18,9 +18,9 @@ AdonisJS provides utilities through the `testUtils` service that handle common s
 Make sure your test environment is configured to use separate databases and storage systems from your development and production environments. Running tests against production data can result in data loss. You can use the `.env.test` file to override environment variables specifically for tests.
 :::
 
-## Database State Management
+## Database state management
 
-### Migrating the Database
+### Migrating the database
 
 Register a global setup hook in `tests/bootstrap.ts` to run migrations before any tests execute. The `testUtils.db().migrate()` method applies all pending migrations to prepare the database schema.
 
@@ -46,7 +46,7 @@ export const runnerHooks: Required<Pick<Config, 'setup' | 'teardown'>> = {
 }
 ```
 
-### Seeding the Database
+### Seeding the database
 
 If your tests require seed data, add the `seed()` hook after migration. This runs your database seeders to populate tables with initial data.
 
@@ -63,7 +63,7 @@ export const runnerHooks: Required<Pick<Config, 'setup' | 'teardown'>> = {
 }
 ```
 
-### Cleaning Up Between Tests
+### Cleaning Up between tests
 
 While migrations run once globally, you need to clean up data between individual tests to prevent state from leaking. AdonisJS offers two approaches: global transactions and truncation.
 
@@ -101,7 +101,7 @@ test.group('Posts', (group) => {
 
 Global transactions are generally faster, especially when your database has many tables, since rolling back a transaction is less expensive than truncating every table. Choose the approach that best fits your testing needs.
 
-## Filesystem State Management
+## Filesystem state management
 
 For tests that create files, use the `@japa/file-system` plugin. This plugin provides a simple API for managing files and automatically cleans them up after each test.
 
@@ -139,7 +139,7 @@ test('can process an uploaded file', async ({ fs }) => {
 
 Files are created in a temporary directory managed by the plugin. For more configuration options and advanced usage, see the [Japa file-system plugin documentation](https://japa.dev/docs/plugins/file-system).
 
-## Redis State Management
+## Redis state management
 
 For tests that interact with Redis, flush the test database between tests to ensure a clean state. Use a group setup hook to call `flushdb()` before each test.
 
@@ -160,7 +160,7 @@ test.group('Cache', (group) => {
 
 The `flushdb()` command clears all keys in the currently selected Redis database without affecting other databases on the same Redis server. Make sure your test environment is configured to use a different Redis database number than development or production.
 
-## Environment Configuration
+## Environment configuration
 
 Use the `.env.test` file to override environment variables specifically for your test environment. This file is automatically loaded when running tests.
 
