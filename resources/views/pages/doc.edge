@@ -1,16 +1,16 @@
 @let(markdownDocument = await $markdown.render({
-  file: doc.contentPath,
-  toc: {
-    enabled: true,
-    maxDepth: 3
-  }
+file: doc.contentPath,
+toc: {
+enabled: doc.toc !== false,
+maxDepth: 3
+}
 }))
 
 @layout()
-  <div class="container-full mx-auto lg:px-10 relative" x-data>
-    <button @click.prevent="$dispatch('toggle-mobile-nav')" class="w-full lg:hidden py-3 backdrop-blur-3xl bg-woodsmoke-950/60 border-b border-woodsmoke-900 flex items-center justify-between sticky top-18 z-1 px-5">
-      <div class="text-13 flex items-center gap-2.5 text-white font-medium">
-        <span class="text-woodsmoke-500">HTTP</span>
+<div class="container-full mx-auto lg:px-10 relative" x-data>
+  <button @click.prevent="$dispatch('toggle-mobile-nav')" class="w-full lg:hidden py-3 backdrop-blur-3xl bg-woodsmoke-950/60 border-b border-woodsmoke-900 flex items-center justify-between sticky top-18 z-1 px-5">
+    <div class="text-13 flex items-center gap-2.5 text-white font-medium">
+      <span class="text-woodsmoke-500">HTTP</span>
         @svg('mynaui:chevron-right', {class: 'size-4'})
         <span>Controllers</span>
       </div>
@@ -45,5 +45,36 @@
       @include('partials/docs/content')
       @include('partials/docs/toc')
     </div>
+    <div>
+      @svg('mynaui:menu', {class: 'size-6 text-woodsmoke-200'})
+    </div>
+  </button>
+  <div class="px-5 lg:px-0 lg:border-l lg:border-r border-woodsmoke-900 bg-[url('/resources/assets/docs-hero-bg.webp')] bg-no-repeat bg-top-bottom lg:grid lg:grid-cols-[270px_1fr] xl:grid-cols-[230px_1fr_230px] gap-4">
+    {{-- webview --}}
+    <div class="pl-8 pr-3 hidden lg:block sticky top-23 pt-10 pb-11 max-h-[calc(100dvh-(var(--spacing)*16))] overflow-y-auto">
+      @include('partials/docs/sidebar')
+    </div>
+    {{-- webview --}}
+
+    {{-- mobile view --}}
+    <div
+    x-data="{ isOpen: false }"
+    @toggle-mobile-nav.window="isOpen = !isOpen"
+    @hide-mobile-nav.window="isOpen = false"
+    x-show="isOpen"
+    class="fixed lg:hidden inset-0 z-2 bg-woodsmoke-950/45 backdrop-blur-3xl overflow-auto p-7 flex items-start"
+    >
+    <div class="flex-1">
+      @include('partials/docs/sidebar')
+    </div>
+    <button class="sticky top-0" @click.prevent="$dispatch('toggle-mobile-nav')">
+      @svg('mynaui:x', {class: 'size-6 text-woodsmoke-200'})
+    </button>
   </div>
+  {{-- mobile view --}}
+
+  @include('partials/docs/content')
+  @include('partials/docs/toc')
+</div>
+</div>
 @end

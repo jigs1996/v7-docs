@@ -35,6 +35,7 @@ export const singleDoc = vine.object({
     .optional()
     .requiredIfMissing('permalink'),
   draft: vine.boolean().optional(),
+  toc: vine.boolean().optional(),
   oldUrls: vine.array(vine.string()).optional(),
   contentPath: vine
     .string()

@@ -1,39 +1,39 @@
 @let(docsSections = [
-  {
-    href: '/introduction',
-    title: 'Start',
-    icon: 'mynaui:play-square',
-    active: sections.start.has(doc.permalink),
-  },
-  {
-    href: '/guides/basics/routing',
-    title: 'Guides',
-    icon: 'mynaui:book',
-    active: sections.guides.has(doc.permalink),
-  },
-  {
-    href: '/reference/application',
-    title: 'Reference',
-    icon: 'mynaui:code',
-    active: sections.reference.has(doc.permalink),
-  }
+{
+href: '/introduction',
+title: 'Start',
+icon: 'mynaui:play-square',
+active: sections.start.has(doc.permalink),
+},
+{
+href: '/guides/basics/routing',
+title: 'Guides',
+icon: 'mynaui:book',
+active: sections.guides.has(doc.permalink),
+},
+{
+href: '/reference/application',
+title: 'Reference',
+icon: 'mynaui:code',
+active: sections.reference.has(doc.permalink),
+}
 ])
 
-<aside>
+<aside up-section-sidebar>
   {{-- Sections list --}}
   <nav>
     <ul class="flex flex-col gap-2.5 mb-10 text-16">
       @each(section in docsSections)
         <li class="{{ section.active ? 'text-white' : '' }}">
           <a
-            href="{{ section.href }}"
-            class="flex items-center gap-2"
-            up-follow
-            up-preload
-            up-target="main"
+          href="{{ section.href }}"
+          class="flex items-center gap-2"
+          up-follow
+          up-preload
+          up-target="main"
           >
-            @svg(section.icon, { class: 'w-5 h-5' })
-            {{ section.title }}
+          @svg(section.icon, { class: 'w-5 h-5' })
+          {{ section.title }}
           </a>
         </li>
       @end
@@ -44,9 +44,9 @@
   @each(group in section.menu(doc.variant))
     @let(isExpanded = true)
     <nav
-      class="menu-group {{ isExpanded ? 'expanded' : '' }}"
-      x-data="{ expanded: {{ isExpanded }} }"
-      :class="{ expanded }"
+    class="menu-group {{ isExpanded ? 'expanded' : '' }}"
+    x-data="{ expanded: {{ isExpanded }} }"
+    :class="{ expanded }"
     >
       @if(group.category !== 'Root')
         <button
@@ -62,15 +62,15 @@
         @each(doc in group.children)
           <li class="text-14 mb-1">
             @!link({
-              route: 'docs',
-              routeParams: { '*': [doc.permalink] },
-              text: doc.title,
-              'up-follow': 'true',
-              'up-preload': 'true',
-              'up-target': '[up-main], [up-section-toc]',
-              class: ['leading-5', 'block', 'py-1', 'relative', {
-                'up-current': request.url() === `/${doc.permalink}`
-              }]
+            route: 'docs',
+            routeParams: { '*': [doc.permalink] },
+            text: doc.title,
+            'up-follow': 'true',
+            'up-preload': 'true',
+            'up-target': '[up-main], [up-section-toc]',
+            class: ['leading-5', 'block', 'py-1', 'relative', {
+            'up-current': request.url() === `/${doc.permalink}`
+            }]
             })
           </li>
         @end

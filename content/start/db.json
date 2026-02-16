@@ -200,7 +200,8 @@
         "title": "Releases",
         "permalink": "releases",
         "oldUrls": ["guides/preface/releases"],
-        "contentPath": "./resources/releases.md"
+        "contentPath": "./resources/releases.md",
+        "toc": false
       },
       {
         "title": "Governance",

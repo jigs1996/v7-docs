@@ -467,12 +467,12 @@ export class PaymentGatewayCheck extends BaseCheck {
     })
   }
 
-  private async checkGatewayConnectivity(): Promise<boolean> {
+  protected async checkGatewayConnectivity(): Promise<boolean> {
     // Implementation here
     return true
   }
 
-  private async measureLatency(): Promise<number> {
+  protected async measureLatency(): Promise<number> {
     // Implementation here
     return 150
   }

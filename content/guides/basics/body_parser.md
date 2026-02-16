@@ -379,3 +379,37 @@ export default class XmlParserMiddleware {
   }
 }
 ```
+
+## Form Method Spoofing
+
+HTML forms only support GET and POST methods. Method spoofing allows you to specify other HTTP methods (PUT, PATCH, DELETE) via a query parameter, enabling full RESTful routing with standard HTML forms.
+
+```ts
+// title: config/app.ts
+import env from '#start/env'
+import { defineConfig } from '@adonisjs/core/http'
+
+export const http = defineConfig({
+  /**
+   * Enable method spoofing for HTML forms.
+   * This allows forms to use PUT, PATCH, and DELETE methods
+   * by adding ?_method=PUT to the form action.
+   */
+  allowMethodSpoofing: true
+})
+```
+
+With method spoofing enabled, you can use the `_method` query parameter in your forms:
+
+```html
+<!-- Form will be processed as a PUT request -->
+<form method="POST" action="/posts/1?_method=PUT">
+  <input type="text" name="title" />
+  <button type="submit">Update Post</button>
+</form>
+
+<!-- Form will be processed as a DELETE request -->
+<form method="POST" action="/posts/1?_method=DELETE">
+  <button type="submit">Delete Post</button>
+</form>
+```
