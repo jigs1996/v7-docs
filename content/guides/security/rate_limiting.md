@@ -1,5 +1,5 @@
 ---
-summary: Protect your web application or API server from abuse by implementing rate limits using the @adonisjs/limiter package.
+description: Protect your web application or API server from abuse by implementing rate limits using the @adonisjs/limiter package.
 ---
 
 # Rate limiting

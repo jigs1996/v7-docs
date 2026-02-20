@@ -1,5 +1,5 @@
 ---
-summary: Learn how to define and process command flags in Ace commands.
+description: Learn how to define and process command flags in Ace commands.
 ---
 
 # Command flags

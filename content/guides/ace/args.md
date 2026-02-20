@@ -1,5 +1,5 @@
 ---
-summary: Learn about defining and processing command arguments in Ace commands.
+description: Learn about defining and processing command arguments in Ace commands.
 ---
 
 # Command arguments

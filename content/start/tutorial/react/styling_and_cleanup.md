@@ -1,8 +1,12 @@
+---
+description: Style and improve the user experience of the DevShow React tutorial application by adding navigation, CSS, and visual polish.
+---
+
 :variantSelector{}
 
 # Styling and Cleanup
 
-In the previous chapter, we added forms to create posts and comments. We're not done building DevShow yet — there are more features to add — but we've built enough that it's worth pausing to improve the design and user experience. 
+In the previous chapter, we added forms to create posts and comments. We're not done building DevShow yet — there are more features to add — but we've built enough that it's worth pausing to improve the design and user experience.
 
 Right now, users can't easily navigate between pages, and the design looks bare. Let's fix both by adding proper navigation links and styling everything with CSS.
 

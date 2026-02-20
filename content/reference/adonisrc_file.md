@@ -1,5 +1,5 @@
 ---
-summary: 'The `adonisrc.ts` file is used to configure the workspace settings of your application.'
+description: The adonisrc.ts file is used to configure the workspace settings of your application.
 ---
 
 # AdonisRC file

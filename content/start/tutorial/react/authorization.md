@@ -1,3 +1,7 @@
+---
+description: Add authorization to the DevShow React tutorial application using AdonisJS Bouncer policies to restrict editing and deleting of posts and comments.
+---
+
 :variantSelector{}
 
 # Authorization

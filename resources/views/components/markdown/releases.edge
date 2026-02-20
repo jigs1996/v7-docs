@@ -3,7 +3,7 @@
     {{ DateTime.fromJSDate(block.date).toFormat('LLL yyyy') }}
   </h2>
 
-  <table>
+  <table class="releases">
     <thead>
       <tr>
         <th>Description</th>
@@ -21,7 +21,7 @@
               {{{ releaseTitle.content.replace('<p>', '').replace('</p>', '') }}}
             </a>
           </td>
-          <td title="{{ `adonisjs/${release.repo}@` }}{{ release.tagName }}">
+          <td class="release-tag" title="{{ `adonisjs/${release.repo}@` }}{{ release.tagName }}">
             <code>{{ release.tagName }}</code>
           </td>
         </tr>

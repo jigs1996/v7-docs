@@ -1,3 +1,7 @@
+---
+description: Create models and database migrations for the DevShow React tutorial application, define relationships, and seed test data using factories.
+---
+
 :variantSelector{}
 
 # Database and Models

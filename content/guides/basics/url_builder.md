@@ -1,5 +1,5 @@
 ---
-summary: Learn how to generate type-safe URLs for named routes in templates, redirects, and frontend applications.
+description: Learn how to generate type-safe URLs for named routes in templates, redirects, and frontend applications.
 ---
 
 # URL Builder

@@ -1,5 +1,5 @@
 ---
-summary: Learn how to protect your server-rendered applications from common web attacks using the @adonisjs/shield package.
+description: Learn how to protect your server-rendered applications from common web attacks using the @adonisjs/shield package.
 ---
 
 # Securing server-rendered applications

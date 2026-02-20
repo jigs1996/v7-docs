@@ -1,3 +1,7 @@
+---
+description: Understand AdonisJS's approach to frontend development and choose between Hypermedia, Inertia, and API-only stacks for your application.
+---
+
 # Pick your path
 
 This guide introduces AdonisJS's approach to frontend development and the three primary stacks you can choose from. You will learn:

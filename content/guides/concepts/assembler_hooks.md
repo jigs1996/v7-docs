@@ -1,5 +1,5 @@
 ---
-summary: Learn how to use Assembler hooks to run custom actions during the development, testing, and build lifecycle of your AdonisJS application.
+description: Learn how to use Assembler hooks to run custom actions during the development, testing, and build lifecycle of your AdonisJS application.
 ---
 
 # Assembler hooks

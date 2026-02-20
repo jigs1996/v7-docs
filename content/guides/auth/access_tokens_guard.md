@@ -1,5 +1,5 @@
 ---
-summary: Learn how to authenticate HTTP requests using opaque access tokens in AdonisJS.
+description: Learn how to authenticate HTTP requests using opaque access tokens in AdonisJS.
 ---
 
 # Access tokens guard

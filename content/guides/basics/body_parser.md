@@ -1,3 +1,7 @@
+---
+description: Learn how to configure the body parser to handle JSON, form data, and file uploads in AdonisJS applications.
+---
+
 # Body Parser
 
 This guide covers the body parser configuration in AdonisJS. You will learn how to:

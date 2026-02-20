@@ -1,5 +1,5 @@
 ---
-summary: Add distributed tracing and observability to your AdonisJS application with OpenTelemetry.
+description: Add distributed tracing and observability to your AdonisJS application with OpenTelemetry.
 ---
 
 # OpenTelemetry

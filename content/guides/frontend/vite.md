@@ -1,5 +1,5 @@
 ---
-summary: Learn how to use Vite to bundle frontend assets in AdonisJS applications.
+description: Learn how to use Vite to bundle frontend assets in AdonisJS applications.
 ---
 
 # Vite

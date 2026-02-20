@@ -1,3 +1,7 @@
+---
+description: Complete reference for all configuration options available in the config/app.ts file for HTTP server behavior, cookies, and runtime settings.
+---
+
 # App Configuration Reference
 
 This reference guide documents all configuration options available in the `config/app.ts` file. The app configuration controls the HTTP server behavior, cookie settings, request parsing, and various other runtime settings for your AdonisJS application.

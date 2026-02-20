@@ -1,5 +1,5 @@
 ---
-summary: Build a fully functional community showcase website with AdonisJS and learn how to create hypermedia-driven web applications.
+description: Build a fully functional community showcase website with AdonisJS and learn how to create hypermedia-driven web applications.
 ---
 
 :variantSelector{}

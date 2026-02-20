@@ -1,5 +1,5 @@
 ---
-summary: Learn how testing is configured in AdonisJS applications using Japa, and how to create, run, and filter tests.
+description: Learn how testing is configured in AdonisJS applications using Japa, and how to create, run, and filter tests.
 ---
 
 # Introduction to testing

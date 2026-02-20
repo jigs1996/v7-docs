@@ -1,3 +1,7 @@
+---
+description: Style and improve the user experience of the DevShow tutorial application by adding navigation, CSS, and visual polish.
+---
+
 :variantSelector{}
 
 # Styling and Cleanup

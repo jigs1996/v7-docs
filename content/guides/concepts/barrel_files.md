@@ -1,5 +1,5 @@
 ---
-summary: Understand what barrel files are, why AdonisJS uses them, and how they help reduce visual clutter in your codebase.
+description: Understand what barrel files are, why AdonisJS uses them, and how they help reduce visual clutter in your codebase.
 ---
 
 # Barrel Files

@@ -1,3 +1,7 @@
+---
+description: Build routes, controllers, and Edge template views for the DevShow tutorial application to display posts and comments.
+---
+
 :variantSelector{}
 
 # Routes, controllers and views

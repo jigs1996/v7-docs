@@ -1,5 +1,5 @@
 ---
-summary: Learn how to encrypt and decrypt sensitive data in your AdonisJS applications.
+description: Learn how to encrypt and decrypt sensitive data in your AdonisJS applications.
 ---
 
 # Encryption

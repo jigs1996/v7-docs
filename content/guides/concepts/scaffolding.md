@@ -1,5 +1,5 @@
 ---
-summary: Learn how to create configure hooks for AdonisJS packages using stubs and codemods
+description: Learn how to create configure hooks for AdonisJS packages using stubs and codemods.
 ---
 
 # Scaffolding and codemods

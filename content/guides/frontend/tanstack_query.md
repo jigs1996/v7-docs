@@ -1,3 +1,7 @@
+---
+description: Learn how to integrate TanStack Query with Tuyau for type-safe API calls, infinite scrolling, and cache management in AdonisJS applications.
+---
+
 # TanStack Query Integration
 
 This guide covers the TanStack Query integration for Tuyau. You will learn how to install and configure `@tuyau/react-query`, generate type-safe query and mutation options, implement infinite scrolling and manage cache invalidation.

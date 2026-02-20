@@ -1,5 +1,5 @@
 ---
-summary: Learn how dependency injection works in AdonisJS and how to use the IoC container to manage class dependencies automatically.
+description: Learn how dependency injection works in AdonisJS and how to use the IoC container to manage class dependencies automatically.
 ---
 
 # Dependency injection and the IoC container

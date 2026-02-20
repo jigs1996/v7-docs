@@ -1,5 +1,5 @@
 ---
-summary: Learn how to create a custom authentication guard for AdonisJS.
+description: Learn how to create a custom authentication guard for AdonisJS.
 ---
 
 # Creating a custom auth guard

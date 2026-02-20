@@ -1,5 +1,5 @@
 ---
-summary: Learn how to handle file uploads in AdonisJS, from basic single file uploads to advanced direct uploads with cloud storage providers.
+description: Learn how to handle file uploads in AdonisJS, from basic single file uploads to advanced direct uploads with cloud storage providers.
 ---
 
 # File Uploads

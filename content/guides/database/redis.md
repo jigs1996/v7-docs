@@ -1,5 +1,5 @@
 ---
-summary: Use Redis inside your AdonisJS applications using the `@adonisjs/redis` package.
+description: Use Redis inside your AdonisJS applications using the @adonisjs/redis package.
 ---
 
 # Redis

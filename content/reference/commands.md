@@ -1,5 +1,5 @@
 ---
-summary: Learn about the commands shipped with the AdonisJS framework core and official packages.
+description: Learn about the commands shipped with the AdonisJS framework core and official packages.
 ---
 
 # Commands reference

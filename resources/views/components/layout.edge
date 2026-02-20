@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en-us" class="bg-woodsmoke-1000">
+<html lang="en-us" class="bg-woodsmoke-1000" >
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     @include('partials/favicons')
     <title>
-      AdonisJS - A fully featured web framework for Node.js
+      {{ title ? title + ' - AdonisJS' : 'AdonisJS Documentation' }}
     </title>
     @vite(['resources/js/app.js'])
     @stack('dumper')

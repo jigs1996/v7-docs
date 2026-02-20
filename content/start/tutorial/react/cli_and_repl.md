@@ -1,3 +1,7 @@
+---
+description: Learn to use the AdonisJS Ace CLI and REPL to generate files and interact with your application during the DevShow React tutorial.
+---
+
 :variantSelector{}
 
 # Command line and REPL

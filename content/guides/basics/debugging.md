@@ -1,5 +1,5 @@
 ---
-summary: Learn how to debug AdonisJS applications using VSCode, Node.js inspector, debug logs, and Edge template helpers.
+description: Learn how to debug AdonisJS applications using VSCode, Node.js inspector, debug logs, and Edge template helpers.
 ---
 
 # Debugging

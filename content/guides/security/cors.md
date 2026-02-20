@@ -1,5 +1,5 @@
 ---
-summary: Learn how to implement CORS in AdonisJS to control cross-origin access to your API.
+description: Learn how to implement CORS in AdonisJS to control cross-origin access to your API.
 ---
 
 # CORS

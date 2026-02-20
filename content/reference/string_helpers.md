@@ -1,3 +1,7 @@
+---
+description: Reference guide for string helper functions available in AdonisJS for common string manipulation tasks.
+---
+
 # String helpers
 
 ## excerpt

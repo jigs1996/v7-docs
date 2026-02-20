@@ -1,5 +1,5 @@
 ---
-summary: Learn about the helpers and tags contributed by the AdonisJS official packages to the Edge templating engine.
+description: Learn about the helpers and tags contributed by the AdonisJS official packages to the Edge templating engine.
 ---
 
 # Edge helpers and tags

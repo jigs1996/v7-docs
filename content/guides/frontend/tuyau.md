@@ -1,3 +1,7 @@
+---
+description: Learn how to use Tuyau, a type-safe HTTP client for AdonisJS applications that enables end-to-end type safety between backend and frontend.
+---
+
 # Tuyau
 
 This guide covers Tuyau, a type-safe HTTP client for AdonisJS applications. You will learn how to install and configure Tuyau, make type-safe API calls using route names, handle request parameters and validation, work with file uploads, generate URLs programmatically, and understand type-level serialization for end-to-end type safety between your backend and frontend.

@@ -1,5 +1,5 @@
 ---
-summary: Learn how to validate user input in AdonisJS using VineJS validators at the controller level.
+description: Learn how to validate user input in AdonisJS using VineJS validators at the controller level.
 ---
 
 # Validation

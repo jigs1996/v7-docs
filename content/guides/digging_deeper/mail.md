@@ -1,5 +1,5 @@
 ---
-summary: Learn how to send emails from your AdonisJS application using the @adonisjs/mail package.
+description: Learn how to send emails from your AdonisJS application using the @adonisjs/mail package.
 ---
 
 # Mail

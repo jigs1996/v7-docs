@@ -1,5 +1,5 @@
 ---
-summary: Learn how to write end-to-end browser tests for hypermedia and Inertia applications using Playwright.
+description: Learn how to write end-to-end browser tests for hypermedia and Inertia applications using Playwright.
 ---
 
 # Browser tests

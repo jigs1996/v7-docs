@@ -1,5 +1,5 @@
 ---
-summary: Learn how to securely verify user credentials in an AdonisJS application using the AuthFinder mixin.
+description: Learn how to securely verify user credentials in an AdonisJS application using the AuthFinder mixin.
 ---
 
 # Verifying user credentials

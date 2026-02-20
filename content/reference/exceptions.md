@@ -1,5 +1,5 @@
 ---
-summary: Learn about the exceptions raised by the AdonisJS framework core and official packages.
+description: Learn about the exceptions raised by the AdonisJS framework core and official packages.
 ---
 
 # Exceptions reference

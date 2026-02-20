@@ -1,5 +1,5 @@
 ---
-summary: Learn how to use and create middleware in AdonisJS to handle cross-cutting concerns during HTTP requests
+description: Learn how to use and create middleware in AdonisJS to handle cross-cutting concerns during HTTP requests.
 ---
 
 # Middleware

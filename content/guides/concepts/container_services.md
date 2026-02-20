@@ -1,5 +1,5 @@
 ---
-summary: Learn about container services in AdonisJS and how they provide convenient access to framework components through ES module imports.
+description: Learn about container services in AdonisJS and how they provide convenient access to framework components through ES module imports.
 ---
 
 # Container Services

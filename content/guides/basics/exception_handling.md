@@ -1,5 +1,5 @@
 ---
-summary: Learn how to handle and report exceptions during HTTP requests in AdonisJS applications.
+description: Learn how to handle and report exceptions during HTTP requests in AdonisJS applications.
 ---
 
 # Exception Handling

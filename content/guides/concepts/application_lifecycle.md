@@ -1,3 +1,7 @@
+---
+description: Learn about the application lifecycle in AdonisJS, including the boot, start, and termination phases.
+---
+
 # Application Lifecycle
 
 This guide covers the application lifecycle in AdonisJS. You will learn:

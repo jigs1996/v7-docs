@@ -1,3 +1,7 @@
+---
+description: Learn how to use Lucid ORM, the official SQL ORM for AdonisJS, including models, query builder, migrations, and relationships.
+---
+
 # Lucid - SQL ORM
 
 This guide covers Lucid ORM, the official database ORM for AdonisJS. You will learn how to:

@@ -1,5 +1,5 @@
 ---
-summary: Learn how to test JSON API endpoints in AdonisJS using Japa's API client
+description: Learn how to test JSON API endpoints in AdonisJS using Japa's API client.
 ---
 
 # API tests

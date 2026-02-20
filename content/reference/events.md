@@ -1,5 +1,5 @@
 ---
-summary: Learn about the events dispatched by the AdonisJS framework core and official packages.
+description: Learn about the events dispatched by the AdonisJS framework core and official packages.
 ---
 
 # Events reference

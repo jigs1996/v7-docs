@@ -1,3 +1,7 @@
+---
+description: Add form handling and validation to the DevShow React tutorial application to allow users to create posts and comments using Inertia forms.
+---
+
 :variantSelector{}
 
 # Forms and Validation

@@ -1,5 +1,5 @@
 ---
-summary: Learn how to serve static files from the public directory using the @adonisjs/static package.
+description: Learn how to serve static files from the public directory using the @adonisjs/static package.
 ---
 
 # Static files server

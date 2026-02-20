@@ -1,5 +1,5 @@
 ---
-summary: Learn how to create and use controllers to organize your route handlers in AdonisJS applications.
+description: Learn how to create and use controllers to organize your route handlers in AdonisJS applications.
 ---
 
 # Controllers

@@ -1,5 +1,5 @@
 ---
-summary: Learn how to use sessions to persist state across HTTP requests in AdonisJS applications
+description: Learn how to use sessions to persist state across HTTP requests in AdonisJS applications.
 ---
 
 # Sessions

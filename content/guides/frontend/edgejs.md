@@ -1,5 +1,5 @@
 ---
-summary: Learn how to use Edge templates in AdonisJS applications to render HTML on the server-side.
+description: Learn how to use Edge templates in AdonisJS applications to render HTML on the server-side.
 ---
 
 # Edge Templates

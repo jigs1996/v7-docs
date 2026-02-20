@@ -1,5 +1,5 @@
 ---
-summary: Learn how to create custom Ace commands in AdonisJS
+description: Learn how to create custom Ace commands in AdonisJS
 ---
 
 # Creating commands

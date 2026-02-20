@@ -1,5 +1,5 @@
 ---
-summary: Learn how to use atomic locks in AdonisJS to prevent race conditions and coordinate concurrent operations.
+description: Learn how to use atomic locks in AdonisJS to prevent race conditions and coordinate concurrent operations.
 ---
 
 # Atomic Locks

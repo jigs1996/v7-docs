@@ -25,6 +25,7 @@ edge.use(edgeMarkdown, {
       'handlebars',
       'vue',
       'dockerfile',
+      'diff',
     ],
     theme: 'github-dark',
   },

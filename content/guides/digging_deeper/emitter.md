@@ -1,5 +1,5 @@
 ---
-summary: Learn how to use the AdonisJS event emitter to build event-driven applications with type-safe events and listeners.
+description: Learn how to use the AdonisJS event emitter to build event-driven applications with type-safe events and listeners.
 ---
 
 # Event Emitter

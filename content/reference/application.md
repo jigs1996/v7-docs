@@ -1,5 +1,5 @@
 ---
-summary: Learn about the Application class and how to access the environment, state, and make paths to project files.
+description: Learn about the Application class and how to access the environment, state, and make paths to project files.
 ---
 
 # Application

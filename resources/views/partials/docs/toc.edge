@@ -1,20 +1,21 @@
-<aside class="relative hidden xl:block" up-section-toc>
-  <div class="absolute inset-0 pl-3">
-    <div
-      class="sticky top-22 max-h-[calc(100dvh-(var(--spacing)*16))] overflow-y-auto pt-12 pb-6"
-      x-data="trackScroll"
-    >
-      @!docActionsDropdown()
+@if(markdownDocument.toc)
+  <aside class="relative hidden xl:block" up-section-toc>
+    <div class="absolute inset-0 pl-3">
+      <div
+        class="sticky top-22 max-h-[calc(100dvh-(var(--spacing)*16))] overflow-y-auto pt-12 pb-6"
+        x-data="trackScroll"
+      >
+        @!docActionsDropdown()
 
-      <div class="doc-right-nav mt-6 min-h-54">
-        <label class="block font-medium text-white text-xs uppercase tracking-tight pt-2.5 mb-4 font-mono">
-          On this page
-        </label>
-        {{{ markdownDocument.toc }}}
+        <div class="doc-right-nav mt-6 min-h-54">
+          <label class="block font-medium text-white text-xs uppercase tracking-tight pt-2.5 mb-4 font-mono">
+            On this page
+          </label>
+          {{{ markdownDocument.toc }}}
+        </div>
       </div>
     </div>
-    </div>
   </aside>
-  @else
+@else
   <aside up-section-toc></aside>
 @end

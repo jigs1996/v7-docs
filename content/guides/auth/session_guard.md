@@ -1,5 +1,5 @@
 ---
-summary: Learn how to authenticate users using the session guard in AdonisJS.
+description: Learn how to authenticate users using the session guard in AdonisJS.
 ---
 
 # Session guard

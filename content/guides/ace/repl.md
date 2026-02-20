@@ -1,5 +1,5 @@
 ---
-summary: AdonisJS offers an application-aware REPL to interact with your application from the command line.
+description: AdonisJS offers an application-aware REPL to interact with your application from the command line.
 ---
 
 # REPL

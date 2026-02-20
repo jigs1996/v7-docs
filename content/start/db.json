@@ -208,6 +208,11 @@
         "permalink": "governance",
         "oldUrls": ["guides/preface/governance"],
         "contentPath": "./resources/governance.md"
+      },
+      {
+        "title": "Upgrade guide",
+        "permalink": "v6-to-v7",
+        "contentPath": "./resources/upgrade_guide.md"
       }
     ]
   }

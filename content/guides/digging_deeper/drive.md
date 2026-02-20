@@ -1,5 +1,5 @@
 ---
-summary: Learn how to manage user-uploaded files using AdonisJS Drive, a unified API for local filesystem and cloud storage services like S3, GCS, R2, and more.
+description: Learn how to manage user-uploaded files using AdonisJS Drive, a unified API for local filesystem and cloud storage services like S3, GCS, R2, and more.
 ---
 
 # Drive

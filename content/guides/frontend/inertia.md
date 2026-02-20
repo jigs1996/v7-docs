@@ -1,5 +1,5 @@
 ---
-summary: Learn how to build modern single-page applications using Inertia with AdonisJS, React, and Vue.
+description: Learn how to build modern single-page applications using Inertia with AdonisJS, React, and Vue.
 ---
 
 # Inertia

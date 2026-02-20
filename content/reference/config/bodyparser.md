@@ -1,5 +1,5 @@
 ---
-summary: Complete reference for configuring the BodyParser middleware, including parser options, data normalization, and request body limits.
+description: Complete reference for configuring the BodyParser middleware, including parser options, data normalization, and request body limits.
 ---
 
 # Body parser configuration

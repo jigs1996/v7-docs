@@ -1,3 +1,7 @@
+---
+description: Understand how AdonisJS approaches frontend development and the different options available for building full-stack applications.
+---
+
 # Frontend in AdonisJS
 
 Let's try to understand how AdonisJS approaches frontend in its full-stack paradigm and how it differs from the mainstream approach of meta-frameworks. We will look at things through a clear lens without getting lost in a gazillion acronyms commonly used in the frontend ecosystem.

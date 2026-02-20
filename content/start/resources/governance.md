@@ -1,5 +1,5 @@
 ---
-summary: Governance model for the AdonisJS project.
+description: Governance model for the AdonisJS project, outlining roles, responsibilities, and decision-making processes.
 ---
 
 # Governance

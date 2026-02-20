@@ -1,3 +1,7 @@
+---
+description: Learn how to work with HTTP requests in AdonisJS, including reading request data, headers, cookies, and handling trusted proxies.
+---
+
 # Request
 
 This guide covers working with HTTP requests in AdonisJS. You will learn about:

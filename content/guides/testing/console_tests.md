@@ -1,5 +1,5 @@
 ---
-summary: Learn how to test custom Ace commands in AdonisJS applications.
+description: Learn how to test custom Ace commands in AdonisJS applications.
 ---
 
 # Console tests

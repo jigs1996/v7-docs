@@ -1,3 +1,7 @@
+---
+description: Learn how to manage configuration and environment variables in AdonisJS applications with type-safe validation.
+---
+
 # Configuration & Environment
 
 This guide covers configuration in AdonisJS applications. You will learn about:

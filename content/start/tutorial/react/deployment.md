@@ -1,3 +1,7 @@
+---
+description: Deploy the DevShow React tutorial application to production using PostgreSQL and a cloud hosting platform.
+---
+
 :variantSelector{}
 
 # Deploying to Production

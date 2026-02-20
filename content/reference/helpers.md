@@ -1,5 +1,5 @@
 ---
-summary: AdonisJS bundles its utilities into the `helpers` module and makes them available to your application code. 
+description: AdonisJS bundles its utilities into the helpers module and makes them available to your application code.
 ---
 
 # Helpers reference

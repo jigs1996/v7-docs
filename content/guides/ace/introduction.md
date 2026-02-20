@@ -1,5 +1,5 @@
 ---
-summary: Ace is a command line framework used by AdonisJS to create and run console commands.
+description: Ace is a command line framework used by AdonisJS to create and run console commands.
 ---
 
 # Ace Command line

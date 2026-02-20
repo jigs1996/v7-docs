@@ -1,5 +1,5 @@
 ---
-summary: Learn how to add health checks to your AdonisJS application for monitoring liveness and readiness in production environments.
+description: Learn how to add health checks to your AdonisJS application for monitoring liveness and readiness in production environments.
 ---
 
 # Health checks

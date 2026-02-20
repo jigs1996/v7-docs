@@ -1,5 +1,5 @@
 ---
-summary: Quick answers to the most common questions about AdonisJS, including framework sustainability, technical capabilities, and production readiness.
+description: Quick answers to the most common questions about AdonisJS, including framework sustainability, technical capabilities, and production readiness.
 ---
 
 # Frequently Asked Questions

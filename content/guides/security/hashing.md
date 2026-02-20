@@ -1,5 +1,5 @@
 ---
-summary: Learn how to securely hash and verify passwords using the AdonisJS hash service.
+description: Learn how to securely hash and verify passwords using the AdonisJS hash service.
 ---
 
 # Hashing

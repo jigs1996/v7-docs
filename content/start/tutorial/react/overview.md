@@ -1,5 +1,5 @@
 ---
-summary: Build a fully functional community showcase website with AdonisJS, Inertia, and React, and learn how to create modern full-stack web applications.
+description: Build a fully functional community showcase website with AdonisJS, Inertia, and React, and learn how to create modern full-stack web applications.
 ---
 
 :variantSelector{}

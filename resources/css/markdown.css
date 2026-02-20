@@ -169,6 +169,10 @@
   margin-bottom: 24px;
   font-size: var(--text-sm);
 }
+.prose table.releases td.release-tag {
+  width: 150px;
+  text-align: right;
+}
 
 .prose table th {
   color: var(--color-woodsmoke-50);
@@ -519,4 +523,10 @@
 
 .changelog .prose {
   @apply sm:min-h-auto;
+}
+
+@media screen and (min-width: 1280px) {
+  .prose table.releases {
+    width: 140%;
+  }
 }

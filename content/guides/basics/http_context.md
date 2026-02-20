@@ -1,5 +1,5 @@
 ---
-summary: Learn about the HTTP context object in AdonisJS and how to access request-specific data and services.
+description: Learn about the HTTP context object in AdonisJS and how to access request-specific data and services.
 ---
 
 # HTTP Context

@@ -1,5 +1,5 @@
 ---
-summary: Learn how to implement authorization in AdonisJS using abilities and policies with the Bouncer package.
+description: Learn how to implement authorization in AdonisJS using abilities and policies with the Bouncer package.
 ---
 
 # Authorization
