@@ -86,6 +86,22 @@
   border-radius: 10px;
 }
 
+.bg-noise {
+  background-image: url('/resources/assets/noise.webp');
+}
+
+.bg-dot-pattern {
+  background-image: url('/resources/assets/round.png');
+}
+
+.bg-hero {
+  background-image: url('/resources/assets/hero-bg.webp');
+}
+
+.bg-docs-hero {
+  background-image: url('/resources/assets/docs-hero-bg.webp');
+}
+
 .container {
   max-width: 1360px;
 }
