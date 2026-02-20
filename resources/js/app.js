@@ -9,7 +9,7 @@ import '@pagefind/component-ui/css'
 import '../css/app.css'
 
 import.meta.glob('../../content/**/*.(png|jpg|jpeg)')
-import.meta.glob('../assets/**/*.(svg|jpg|png|jpeg)')
+import.meta.glob('../assets/**/*.(svg|jpg|png|jpeg|json)')
 
 Alpine.data('ctc', function () {
   return {
