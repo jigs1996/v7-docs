@@ -244,7 +244,7 @@ The `PostTransformer.paginate()` method takes two arguments: the array of data t
       "updatedAt": "2024-01-15T10:30:00.000Z"
     }
   ],
-  "meta": {
+  "metadata": {
     "total": 100,
     "perPage": 20,
     "currentPage": 1,
@@ -258,7 +258,7 @@ The `PostTransformer.paginate()` method takes two arguments: the array of data t
 }
 ```
 
-Your frontend can use the `meta` object to build pagination controls while the `data` array contains the transformed posts.
+Your frontend can use the `metadata` object to build pagination controls while the `data` array contains the transformed posts.
 
 ## Using transformers with Inertia
 

@@ -45,7 +45,7 @@ export default class PostsController {
    * Display the form for creating a new post
    */
   async create({ inertia }: HttpContext) {
-    return inertia.render('posts/create')
+    return inertia.render('posts/create', {})
   }
 
   /**
@@ -88,7 +88,7 @@ The `auth()` middleware ensures only logged-in users can access these routes. Un
 
 Create the React component for the form using the Ace CLI.
 ```bash
-node ace make:inertia posts/create
+node ace make:page posts/create
 ```
 
 This creates `inertia/pages/posts/create.tsx`. Open it and add the following form:
@@ -382,7 +382,7 @@ export default function PostsShow(props: PageProps) {
                 <p>{comment.content}</p>
                 <div className="comment-meta">
                   By {comment.author.fullName} on{' '}
-                  {new Date(comment.createdAt).toLocaleDateString('en-US', {
+                  {comment.createdAt && new Date(comment.createdAt).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
                     year: 'numeric',

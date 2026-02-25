@@ -320,7 +320,7 @@ import { Form } from '@adonisjs/inertia/react'
 
 export default function EditPost({ post }) {
   return (
-    <Form route="posts.update" method="put" routeParams={{ id: post.id }}>
+    <Form route="posts.update" routeParams={{ id: post.id }}>
       {({ errors }) => (
         <>
           <div>
@@ -349,7 +349,6 @@ defineProps<{ post: { id: number; title: string } }>()
 <template>
   <Form
     route="posts.update"
-    method="put"
     :routeParams="{ id: post.id }"
     v-slot="{ errors }"
   >
@@ -367,7 +366,53 @@ defineProps<{ post: { id: number; title: string } }>()
 
 ::::
 
+The `Form` component infers the HTTP method (`POST`, `PUT`, `PATCH`, `DELETE`) from the route name automatically. You do not need to pass a `method` prop — in fact, the AdonisJS wrapper omits `method` and `action` from the accepted props since both are derived from the route definition.
+
 When validation fails on the server, AdonisJS automatically adds validation errors to the session flash messages. The Inertia middleware then shares these errors with the frontend, making them available through the `errors` object in your form.
+
+### Route parameters
+
+Both `Link` and `Form` accept a `routeParams` prop for routes with dynamic segments. The keys in the object correspond to the parameter names defined in your route:
+
+```ts title="start/routes.ts"
+// Single parameter — :id
+router.get('posts/:id', [PostsController, 'show']).as('posts.show')
+
+// Multiple parameters — :userId and :postId
+router.get('users/:userId/posts/:postId', [PostsController, 'show']).as('users.posts.show')
+```
+
+Pass the matching parameter values through `routeParams`:
+
+```tsx
+{/* Single parameter */}
+<Link route="posts.show" routeParams={{ id: post.id }}>
+  {post.title}
+</Link>
+
+{/* Multiple parameters */}
+<Link route="users.posts.show" routeParams={{ userId: user.id, postId: post.id }}>
+  View post
+</Link>
+```
+
+TypeScript enforces that you provide all required parameters with the correct names. Missing or misspelled parameters are caught at compile time.
+
+### Query parameters
+
+The `Link` and `Form` components use the `route` prop for type-safe navigation, but they don't accept query parameters directly. To add query parameters (for example, `?page=2`), generate the URL with `urlFor` and pass it as the `href` prop instead:
+
+```tsx
+import { urlFor } from '~/lib/client'
+
+<Link href={urlFor('posts.index', {}, { qs: { page: 2, status: 'published' } })}>
+  Page 2
+</Link>
+```
+
+:::note
+When using `href`, you lose the type-safe route name checking that the `route` prop provides. Use `route` with `routeParams` for standard navigation and fall back to `href` with `urlFor` only when you need query parameters.
+:::
 
 ## Shared data
 
@@ -441,6 +486,84 @@ export default function PostsIndex(props: PageProps) {
   )
 }
 ```
+
+## Pagination
+
+Pagination in Inertia applications requires coordination between the controller, transformer, and frontend component. Here is a complete example using a posts list.
+
+### Controller
+
+Use a transformer's `paginate` method to serialize both the data and pagination metadata, then pass everything to `inertia.render()`:
+
+```ts title="app/controllers/posts_controller.ts"
+import Post from '#models/post'
+import type { HttpContext } from '@adonisjs/core/http'
+import PostTransformer from '#transformers/post_transformer'
+
+export default class PostsController {
+  async index({ request, inertia }: HttpContext) {
+    const page = request.input('page', 1)
+    const posts = await Post.query().paginate(page, 10)
+
+    return inertia.render('posts/index', {
+      posts: PostTransformer.paginate(posts.all(), posts.getMeta()),
+    })
+  }
+}
+```
+
+### Frontend component
+
+Type the paginated props using the `Data` namespace. The pagination metadata includes `currentPage`, `lastPage`, and other fields you can use to render controls:
+
+```tsx title="inertia/pages/posts/index.tsx"
+import { Link } from '@adonisjs/inertia/react'
+import { urlFor } from '~/lib/client'
+import { InertiaProps } from '~/types'
+import { Data } from '~/generated/data'
+
+type PageProps = InertiaProps<{
+  posts: {
+    data: Data.Post[]
+    metadata: {
+      total: number
+      perPage: number
+      currentPage: number
+      lastPage: number
+      firstPage: number
+    }
+  }
+}>
+
+export default function PostsIndex({ posts }: PageProps) {
+  const { data, metadata } = posts
+
+  return (
+    <div>
+      {data.map((post) => (
+        <article key={post.id}>
+          <h2>{post.title}</h2>
+        </article>
+      ))}
+
+      <nav>
+        {metadata.currentPage > 1 && (
+          <Link href={urlFor('posts.index', {}, { qs: { page: metadata.currentPage - 1 } })}>
+            Previous
+          </Link>
+        )}
+        {metadata.currentPage < metadata.lastPage && (
+          <Link href={urlFor('posts.index', {}, { qs: { page: metadata.currentPage + 1 } })}>
+            Next
+          </Link>
+        )}
+      </nav>
+    </div>
+  )
+}
+```
+
+The pagination links use `urlFor` with the `qs` option to generate URLs like `/posts?page=2`. See [Transformers](./transformers.md) for details on the `paginate` method and the shape of the metadata object.
 
 ## CSRF protection
 

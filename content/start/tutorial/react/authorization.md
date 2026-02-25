@@ -99,13 +99,11 @@ Open your existing post validator file and add the update validator.
 ```ts title="app/validators/post.ts"
 import vine from '@vinejs/vine'
 
-export const createPostValidator = vine.compile(
-  vine.object({
-    title: vine.string().minLength(3).maxLength(255),
-    url: vine.string().url(),
-    summary: vine.string().minLength(80).maxLength(500),
-  })
-)
+export const createPostValidator = vine.create({
+  title: vine.string().minLength(3).maxLength(255),
+  url: vine.string().url(),
+  summary: vine.string().minLength(80).maxLength(500),
+})
 
 // [!code ++:6]
 /**
@@ -178,6 +176,8 @@ The key part here is `bouncer.with(PostPolicy).authorize('edit', post)`. This li
 We check authorization in both methods. Even though `edit` checks permissions, someone could bypass the form and send a PUT request directly to the `update` route. Always verify permissions before performing sensitive actions.
 
 You'll also notice `session.flash('success', 'Post updated successfully')` in the `update` method. [Flash messages](../../../guides/basics/session.md#flash-messages) are temporary messages stored in the session that are available on the next request and then automatically removed. This is perfect for showing success or error messages after form submissions.
+
+You don't need to add any code to display these messages — the starter kit's layout already includes a component that renders flash messages automatically. When a flash message is set, it will appear as a notification at the top of the page on the next request.
 
 :::
 
@@ -284,13 +284,13 @@ We need two routes (one to show the edit form and another to handle the form sub
 
 Create the edit form component.
 ```bash
-node ace make:inertia posts/edit
+node ace make:page posts/edit
 ```
 
 Now add the form markup.
 ```tsx title="inertia/pages/posts/edit.tsx"
 import { InertiaProps } from '~/types'
-import { Data } from '~/generated/data'
+import { Data } from '@generated/data'
 import { Form, Link } from '@adonisjs/inertia/react'
 
 type PageProps = InertiaProps<{
@@ -308,7 +308,7 @@ export default function PostsEdit(props: PageProps) {
 
       <h1>Edit Post</h1>
 
-      <Form route="posts.update" routeParams={{ id: post.id }} method="put">
+      <Form route="posts.update" routeParams={{ id: post.id }}>
         {({ errors }) => (
           <>
             <div>
@@ -362,9 +362,8 @@ export default function PostsEdit(props: PageProps) {
 
 This form is similar to the create form, with a few key differences:
 
-- **HTTP method**: Uses `method="put"` to indicate this is an update request, not a POST for creating new data
 - **Pre-filled values**: Each field shows the current post data (`defaultValue={post.title}`, etc.) so users can see what they're editing
-- **Route**: Submits to the `posts.update` route with the post ID included via `routeParams`
+- **Route**: Submits to the `posts.update` route with the post ID included via `routeParams`. The HTTP method (PUT) is automatically inferred from the route definition
 
 :::
 
@@ -373,11 +372,11 @@ This form is similar to the create form, with a few key differences:
 Now add an Edit button to the post detail page. Open your `posts/show.tsx` component.
 ```tsx title="inertia/pages/posts/show.tsx"
 import { InertiaProps } from '~/types'
-import { Data } from '~/generated/data'
+import { Data } from '@generated/data'
 import { Form, Link } from '@adonisjs/inertia/react'
 
 type PageProps = InertiaProps<{
-  post: Data.Post
+  post: Data.Post.Variants['forDetailedView']
 }>
 
 export default function PostsShow(props: PageProps) {
@@ -491,11 +490,11 @@ router.post('/posts/:id/comments', [controllers.Comments, 'store']).use(middlewa
 Add a delete button next to the edit button in your post detail component.
 ```tsx title="inertia/pages/posts/show.tsx"
 import { InertiaProps } from '~/types'
-import { Data } from '~/generated/data'
+import { Data } from '@generated/data'
 import { Form, Link } from '@adonisjs/inertia/react'
 
 type PageProps = InertiaProps<{
-  post: Data.Post
+  post: Data.Post.Variants['forDetailedView']
 }>
 
 export default function PostsShow(props: PageProps) {
@@ -533,7 +532,7 @@ export default function PostsShow(props: PageProps) {
           {post.can?.delete && (
             <>
               <span>.</span>
-              <Form route="posts.destroy" routeParams={{ id: post.id }} method="delete">
+              <Form route="posts.destroy" routeParams={{ id: post.id }}>
                 {() => (
                   <button type="submit" className="destructive">
                     Delete
@@ -555,9 +554,8 @@ export default function PostsShow(props: PageProps) {
 
 A few important things about this delete button:
 
-- **DELETE method** - We're using `method="delete"` in the form. Inertia handles method spoofing automatically
 - **Authorization check** - The `post.can?.delete` check ensures only the post owner sees the button
-- **Form component** - Even for a simple delete action, we use the `Form` component to properly handle the request
+- **Form component** - Even for a simple delete action, we use the `Form` component to properly handle the request. The HTTP method is automatically inferred from the route definition
 
 Try it out! Visit a post you created and you'll see both Edit and Delete buttons. Visit a post created by someone else and no buttons appear.
 
@@ -634,9 +632,9 @@ export default class PostTransformer extends BaseTransformer<Post> {
       // [!code --:1]
       comments: CommentTransformer.transform(this.whenLoaded(this.resource.comments)),
       // [!code ++:3]
-      comments: CommentTransformer.transform(this.whenLoaded(this.resource.comments)).useVariant(
-        'withAuthorization'
-      ),
+      comments: CommentTransformer.transform(this.whenLoaded(this.resource.comments))
+        .useVariant('withAuthorization')
+        .depth(2),
       can: {
         edit: await bouncer.with(PostPolicy).allows('edit', this.resource),
         delete: await bouncer.with(PostPolicy).allows('delete', this.resource),
@@ -718,11 +716,11 @@ router
 Finally, add delete buttons to the comments list in your post detail component.
 ```tsx title="inertia/pages/posts/show.tsx"
 import { InertiaProps } from '~/types'
-import { Data } from '~/generated/data'
+import { Data } from '@generated/data'
 import { Form, Link } from '@adonisjs/inertia/react'
 
 type PageProps = InertiaProps<{
-  post: Data.Post
+  post: Data.Post.Variants['forDetailedView']
 }>
 
 export default function PostsShow(props: PageProps) {
@@ -751,7 +749,7 @@ export default function PostsShow(props: PageProps) {
                 <p>{comment.content}</p>
                 <div className="comment-meta">
                   By {comment.author.fullName} on{' '}
-                  {new Date(comment.createdAt).toLocaleDateString('en-US', {
+                  {comment.createdAt && new Date(comment.createdAt).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
                     year: 'numeric',
@@ -760,7 +758,7 @@ export default function PostsShow(props: PageProps) {
                 // [!code ++:10]
                 <div className="comment-actions">
                   {comment.can?.delete && (
-                    <Form route="comments.destroy" routeParams={{ id: comment.id }} method="delete">
+                    <Form route="comments.destroy" routeParams={{ id: comment.id }}>
                       {() => (
                         <button type="submit" className="destructive">
                           Delete

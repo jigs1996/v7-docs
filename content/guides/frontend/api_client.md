@@ -120,7 +120,7 @@ The `baseUrl` should point to your API server. Using an environment variable all
 
 For monorepo setups where your frontend and backend are separate packages, the setup requires additional configuration to share types between workspaces.
 
-This guide assumes you're using `pnpm workspaces`, but the concepts apply to other monorepo tools like Yarn or npm workspaces with slight variations in syntax.
+This guide assumes you're using npm workspaces with Turborepo (as used by the [API Starter Kit](https://github.com/adonisjs/api-starter-kit)), but the concepts apply to other monorepo tools like pnpm or Yarn workspaces with slight variations in syntax.
 
 #### Step 1. Structure your monorepo
 
@@ -129,9 +129,8 @@ Organize your monorepo with separate workspaces for your API and frontend applic
 ```
 my-app/
 ├── apps/
-│   ├── api/          # AdonisJS backend
-│   └── web/          # Frontend (React, Vue, etc)
-├── pnpm-workspace.yaml
+│   ├── backend/      # AdonisJS backend
+│   └── frontend/     # Frontend (React, Vue, etc)
 └── package.json
 ```
 
@@ -139,26 +138,26 @@ my-app/
 
 In your frontend workspace, install Tuyau and add your API as a dependency:
 
-```json title="apps/web/package.json"
+```json title="apps/frontend/package.json"
 {
-  "name": "@acme/web",
+  "name": "@my-app/frontend",
   "private": true,
   "type": "module",
   "dependencies": {
     // [!code highlight:2]
-    "@tuyau/core": "^3.0.0", 
-    "@acme/api": "workspace:*" 
+    "@tuyau/core": "^3.0.0",
+    "@my-app/backend": "*"
   }
 }
 ```
 
-The `workspace:*` syntax tells pnpm to link to your local API package. Make sure the package name matches the `name` field in your API's `package.json`.
+The `"*"` version range tells npm to resolve `@my-app/backend` from your local workspace. Make sure the package name matches the `name` field in your backend's `package.json`.
 
 #### Step 3. Enable experimental decorators
 
 Tuyau uses TypeScript decorators internally. Enable them in your frontend `tsconfig.json`:
 
-```json title="apps/web/tsconfig.json"
+```json title="apps/frontend/tsconfig.json"
 {
   "compilerOptions": {
     "experimentalDecorators": true, // [!code highlight]
@@ -171,7 +170,7 @@ Tuyau uses TypeScript decorators internally. Enable them in your frontend `tscon
 
 In your backend AdonisJS application, add the `generateRegistry` hook just like in the Inertia setup:
 
-```ts title="apps/api/adonisrc.ts"
+```ts title="apps/backend/adonisrc.ts"
 import { defineConfig } from '@adonisjs/core/app'
 import { generateRegistry } from '@tuyau/core/hooks'
 
@@ -186,9 +185,9 @@ export default defineConfig({
 
 Configure your backend `package.json` to export the generated Tuyau files so your frontend can import them:
 
-```json title="apps/api/package.json"
+```json title="apps/backend/package.json"
 {
-  "name": "@acme/api",
+  "name": "@my-app/backend",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -199,22 +198,30 @@ Configure your backend `package.json` to export the generated Tuyau files so you
 }
 ```
 
-These exports allow your frontend to import the registry using `@acme/api/registry`.
+These exports allow your frontend to import the registry using `@my-app/backend/registry`.
 
 #### Step 6. Create the Tuyau client
 
 In your frontend, create a file to initialize Tuyau:
 
-```ts title="apps/web/src/lib/client.ts"
+```ts title="apps/frontend/src/lib/client.ts"
 import { createTuyau } from '@tuyau/core/client'
-import { registry } from '@acme/api/registry'
+import { registry } from '@my-app/backend/registry'
 
 export const tuyau = createTuyau({
   baseUrl: import.meta.env.VITE_API_URL || 'http://localhost:3333',
   registry,
   headers: { Accept: 'application/json' },
-  credentials: 'include',
-  redirect: 'manual',
+  hooks: {
+    beforeRequest: [
+      (request) => {
+        const token = localStorage.getItem('auth_token')
+        if (token) {
+          request.headers.set('Authorization', `Bearer ${token}`)
+        }
+      }
+    ]
+  }
 })
 ```
 
@@ -248,13 +255,11 @@ Define validation rules using VineJS:
 ```ts title="app/validators/auth.ts"
 import vine from '@vinejs/vine'
 
-export const signupValidator = vine.compile(
-  vine.object({
-    fullName: vine.string().nullable(),
-    email: vine.string().email().maxLength(254),
-    password: vine.string().minLength(8).maxLength(32)
-  })
-)
+export const signupValidator = vine.create({
+  fullName: vine.string().nullable(),
+  email: vine.string().email().maxLength(254),
+  password: vine.string().minLength(8).maxLength(32),
+})
 ```
 
 ### Step 3. Implement the controller
@@ -328,6 +333,20 @@ const user = await tuyau.users.show({
 ```
 
 Each segment of the route name becomes a property access. The route `users.show` becomes `tuyau.users.show()`. This syntax provides excellent autocomplete and keeps your code clean.
+
+:::note
+Route name segments that contain underscores are converted to camelCase in the proxy syntax. For example, a route named `auth.new_account.store` becomes `tuyau.auth.newAccount.store()`.
+:::
+
+:::tip
+If the proxy syntax does not resolve types for a particular route name, use the `request()` method as a fallback — it supports all route names and is functionally identical:
+
+```ts
+const result = await tuyau.request('auth.new_account.store', {
+  body: { email: 'foo@ok.com', password: 'password123' }
+})
+```
+:::
 
 ### Using the request method
 
@@ -493,15 +512,13 @@ Use VineJS to define validation schemas. Every field you define becomes part of 
 ```ts title="app/validators/post.ts"
 import vine from '@vinejs/vine'
 
-export const createPostValidator = vine.compile(
-  vine.object({
-    title: vine.string().minLength(3).maxLength(255),
-    content: vine.string().minLength(10),
-    published: vine.boolean().optional(),
-    categoryId: vine.number(),
-    tags: vine.array(vine.string()).optional()
-  })
-)
+export const createPostValidator = vine.create({
+  title: vine.string().minLength(3).maxLength(255),
+  content: vine.string().minLength(10),
+  published: vine.boolean().optional(),
+  categoryId: vine.number(),
+  tags: vine.array(vine.string()).optional(),
+})
 ```
 
 On your frontend, the `body` parameter will have this exact shape:
@@ -525,14 +542,12 @@ TypeScript will enforce required fields, prevent extra fields, and ensure correc
 Query parameters can also be validated and typed. Define a validator for query parameters and use it in your controller:
 
 ```ts title="app/validators/post.ts"
-export const listPostsValidator = vine.compile(
-  vine.object({
-    page: vine.number().optional(),
-    limit: vine.number().optional(),
-    status: vine.enum(['draft', 'published']).optional(),
-    search: vine.string().optional()
-  })
-)
+export const listPostsValidator = vine.create({
+  page: vine.number().optional(),
+  limit: vine.number().optional(),
+  status: vine.enum(['draft', 'published']).optional(),
+  search: vine.string().optional(),
+})
 ```
 
 ```ts title="app/controllers/posts_controller.ts"
@@ -616,6 +631,14 @@ function handleFileSelect(event: ChangeEvent<HTMLInputElement>) {
 
 The presence of the File object triggers FormData encoding automatically. The `description` field is included in the same FormData payload.
 
+:::note
+When Tuyau detects a File object in the body, it converts the entire payload to FormData. A few things to keep in mind:
+
+- **Field names must match your validator.** The keys in the `body` object (e.g., `avatar`, `description`) become FormData field names, which must match the corresponding keys in your VineJS validator.
+- **You can mix files and regular fields.** Scalar values like strings and numbers are included in the same FormData payload alongside file fields.
+- **Optional file fields.** If a file field is optional in your validator, simply omit the key from the body — do not send `undefined` or `null`, as these may be serialized as literal strings in FormData.
+:::
+
 ### Backend handling
 
 On the backend, handle file uploads using AdonisJS's standard file validation:
@@ -623,15 +646,13 @@ On the backend, handle file uploads using AdonisJS's standard file validation:
 ```ts title="app/validators/user.ts"
 import vine from '@vinejs/vine'
 
-export const updateAvatarValidator = vine.compile(
-  vine.object({
-    avatar: vine.file({
-      size: '2mb',
-      extnames: ['jpg', 'png', 'jpeg']
-    }),
-    description: vine.string().optional()
-  })
-)
+export const updateAvatarValidator = vine.create({
+  avatar: vine.file({
+    size: '2mb',
+    extnames: ['jpg', 'png', 'jpeg'],
+  }),
+  description: vine.string().optional(),
+})
 ```
 
 ```ts title="app/controllers/users_controller.ts"
@@ -929,6 +950,30 @@ const tuyau = createTuyau({
   }
 })
 ```
+
+### Access token authentication
+
+For APIs that use access token authentication (like the [API Starter Kit](https://github.com/adonisjs/api-starter-kit)), use the `hooks.beforeRequest` option to dynamically attach the `Authorization` header to every request:
+
+```ts
+const tuyau = createTuyau({
+  baseUrl: 'http://localhost:3333',
+  registry,
+  headers: { Accept: 'application/json' },
+  hooks: {
+    beforeRequest: [
+      (request) => {
+        const token = localStorage.getItem('auth_token')
+        if (token) {
+          request.headers.set('Authorization', `Bearer ${token}`)
+        }
+      }
+    ]
+  }
+})
+```
+
+This pattern reads the token from storage before each request. You can adapt it to read from a different source (e.g., a state management store or cookie) depending on where your application stores the token after login.
 
 For a complete list of available options, see the [Ky documentation](https://github.com/sindresorhus/ky#options).
 

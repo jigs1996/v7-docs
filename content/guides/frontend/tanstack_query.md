@@ -14,7 +14,7 @@ This approach gives you complete control over TanStack Query's features while ma
 
 ## Prerequisites
 
-Before using the TanStack Query integration, you must have Tuyau installed and configured in your application. Follow the [Tuyau installation guide](./tuyau.md) to set up your Tuyau client first.
+Before using the TanStack Query integration, you must have Tuyau installed and configured in your application. Follow the [Tuyau installation guide](./api_client.md) to set up your Tuyau client first.
 
 You should be familiar with:
 - [TanStack Query basics](https://tanstack.com/query/latest/docs/framework/react/overview) - Understanding queries, mutations, and cache management
@@ -27,6 +27,10 @@ Install the TanStack Query integration package in your frontend application:
 ```bash
 npm install @tanstack/react-query @tuyau/react-query
 ```
+
+:::note
+Make sure `@tuyau/react-query` and `@tuyau/core` are on compatible versions. If you see type errors after installing, check that both packages share the same major and prerelease tag (e.g., both on `1.x` or both on `next`).
+:::
 
 ## Setup
 
@@ -41,10 +45,10 @@ import { createTuyauReactQueryClient } from '@tuyau/react-query'
 export const queryClient = new QueryClient()
 
 export const client = createTuyau({ baseUrl: import.meta.env.VITE_API_URL, registry })
-export const tuyau = createTuyauReactQueryClient({ client })
+export const api = createTuyauReactQueryClient({ client })
 ```
 
-The `tuyau` object provides access to all your routes with type-safe query and mutation options. The `queryClient` is the standard TanStack Query client used for cache management and invalidation.
+The `api` object provides access to all your routes with type-safe query and mutation options. The `client` object is the core Tuyau client, and `queryClient` is the standard TanStack Query client used for cache management and invalidation.
 
 ### Retry behavior
 
@@ -54,7 +58,7 @@ This prevents double retries (Ky retrying, then TanStack Query retrying on top) 
 
 ```ts
 const postsQuery = useQuery(
-  tuyau.posts.index.queryOptions(
+  api.posts.index.queryOptions(
     {},
     {
       retry: 3, // TanStack Query handles retries
@@ -69,7 +73,7 @@ Use `queryOptions()` to generate options for TanStack Query's `useQuery` hook. A
 
 ```tsx title="src/pages/posts.tsx"
 import { useQuery } from '@tanstack/react-query'
-import { tuyau } from '~/lib/client'
+import { api } from '~/lib/client'
 
 export default function PostsList() {
   /**
@@ -78,7 +82,7 @@ export default function PostsList() {
    * query key, and all type information automatically.
    */
   const postsQuery = useQuery(
-    tuyau.posts.index.queryOptions()
+    api.posts.index.queryOptions()
   )
 
   if (postsQuery.isLoading) return <div>Loading...</div>
@@ -105,11 +109,11 @@ Pass route parameters and query parameters to `queryOptions()`. TanStack Query o
 
 ```tsx
 import { useQuery } from '@tanstack/react-query'
-import { tuyau } from '~/lib/client'
+import { api } from '~/lib/client'
 
 export default function PostDetail({ postId }: { postId: string }) {
   const postQuery = useQuery(
-    tuyau.posts.show.queryOptions(
+    api.posts.show.queryOptions(
       {
         params: { id: postId },
         query: { include: 'comments' }
@@ -134,18 +138,18 @@ Use `mutationOptions()` to generate options for TanStack Query's `useMutation` h
 
 ```tsx
 import { useMutation } from '@tanstack/react-query'
-import { tuyau, queryClient } from '~/lib/client'
+import { api, queryClient } from '~/lib/client'
 
 export default function CreatePost() {
   const createPost = useMutation(
-    tuyau.posts.store.mutationOptions({
+    api.posts.store.mutationOptions({
       onSuccess: () => {
         /**
          * Invalidate the posts list query after creating a post.
          * This causes the list to refetch with the new post included.
          */
-        queryClient.invalidateQueries({ 
-          queryKey: tuyau.posts.list.pathKey() 
+        queryClient.invalidateQueries({
+          queryKey: api.posts.list.pathKey() 
         })
       }
     })
@@ -192,11 +196,11 @@ Configure the infinite query with pagination parameters:
 
 ```tsx title="src/pages/posts.tsx"
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { tuyau } from '~/lib/client'
+import { api } from '~/lib/client'
 
 export default function InfinitePosts() {
   const postsQuery = useInfiniteQuery(
-    tuyau.posts.list.infiniteQueryOptions(
+    api.posts.list.infiniteQueryOptions(
       {
         query: { 
           limit: 10,
@@ -248,13 +252,11 @@ Define a validator that includes the pagination parameter referenced by `pagePar
 ```ts title="app/validators/post.ts"
 import vine from '@vinejs/vine'
 
-export const listPostsValidator = vine.compile(
-  vine.object({
-    page: vine.number().optional(),
-    limit: vine.number().optional(),
-    search: vine.string().optional(),
-  })
-)
+export const listPostsValidator = vine.create({
+  page: vine.number().optional(),
+  limit: vine.number().optional(),
+  search: vine.string().optional(),
+})
 ```
 
 The `page` parameter in the validator must match the `pageParamKey` value in your frontend configuration. Tuyau automatically handles passing the page parameter from TanStack Query's pagination system to your backend.
@@ -305,17 +307,17 @@ Get the exact query key for a specific query with its parameters:
 
 ```tsx
 import { useMutation } from '@tanstack/react-query'
-import { tuyau, queryClient } from '~/lib/client'
+import { api, queryClient } from '~/lib/client'
 
 const updatePost = useMutation(
-  tuyau.posts.update.mutationOptions({
+  api.posts.update.mutationOptions({
     onSuccess: (data, variables) => {
       /**
        * Invalidate only the specific post that was updated.
        * This is the most precise invalidation strategy.
        */
       queryClient.invalidateQueries({
-        queryKey: tuyau.posts.show.queryKey({ 
+        queryKey: api.posts.show.queryKey({ 
           params: { id: variables.params.id } 
         })
       })
@@ -332,14 +334,14 @@ Get the base path key without parameters:
 
 ```tsx
 const deletePost = useMutation(
-  tuyau.posts.delete.mutationOptions({
+  api.posts.delete.mutationOptions({
     onSuccess: () => {
       /**
        * Invalidate all queries for this exact path.
        * This invalidates posts.list but not posts.show.
        */
       queryClient.invalidateQueries({
-        queryKey: tuyau.posts.list.pathKey()
+        queryKey: api.posts.list.pathKey()
       })
     }
   })
@@ -354,7 +356,7 @@ Get a filter that matches all queries starting with a path:
 
 ```tsx
 const createProduct = useMutation(
-  tuyau.products.store.mutationOptions({
+  api.products.store.mutationOptions({
     onSuccess: () => {
       /**
        * Invalidate all product-related queries across any route.
@@ -362,7 +364,7 @@ const createProduct = useMutation(
        * products.byCategory, and any other product routes.
        */
       queryClient.invalidateQueries(
-        tuyau.products.pathFilter()
+        api.products.pathFilter()
       )
     }
   })
@@ -377,17 +379,17 @@ Use `queryFilter()` with a predicate function for fine-grained control over whic
 
 ```tsx
 import { useMutation } from '@tanstack/react-query'
-import { tuyau, queryClient } from '~/lib/client'
+import { api, queryClient } from '~/lib/client'
 
 const archivePost = useMutation(
-  tuyau.posts.archive.mutationOptions({
+  api.posts.archive.mutationOptions({
     onSuccess: () => {
       /**
        * Invalidate only queries where the post is marked as active.
        * Use the predicate to inspect the cached data and decide
        * whether to invalidate based on custom logic.
        */
-      const filter = tuyau.posts.pathFilter({
+      const filter = api.posts.pathFilter({
         predicate: (query) => {
           const data = query.state.data
           return data?.post?.status === 'active'
@@ -402,6 +404,62 @@ const archivePost = useMutation(
 
 The predicate function receives the query state and can inspect cached data to make invalidation decisions. This is useful for complex invalidation logic that depends on the actual cached values.
 
+## Error handling
+
+When an API call fails, Tuyau throws an `HTTPError` (from [Ky](https://github.com/sindresorhus/ky)) that TanStack Query captures and exposes through its standard error state.
+
+### Accessing errors in queries and mutations
+
+TanStack Query surfaces errors through `isError` and `error` on the result object:
+
+```tsx
+const postsQuery = useQuery(api.posts.index.queryOptions())
+
+if (postsQuery.isError) {
+  console.log(postsQuery.error.message)
+}
+```
+
+### Inspecting HTTP status codes
+
+The `error` object is a Ky `HTTPError` with a `response` property. Use it to inspect the status code:
+
+```tsx
+import { HTTPError } from 'ky'
+
+const postsQuery = useQuery(api.posts.index.queryOptions())
+
+if (postsQuery.isError && postsQuery.error instanceof HTTPError) {
+  const status = postsQuery.error.response.status
+
+  if (status === 401) {
+    // Redirect to login
+    window.location.href = '/login'
+  }
+}
+```
+
+### Global error handler
+
+Rather than checking status codes in every component, configure a global handler using the `queryClient` default options:
+
+```ts title="src/lib/client.ts"
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: (failureCount, error) => {
+        if (error instanceof HTTPError && error.response.status === 401) {
+          return false // Don't retry on 401
+        }
+        return failureCount < 3
+      },
+    },
+  },
+})
+```
+
+This prevents retrying unauthorized requests and lets you handle 401s consistently across your application.
+
 ## What you learned
 
 You now know how to:
@@ -410,5 +468,6 @@ You now know how to:
 - Implement infinite scrolling with proper frontend and backend coordination
 - Create mutations with automatic type inference and cache invalidation
 - Use `queryKey`, `pathKey`, `pathFilter`, and `queryFilter` for cache management
+- Handle errors and inspect HTTP status codes from failed API calls
 
 For more information about TanStack Query's capabilities, see the [TanStack Query documentation](https://tanstack.com/query/latest/docs/framework/react/overview).

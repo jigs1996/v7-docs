@@ -15,6 +15,10 @@ Depending on the starter kit you select, some files or directories may differ. F
 
 Here's what a freshly created AdonisJS project looks like.
 
+::::tabs
+
+:::tab{title="Hypermedia / Inertia kits"}
+
 ```sh
 ├── app
 ├── bin
@@ -31,6 +35,49 @@ Here's what a freshly created AdonisJS project looks like.
 ├── tsconfig.json
 └── vite.config.ts
 ```
+
+:::
+
+:::tab{title="API kit"}
+
+The API starter kit is a monorepo with two workspaces managed by [Turborepo](https://turbo.build/repo):
+
+```sh
+├── apps
+│   ├── backend           # AdonisJS application
+│   │   ├── app
+│   │   ├── bin
+│   │   ├── config
+│   │   ├── database
+│   │   ├── start
+│   │   ├── tests
+│   │   ├── ace.js
+│   │   ├── adonisrc.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   └── frontend          # Your frontend application
+│       ├── package.json
+│       └── ...
+├── package.json          # Root package.json with workspaces
+├── package-lock.json
+└── turbo.json            # Turborepo pipeline configuration
+```
+
+The `apps/backend` directory contains a standard AdonisJS application — all the sections below (`app/`, `config/`, `start/`, etc.) apply to that directory. The `apps/frontend` directory is where you set up your frontend framework (TanStack Start, Next.js, Nuxt, or others).
+
+The root `package.json` defines the workspaces:
+
+```json
+{
+  "workspaces": ["apps/*"]
+}
+```
+
+And `turbo.json` configures the `dev`, `build`, and other scripts to run across both apps. When you run `npm run dev` from the project root, Turborepo starts both the backend and frontend dev servers in parallel.
+
+:::
+
+::::
 
 Each directory and file has a specific purpose. The sections below explain the role of each item and what you are likely to find there.
 

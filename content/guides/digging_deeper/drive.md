@@ -42,6 +42,16 @@ The command prompts you to select one or more storage services.
 
 :::
 
+:::tip{title="Non-interactive installation"}
+The `node ace add` command requires interactive service selection. If you need to install Drive non-interactively (for example, in CI scripts), you can perform the steps manually:
+
+1. Install the package: `npm install @adonisjs/drive`
+2. Install peer dependencies for your storage service (e.g., `npm install @aws-sdk/client-s3 @aws-sdk/s3-request-presigner` for S3)
+3. Register the provider in `adonisrc.ts`: add `() => import('@adonisjs/drive/drive_provider')` to the `providers` array
+4. Create `config/drive.ts` with your service configuration (see the [Configuration](#configuration) section below)
+5. Add the required environment variables to `.env` and `start/env.ts`
+:::
+
 ## Configuration
 
 The configuration for Drive is stored in `config/drive.ts`. The file contents depend on which services you selected during installation.
@@ -715,6 +725,7 @@ Drive provides a fakes API for testing file uploads without interacting with rea
 
 ```ts title="tests/functional/profile/update_avatar.spec.ts"
 import { test } from '@japa/runner'
+import { fileGenerator } from '@poppinss/file-generator'
 import drive from '@adonisjs/drive/services/main'
 import { UserFactory } from '#database/factories/user_factory'
 
@@ -735,11 +746,18 @@ test.group('Profile | update avatar', () => {
 
     const user = await UserFactory.create()
 
+    /**
+     * Generate a buffer with valid PNG magic bytes.
+     * AdonisJS uses magic byte detection to determine file types,
+     * so plain Buffer.from('fake-image') will be rejected.
+     */
+    const pngFile = await fileGenerator.generatePng(1)
+
     await client
       .post('/profile/avatar')
-      .file('avatar', Buffer.from('fake-image'), {
-        filename: 'avatar.png',
-        contentType: 'image/png',
+      .file('avatar', pngFile.contents, {
+        filename: pngFile.name,
+        contentType: pngFile.mime,
       })
       .loginAs(user)
       .assertStatus(200)
@@ -756,11 +774,13 @@ test.group('Profile | update avatar', () => {
 
     const user = await UserFactory.create()
 
+    const pdfFile = await fileGenerator.generatePdf(1)
+
     await client
       .post('/profile/avatar')
-      .file('avatar', Buffer.from('fake-file'), {
-        filename: 'document.pdf',
-        contentType: 'application/pdf',
+      .file('avatar', pdfFile.contents, {
+        filename: pdfFile.name,
+        contentType: pdfFile.mime,
       })
       .loginAs(user)
       .assertStatus(422)
@@ -772,6 +792,10 @@ test.group('Profile | update avatar', () => {
   })
 })
 ```
+
+:::note
+AdonisJS uses [magic byte detection](https://en.wikipedia.org/wiki/Magic_number_(programming)) to determine file types, not the filename or content type you pass. A plain `Buffer.from('fake-image')` has no valid magic bytes, so VineJS file validation will reject it with `"Invalid file extension undefined"`. Use the `@poppinss/file-generator` package (included in AdonisJS projects) to generate buffers with correct magic bytes for your tests.
+:::
 
 You can also fake a specific disk:
 

@@ -101,9 +101,9 @@
         "contentPath": "./frontend/transformers.md"
       },
       {
-        "title": "Tuyau",
-        "permalink": "guides/frontend/tuyau",
-        "contentPath": "./frontend/tuyau.md"
+        "title": "Type-safe API Client",
+        "permalink": "guides/frontend/api-client",
+        "contentPath": "./frontend/api_client.md"
       },
       {
         "title": "TanStack query",

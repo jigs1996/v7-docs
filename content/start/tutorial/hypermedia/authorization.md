@@ -105,13 +105,11 @@ Open your existing post validator file and add the update validator.
 ```ts title="app/validators/post.ts"
 import vine from '@vinejs/vine'
 
-export const createPostValidator = vine.compile(
-  vine.object({
-    title: vine.string().minLength(3).maxLength(255),
-    url: vine.string().url(),
-    summary: vine.string().minLength(80).maxLength(500),
-  })
-)
+export const createPostValidator = vine.create({
+  title: vine.string().minLength(3).maxLength(255),
+  url: vine.string().url(),
+  summary: vine.string().minLength(80).maxLength(500),
+})
 
 // [!code ++:6]
 /**
@@ -188,6 +186,8 @@ Notice we check authorization in both methods. Even though `edit` checks permiss
 You'll notice `session.flash('success', 'Post updated successfully')` in the `update` method. This is our first use of **flash messages** in DevShow, so let's understand what they do.
 
 [Flash messages](../../../guides/basics/session.md#flash-messages) are temporary messages stored in the session. They're available on the next request only, then automatically removed. This makes them perfect for showing success or error messages after form submissions.
+
+You don't need to add any code to display these messages — the starter kit's layout already includes a component that renders flash messages automatically. When a flash message is set, it will appear as a notification at the top of the page on the next request.
 
 We'll use flash messages throughout the rest of this chapter whenever we want to confirm that an action (like updating or deleting) was successful.
 

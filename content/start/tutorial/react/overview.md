@@ -104,7 +104,7 @@ The `create` method renders the signup form using `inertia.render()`. Instead of
 
 The `store` method does the heavy lifting. It validates data, creates the user, logs them in, and redirects home. **This pattern of bringing together validators, models, and auth is what you'll see throughout the tutorial**.
 
-You might notice the controller references a `User` model and a `signupValidator`. The starter kit already includes these. We'll explore how models work in Chapter 3 and validators in Chapter 5.
+You might notice the controller references a `User` model and a `signupValidator`. The starter kit already includes these. We'll explore how models work in the [Database and Models](./database_and_models.md) chapter and validators in the [Forms and Validation](./forms_and_validation.md) chapter.
 
 ### About Inertia and React
 

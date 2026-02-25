@@ -488,7 +488,7 @@ By default, the mail messenger uses an in-memory queue. This means queued emails
 The in-memory messenger is suitable for development but not recommended for production. If your application crashes or restarts with pending emails in the queue, those emails will never be sent. Use a persistent queue like BullMQ for production deployments.
 :::
 
-### Intermediate: Using BullMQ for persistent queuing
+### Using BullMQ for persistent queuing
 
 For production applications, configure a persistent queue using BullMQ and Redis. This ensures emails survive process restarts.
 
@@ -954,7 +954,7 @@ if (verifyEmail) {
 }
 ```
 
-## Advanced: Custom transports
+## Custom transports
 
 Create custom transports to integrate mail providers not included in the package. A transport wraps a Nodemailer transport and normalizes its response.
 
@@ -1028,7 +1028,7 @@ const mailConfig = defineConfig({
 })
 ```
 
-## Advanced: Custom template engine
+## Custom template engine
 
 By default, the mail package uses Edge for rendering email templates. To use a different template engine, override the static `templateEngine` property on the `Message` class.
 

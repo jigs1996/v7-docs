@@ -23,7 +23,7 @@ AdonisJS supports three primary approaches to building your frontend. Each appro
 
 ### Hypermedia
 
-Hypermedia applications generate complete HTML pages on the server and send them to the browser. You build your interface using a template engine (AdonisJS provides Edge) and add interactivity using lightweight JavaScript libraries like Alpine.js or HTMX/Unpoly when needed.
+Hypermedia applications generate complete HTML pages on the server and send them to the browser. You build your interface using a template engine (AdonisJS provides [Edge](https://edgejs.dev)) and add interactivity using lightweight JavaScript libraries like Alpine.js or HTMX/Unpoly when needed.
 
 :::note{title="What is Hypermedia"}
 The term "Hypermedia" refers to HTML as a medium for building interactive applications, where the server drives the application state and the client (browser) displays it. If you're new to this concept, the HTMX project has an excellent essay explaining [Hypermedia-driven applications](https://htmx.org/essays/hypermedia-driven-applications/) in depth.
@@ -64,7 +64,7 @@ In an API-only setup:
 - The two communicate exclusively through HTTP requests to your API endpoints.
 
 :::note
-In monorepos, you can use a [type-safe fetch client](../guides/frontend/tuyau.md) for true end-to-end typing across backend and frontend. [Transformers](../guides/frontend/transformers.md) also produce reusable, independent response types, so your UI can rely directly on the serialized API contract.
+In monorepos, you can use a [type-safe API client](../guides/frontend/tuyau.md) for true end-to-end typing across backend and frontend. [Transformers](../guides/frontend/transformers.md) also produce reusable, independent response types, so your UI can rely directly on the serialized API contract.
 :::
 
 This approach covers a wide variety of applications: APIs for mobile apps (iOS, Android), web applications built with any frontend framework, desktop applications, or even multiple frontends (web and mobile) consuming the same API. The separation provides flexibility in how you deploy and scale each layer independently.
@@ -97,6 +97,14 @@ export default class PostsController {
 }
 ```
 
+```edge title="views/pages/posts/index.edge"
+@each(post in posts)
+  <div>
+    <h2>{{ post.title }}</h2>
+  <div>
+@end
+```
+
 :::
 
 :::tab{title="Inertia"}
@@ -125,6 +133,25 @@ export default class PostsController {
 }
 ```
 
+```tsx title="pages/posts/index.tsx"
+import { InertiaProps } from '~/types'
+import { Data } from '~/generated/data'
+
+type PageProps = InertiaProps<{ posts: Data.Post[] }>
+
+export default function PostsIndex({ posts }: PageProps) {
+  return <>
+    {
+      posts.map((post) => (
+        <div key={ post.id }>
+          <h2>{ post.title }</h2>
+        </div>
+      ))
+    }
+  </>
+}
+```
+
 :::
 
 :::tab{title="API-only"}
@@ -145,11 +172,21 @@ import PostTransformer from '#transformers/post_transformer'
 export default class PostsController {
   async index({ serialize }: HttpContext) {
     const posts = await Post.all()
-     // [!code highlight:3]
-    return serialize({
-      posts: PostTransformer.transform(posts)
-    })
+     // [!code highlight]
+    return serialize(PostTransformer.transform(posts))
   }
+}
+```
+
+```json title="JSON response"
+{
+  "data": [
+    {
+      "id": 1,
+      "title": "AdonisJS In 30",
+      "description": "In this series, we'll ...",
+    }
+  ]
 }
 ```
 
@@ -162,7 +199,7 @@ export default class PostsController {
 If you're coming from meta-frameworks, there are some patterns you won't find in AdonisJS. These differences are intentional and provide clarity about how your application works.
 
 :::note
-AdonisJS is designed to be the backend that powers your frontend applications, not a replacement for meta-frameworks. You can confidently use AdonisJS alongside frameworks like TanStack Start, Nuxt, Next.js, or others, with clear boundaries and well-defined API contracts between the two.
+AdonisJS is designed to be the backend that powers your frontend applications, not a replacement for meta-frameworks. You can use AdonisJS alongside frameworks like TanStack Start, Nuxt, Next.js, or others, with clear boundaries and well-defined API contracts between the two.
 :::
 
 **No file-based routing**: AdonisJS uses explicit route definitions in your route files. Routes are declared using the router API, giving you full control and visibility over your application's URL structure. This makes it easy to see all your routes in one place and apply middleware or constraints as needed.
@@ -188,4 +225,4 @@ This gives you a **"flexible but not on your own"** experience. You get to choos
 
 ## Next steps
 
-Now that you understand the three approaches AdonisJS supports, you're ready to create your first application. The [installation guide](./installation.md) will walk you through using the starter kits to set up a new project with your chosen stack.
+Now that you understand all different approaches AdonisJS supports, you're ready to create your first application. The [installation guide](./installation.md) will walk you through using the starter kits to set up a new project with your chosen stack.

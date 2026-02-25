@@ -43,60 +43,19 @@ DONE:    create database/migrations/1763866156451_create_posts_table.ts
 Let's look at what was generated in the model file.
 
 ```ts title="app/models/post.ts"
-import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
+import { PostSchema } from '#database/schema'
 
-export default class Post extends BaseModel {
-  @column({ isPrimary: true })
-  declare id: number
-
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
-
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
+export default class Post extends PostSchema {
 }
 ```
 
-The model extends `BaseModel` and uses decorators to define columns. The `@column` decorator tells Lucid that a property maps to a database column. Notice it already includes `id`, `createdAt`, and `updatedAt` - these are common for most models and come pre-configured.
-
-:::
-
-:::step{title="Add fields to the Post model"}
-
-Now let's add the `title`, `url` and `summary` columns our posts need.
-
-```ts title="app/models/post.ts"
-import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
-
-export default class Post extends BaseModel {
-  @column({ isPrimary: true })
-  declare id: number
-
-  // [!code ++:8]
-  @column()
-  declare title: string
-
-  @column()
-  declare url: string
-
-  @column()
-  declare summary: string
-
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
-
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
-}
-```
+The model extends `PostSchema` — a class that is auto-generated from your database migrations. You don't need to define columns in your model file. When you run migrations, AdonisJS scans your database tables and generates the `database/schema.ts` file with all column definitions, types, and decorators. Your model file is where you add relationships and business logic.
 
 :::
 
 :::step{title="Define the table structure in the migration"}
 
-Now let's update the migration file to define the database table structure.
+Let's update the migration file to define the database table structure. This is where you add columns — the model will pick them up automatically after running the migration.
 
 ```ts title="database/migrations/1763866156451_create_posts_table.ts"
 import { BaseSchema } from '@adonisjs/lucid/schema'
@@ -152,35 +111,9 @@ DONE:    create database/migrations/1763866347711_create_comments_table.ts
 
 :::
 
-:::step{title="Add fields to the Comment model"}
-
-The generated Comment model needs a `content` field to store the comment text.
-
-```ts title="app/models/comment.ts"
-import { DateTime } from 'luxon'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
-
-export default class Comment extends BaseModel {
-  @column({ isPrimary: true })
-  declare id: number
-
-  // [!code ++:2]
-  @column()
-  declare content: string
-
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
-
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
-}
-```
-
-:::
-
 :::step{title="Define the table structure in the migration"}
 
-Now update the migration to create the comments table with a content column.
+Update the migration to create the comments table with a content column.
 
 ```ts title="database/migrations/1763866347711_create_comments_table.ts"
 import { BaseSchema } from '@adonisjs/lucid/schema'
@@ -220,7 +153,9 @@ You'll see output showing which migrations were executed.
 ❯ migrated database/migrations/1763866347711_create_comments_table
 ```
 
-Your database now has `posts` and `comments` tables! Migrations are tracked in a special `adonis_schema` table in your database. Once a migration runs successfully, it won't run again even if you execute `node ace migration:run` multiple times.
+Your database now has `posts` and `comments` tables! You'll also notice that `database/schema.ts` has been updated with `PostSchema` and `CommentSchema` classes containing all the column definitions. This file is auto-generated every time you run migrations — you never need to edit it manually.
+
+Migrations are tracked in a special `adonis_schema` table in your database. Once a migration runs successfully, it won't run again even if you execute `node ace migration:run` multiple times.
 
 ## Adding relationships
 
@@ -313,36 +248,14 @@ node ace migration:run
 Now that the database has the foreign key columns, let's update our models to define these relationships.
 
 ```ts title="app/models/post.ts"
-import { DateTime } from 'luxon'
+import { PostSchema } from '#database/schema'
 // [!code ++:4]
-import { BaseModel, column, hasMany, belongsTo } from '@adonisjs/lucid/orm'
+import { hasMany, belongsTo } from '@adonisjs/lucid/orm'
 import type { HasMany, BelongsTo } from '@adonisjs/lucid/types/relations'
 import Comment from '#models/comment'
 import User from '#models/user'
 
-export default class Post extends BaseModel {
-  @column({ isPrimary: true })
-  declare id: number
-
-  @column()
-  declare title: string
-
-  @column()
-  declare url: string
-
-  @column()
-  declare summary: string
-
-  // [!code ++:2]
-  @column()
-  declare userId: number
-
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
-
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
-
+export default class Post extends PostSchema {
   // [!code ++:11]
   /**
    * A post has many comments
@@ -358,6 +271,8 @@ export default class Post extends BaseModel {
 }
 ```
 
+Remember, column definitions like `title`, `url`, `summary`, and `userId` are already handled by `PostSchema` (auto-generated from your migrations). The model file is where you add relationships and business logic.
+
 The `@hasMany` decorator defines a one-to-many relationship - one post has many comments. The `@belongsTo` decorator defines the inverse - a post belongs to one user.
 
 :::
@@ -365,33 +280,14 @@ The `@hasMany` decorator defines a one-to-many relationship - one post has many 
 :::step{title="Define relationships in the Comment model"}
 
 ```ts title="app/models/comment.ts"
-import { DateTime } from 'luxon'
+import { CommentSchema } from '#database/schema'
 // [!code ++:4]
-import { BaseModel, column, belongsTo } from '@adonisjs/lucid/orm'
+import { belongsTo } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Post from '#models/post'
 import User from '#models/user'
 
-export default class Comment extends BaseModel {
-  @column({ isPrimary: true })
-  declare id: number
-
-  @column()
-  declare content: string
-
-  // [!code ++:5]
-  @column()
-  declare userId: number
-
-  @column()
-  declare postId: number
-
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
-
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
-
+export default class Comment extends CommentSchema {
   // [!code ++:11]
   /**
    * A comment belongs to a post
@@ -411,6 +307,10 @@ export default class Comment extends BaseModel {
 ::::
 
 Perfect! Our models now understand their relationships. When you load a post, you can easily access its comments through `post.comments`, and when you load a comment, you can access its post through `comment.post` or its user through `comment.user`.
+
+:::note
+We haven't added the inverse `hasMany` relationships on the User model (e.g., `user.posts` or `user.comments`) because we don't need them in this tutorial. You could add them later if your application needs to query posts or comments from the user side.
+:::
 
 ## Creating factories
 
@@ -575,9 +475,9 @@ Your database now has 10 posts, each with several comments!
 
 Before we move on to querying data, let's take a moment to understand what we've built. AdonisJS provides dedicated tools for working with databases, and each one has a specific purpose.
 
-**Migrations** define your database structure. They create tables, add columns, and establish constraints. Think of them as instructions that transform your database schema. When you run `node ace migration:run`, these instructions execute and modify your database structure.
+**Migrations** define your database structure. They create tables, add columns, and establish constraints. Think of them as instructions that transform your database schema. When you run `node ace migration:run`, these instructions execute and modify your database structure. They also auto-generate the `database/schema.ts` file with column definitions for your models.
 
-**Models** are your JavaScript interface to database tables. They provide a clean, type-safe API for querying and manipulating data without writing raw SQL. Models also define relationships between tables (like how posts relate to comments), making it easy to work with connected data.
+**Models** are your JavaScript interface to database tables. They extend auto-generated schema classes (like `PostSchema`) that contain column definitions, so you only need to add relationships and business logic. Models provide a clean, type-safe API for querying and manipulating data without writing raw SQL.
 
 **Factories** generate realistic dummy data for your models. Instead of manually creating test data over and over, you define a blueprint once, and the factory creates as many realistic instances as you need. This is invaluable during development and testing.
 
@@ -675,8 +575,8 @@ When you're done exploring, type `.exit` to leave the REPL and return to your te
 You now know how to:
 
 - Create models and migrations using the Ace CLI
-- Define column properties on models using decorators
 - Create database tables and modify them with migrations
+- Understand how column definitions are auto-generated in `database/schema.ts` from your migrations
 - Define relationships between models using `hasMany` and `belongsTo`
 - Generate dummy data with factories and seeders
 - Query data using the REPL and model methods

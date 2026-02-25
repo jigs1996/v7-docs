@@ -27,7 +27,11 @@ We'll build a feature that allows users to update their profile avatar. This is 
 
 :::step{title="Create the upload form"}
 
-First, create a form that accepts file uploads. The critical part is setting `enctype="multipart/form-data"` on the form element. Without this attribute, the browser won't send files correctly.
+First, create a form that accepts file uploads. The critical part is setting the form encoding to `multipart/form-data`. Without this, the browser won't send files correctly.
+
+::::tabs
+
+:::tab{title="Edge (Hypermedia)"}
 ```edge title="resources/views/pages/profile.edge"
 @form({ route: 'profile_avatar.update', enctype: 'multipart/form-data' })
   @field.root({ name: 'avatar' })
@@ -35,10 +39,36 @@ First, create a form that accepts file uploads. The critical part is setting `en
     @!field.label({ text: 'Upload new avatar' })
     @!field.error()
   @end
-  
+
   @!button({ type: 'Submit', text: 'Update Avatar' })
 @end
 ```
+:::
+
+:::tab{title="React (Inertia)"}
+```tsx title="inertia/pages/profile.tsx"
+import { Form } from '@adonisjs/inertia/react'
+
+export default function Profile() {
+  return (
+    <Form route="profile_avatar.update" encType="multipart/form-data">
+      {({ errors }) => (
+        <>
+          <div>
+            <label htmlFor="avatar">Upload new avatar</label>
+            <input type="file" name="avatar" id="avatar" />
+            {errors.avatar && <div>{errors.avatar}</div>}
+          </div>
+          <button type="submit">Update Avatar</button>
+        </>
+      )}
+    </Form>
+  )
+}
+```
+:::
+
+::::
 
 :::
 
@@ -161,6 +191,44 @@ If validation fails, AdonisJS automatically returns a 422 response with detailed
 A key security feature of AdonisJS is that it uses [magic number detection](https://en.wikipedia.org/wiki/Magic_number_(programming)) to validate file types. This means even if someone renames a `.exe` file to `.jpg`, AdonisJS will detect the actual file type and reject it. This protects your application from users trying to bypass validation by simply changing file extensions.
 :::
 
+### Combining files with other fields
+
+When your form includes both file uploads and regular fields, the validated payload contains both. Destructure the file field separately before passing the remaining data to your model — passing a multipart file object directly to `Model.create()` will cause an error:
+
+```ts title="app/validators/task.ts"
+import vine from '@vinejs/vine'
+
+export const createTaskValidator = vine.create({
+  title: vine.string(),
+  description: vine.string().optional(),
+  attachment: vine.file({ size: '5mb', extnames: ['pdf', 'jpg', 'png'] }).optional(),
+})
+```
+
+```ts title="app/controllers/tasks_controller.ts"
+import { HttpContext } from '@adonisjs/core/http'
+import { createTaskValidator } from '#validators/task'
+
+export default class TasksController {
+  async store({ request }: HttpContext) {
+    // [!code highlight:2]
+    const { attachment, ...data } = await request.validateUsing(createTaskValidator)
+
+    const task = await Task.create(data)
+
+    if (attachment) {
+      await attachment.moveToDisk(`tasks/${task.id}.${attachment.extname}`)
+      task.attachmentFileName = `tasks/${task.id}.${attachment.extname}`
+      await task.save()
+    }
+
+    return task
+  }
+}
+```
+
+The `{ attachment, ...data }` destructuring separates the file from the scalar fields so you can pass `data` directly to the model and handle the file separately.
+
 ## Storing and serving uploaded files
 
 Files uploaded through forms are temporarily stored in the `tmp` directory. Most operating systems automatically clean up temporary files, so you cannot rely on them persisting. For permanent storage, you need to move files to a location where they will be preserved.
@@ -228,11 +296,41 @@ For example, if you store a file as `avatars/123e4567.jpg`, it becomes accessibl
 http://localhost:3333/uploads/avatars/123e4567.jpg
 ```
 
-Now, instead of hardcoding this path, you must use the `driveUrl` Edge helper to compute the path to a file, as it will return the correct URL even when using cloud storage providers like S3 or R2.
+Now, instead of hardcoding this path, use the appropriate method for your application type to generate the URL. This ensures the correct URL is returned whether you're using local storage or cloud providers like S3 or R2.
+
+::::tabs
+
+:::tab{title="Edge (Hypermedia)"}
+Use the `driveUrl` Edge helper in your templates:
 
 ```edge
 <img src="{{ await driveUrl(user.avatarFileName) }}" alt="User avatar">
 ```
+:::
+
+:::tab{title="API / Inertia"}
+In controllers that return JSON or render Inertia pages, use the `drive` service to generate URLs:
+
+```ts
+import drive from '@adonisjs/drive/services/main'
+
+// Inside a controller or transformer
+const avatarUrl = await drive.use().getUrl(user.avatarFileName)
+```
+
+You can include this URL in your API response or Inertia props:
+
+```ts
+return inertia.render('profile', {
+  user: {
+    name: user.name,
+    avatarUrl: await drive.use().getUrl(user.avatarFileName),
+  }
+})
+```
+:::
+
+::::
 
 ## Uploading multiple files
 
@@ -283,16 +381,14 @@ With VineJS, use `vine.array()` to validate an array of files. Each file in the 
 ```ts title="app/validators/project.ts"
 import vine from '@vinejs/vine'
 
-export const uploadDocumentsValidator = vine.compile(
-  vine.object({
-    documents: vine.array(
-      vine.file({
-        size: '5mb',
-        extnames: ['pdf', 'doc', 'docx', 'txt']
-      })
-    )
-  })
-)
+export const uploadDocumentsValidator = vine.create({
+  documents: vine.array(
+    vine.file({
+      size: '5mb',
+      extnames: ['pdf', 'doc', 'docx', 'txt'],
+    })
+  ),
+})
 ```
 
 ### Processing multiple files

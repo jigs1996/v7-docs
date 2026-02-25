@@ -63,7 +63,7 @@
     ]
   },
   {
-    "category": "Tutorial",
+    "category": "FullStack tutorial",
     "children": [
       {
         "title": "Overview",
@@ -167,21 +167,6 @@
             "name": "React",
             "permalink": "tutorial/react/authorization",
             "contentPath": "./tutorial/react/authorization.md"
-          }
-        ]
-      },
-      {
-        "title": "Deployment",
-        "variations": [
-          {
-            "name": "Hypermedia",
-            "permalink": "tutorial/hypermedia/deployment",
-            "contentPath": "./tutorial/hypermedia/deployment.md"
-          },
-          {
-            "name": "React",
-            "permalink": "tutorial/react/deployment",
-            "contentPath": "./tutorial/react/deployment.md"
           }
         ]
       }

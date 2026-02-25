@@ -15,7 +15,7 @@ Right now, users can't easily navigate between pages, and the design looks bare.
 Let's start by adding CSS to make DevShow look polished. The Inertia starter kit already includes a CSS file with some base styles. We'll add DevShow-specific styles to enhance the posts, comments, and overall layout.
 
 Open your CSS file and add the following styles at the end.
-```css title="resources/css/app.css"
+```css title="inertia/css/app.css"
 /* Dev-show styles */
 .container {
   max-width: 980px;
@@ -168,7 +168,7 @@ Users who want to share their projects need an easy way to reach the creation fo
 Update your posts index component to add the button in the header.
 ```tsx title="inertia/pages/posts/index.tsx"
 import { InertiaProps } from '~/types'
-import { Data } from '~/generated/data'
+import { Data } from '@generated/data'
 import { Link } from '@adonisjs/inertia/react'
 
 type PageProps = InertiaProps<{
@@ -263,7 +263,7 @@ Finally, let's add a back link on individual post pages so users can easily retu
 Update your posts show component:
 ```tsx title="inertia/pages/posts/show.tsx"
 import { InertiaProps } from '~/types'
-import { Data } from '~/generated/data'
+import { Data } from '@generated/data'
 import { Form } from '@adonisjs/inertia/react'
 // [!code ++]
 import { Link } from '@adonisjs/inertia/react'

@@ -26,12 +26,8 @@ Update every `@adonisjs/*` package in your project to its latest version. You mu
 
 Following is a cross-platform script you can run to automatically find AdonisJS specific dependencies within your project's `package.json` file and update them in one go.
 
-:::note
-If you are face peer dependencies issues during upgrade, then power through the process using the `--force` flag.
-:::
-
 ```sh
-npm i $(node -e "const pkg = require('./package.json'); const deps = {...pkg.dependencies, ...pkg.devDependencies}; console.log(Object.keys(deps).filter(k => k.startsWith('@adonisjs/') || k === '@vinejs/vine' || k === 'edge.js').map(k => k + '@latest').join(' '))")
+npm i $(node -e "const pkg = require('./package.json'); const deps = {...pkg.dependencies, ...pkg.devDependencies}; console.log(Object.keys(deps).filter(k => k.startsWith('@adonisjs/') || k === '@vinejs/vine' || k === 'edge.js' || k === '@japa/plugin-adonisjs' || k === 'vite' || k === 'argon2').map(k => k + '@latest').join(' '))") --force
 ```
 
 ## Replace the TypeScript JIT compiler
@@ -168,7 +164,7 @@ The `appKey` export from `config/app.ts` is no longer used for encryption. Inste
 export const appKey = env.get('APP_KEY')
 ```
 
-v6 apps must use the `legacy` driver to continue decrypting existing data. Learn more about new [Encryption drivers](../guides/security/encryption.md#choosing-an-algorithm)
+v6 apps must use the `legacy` driver to continue decrypting existing data. Learn more about new [Encryption drivers](../../guides/security/encryption.md#choosing-an-algorithm)
 
 ```ts title="config/encryption.ts"
 import env from '#start/env'
@@ -293,15 +289,15 @@ HttpRequest.macro('someMethod', () => {})
 ## Flash messages `errors` key removed
 The deprecated `errors` key has been removed from the flash messages store. 
 
-Validation errors have always been available under the `inputErrors` key. The `errors` key was a duplicate that unnecessarily increased session payload size. 
+Validation errors have always been available under the `inputErrorsBag` key. The `errors` key was a duplicate that unnecessarily increased session payload size. 
 
-If your templates or frontend code read from `errors`, update them to use `inputErrors` instead.
+If your templates or frontend code read from `errors`, update them to use `inputErrorsBag` instead.
 
 ```edge
 // [!code --]
 {{ flashMessages.get('errors.email') }}
 // [!code ++]
-{{ flashMessages.get('inputErrors.email') }}
+{{ flashMessages.get('inputErrorsBag.email') }}
 ```
 
 ## Multipart files and fields merged in `request.all()`
@@ -318,7 +314,7 @@ Routes that use controllers now automatically receive a generated name. This can
 - You will catch this immediately when starting your application.
 
 ## Status pages skipped for JSON API requests
-The status pages rendered by the [global exception handler](../guides/basics/exception_handling.md#status-pages) are no longer returned when the request's `Accept` header asks for a JSON response. API clients will now receive JSON error responses instead of rendered HTML pages. This was a bug fix, but it changes behavior if your API consumers were previously receiving HTML error pages.
+The status pages rendered by the [global exception handler](../../guides/basics/exception_handling.md#status-pages) are no longer returned when the request's `Accept` header asks for a JSON response. API clients will now receive JSON error responses instead of rendered HTML pages. This was a bug fix, but it changes behavior if your API consumers were previously receiving HTML error pages.
 
 ## `BaseModifiers` removed from VineJS
 The `BaseModifiers` class has been removed in the latest version of VineJS. In most cases, this will not affect your application. However, if you were extending or directly using `BaseModifiers` for a custom use case, you will need to adjust your implementation. See the [VineJS v4 release notes](https://github.com/vinejs/vine/releases/tag/v4.0.0) for details.
@@ -370,7 +366,7 @@ The Inertia entrypoint and SSR files have been moved out of the `app` subdirecto
 + inertia/ssr.tsx
 ```
 
-The exact file extension depends on your framework. For example, Vue apps will use `inertia/app.vue` and `inertia/ssr.vue`.
+The exact file extension depends on your framework. For example, Vue apps will use `inertia/app.ts` and `inertia/ssr.ts`.
 
 ### Shared data moved to middleware
 The `sharedData` property in `config/inertia.ts` has been removed. You must create an Inertia middleware to define shared data instead and register it as a server middleware in the kernel file.
