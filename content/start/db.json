@@ -5,7 +5,7 @@
       {
         "title": "Introduction",
         "permalink": "introduction",
-        "oldUrls": ["guides/preface/introduction"],
+        "oldUrls": ["guides/preface/introduction", "guides/introduction"],
         "contentPath": "./introduction.md"
       },
       {
