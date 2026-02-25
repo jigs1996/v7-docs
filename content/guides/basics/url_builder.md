@@ -254,7 +254,7 @@ Additionally, from a runtime perspective, you cannot share an object between two
 
 ### Using the URL builder in Inertia apps
 
-The Inertia React and Vue starter kits come with the URL builder pre-configured. The URL builder (along with the API client) is generated using [Tuyau](../frontend/tuyau.md) and written to the `.adonisjs/client` directory.
+The Inertia React and Vue starter kits come with the URL builder pre-configured. The URL builder (along with the API client) is generated using [Tuyau](../frontend/api_client.md) and written to the `.adonisjs/client` directory.
 
 Import and use the URL builder in your frontend components with an identical API to the backend version.
 
