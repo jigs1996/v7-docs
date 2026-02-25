@@ -12,6 +12,11 @@ We have worked hard to keep the breaking changes surface area low. Yet, there ar
 - Works with TypeScript 5.9/6.0 and ESLint 10
 - And the Vite integration has been updated to work with Vite 7
 
+## Helpful links
+
+- [v6 documentation](https://v6-docs.adonisjs.com) - In case you need to reference the old APIs during the upgrade.
+- [Report Upgrade issues](https://github.com/orgs/adonisjs/discussions/5051) - Running into something unexpected? Post it here and we'll help.
+
 ## Upgrade to Node.js 24
 
 AdonisJS v7 requires Node.js 24 or above. Older Node.js versions are no longer supported. Make sure you update your local development environment, CI pipelines, and production servers before proceeding with the rest of this guide.
@@ -19,6 +24,10 @@ AdonisJS v7 requires Node.js 24 or above. Older Node.js versions are no longer s
 ```sh
 node -v
 ```
+
+## Upgrade prompt
+
+:upgradeprompt
 
 ## Upgrade all packages
 
