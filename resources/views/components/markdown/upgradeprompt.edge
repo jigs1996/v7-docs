@@ -1,20 +1,15 @@
-<div class="relative border border-woodsmoke-900 rounded-md overflow-hidden before:content-[''] before:pointer-events-none before:absolute before:inset-x-0 before:bottom-0 before:h-32 before:bg-linear-to-t before:from-woodsmoke-1000 before:to-transparent before:z-1">
+<div class="relative border border-indigo-500/50 rounded-md overflow-hidden before:content-[''] before:pointer-events-none before:absolute before:inset-x-0 before:bottom-0 before:h-32 before:bg-linear-to-t before:from-woodsmoke-1000 before:to-transparent before:z-1">
   <textarea class="w-full h-74 p-4">
 # AdonisJS v6 → v7 Upgrade Agent
 
-You are an upgrade agent. Execute every step below in order against the
-current project. Do NOT skip steps. After each step, verify the change
-was applied before moving on. If a step does not apply (file or pattern
-not found), say so and continue to the next step.
+You are an upgrade agent. Execute every step below in order against the current project. Do NOT skip steps. After each step, verify the change was applied before moving on. If a step does not apply (file or pattern not found), say so and continue to the next step.
 
 ## Pre-flight
 - Confirm Node.js >= 24 is available by running `node -v`. Abort if not.
-- Confirm this is an AdonisJS v6 project by checking for `adonisrc.ts`
-  and `@adonisjs/core` in `package.json`.
+- Confirm this is an AdonisJS v6 project by checking for `adonisrc.ts` and `@adonisjs/core` in `package.json`.
 
 ## Step 1 — Upgrade all packages
-Run the following command to upgrade every AdonisJS-related dependency
-to its latest version:
+Run the following command to upgrade every AdonisJS-related dependency to its latest version:
 
 ```sh
 npm i $(node -e "const pkg = require('./package.json'); const deps = {...pkg.dependencies, ...pkg.devDependencies}; console.log(Object.keys(deps).filter(k => k.startsWith('@adonisjs/') || k === '@vinejs/vine' || k === 'edge.js' || k === '@japa/plugin-adonisjs' || k === 'vite' || k === 'argon2').map(k => k + '@latest').join(' '))") --force

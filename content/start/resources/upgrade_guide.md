@@ -25,7 +25,8 @@ AdonisJS v7 requires Node.js 24 or above. Older Node.js versions are no longer s
 node -v
 ```
 
-## Upgrade prompt
+## Upgrade using a coding agent
+Use the following prompt with your coding agent (Cursor, Claude Code, Copilot, etc.) to handle the mechanical parts of the upgrade. Review the changes it makes against the breaking changes listed above.
 
 :upgradeprompt
 
