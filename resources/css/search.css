@@ -37,6 +37,10 @@
   border: solid 1px var(--pf-border);
 }
 
+.page-search :is(*, #\#):is(*, #\#):is(*, #\#) .pf-modal-body {
+  flex-basis: auto;
+}
+
 .page-search :is(*, #\#):is(*, #\#):is(*, #\#) .pf-trigger-icon {
   width: 18px;
   height: 18px;
