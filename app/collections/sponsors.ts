@@ -4,16 +4,24 @@ import app from '@adonisjs/core/services/app'
 import { Collection } from '@adonisjs/content'
 import { loaders } from '@adonisjs/content/loaders'
 
+const githubToken = env.get('GH_TOKEN')
+
 export const sponsors = Collection.create({
   cache: app.inProduction,
-  loader: loaders.ghSponsors({
-    login: 'thetutlage',
-    isOrg: false,
-    includeInactive: true,
-    outputPath: app.makePath('content/sponsors/db.json'),
-    refresh: 'daily',
-    ghToken: env.get('GH_TOKEN'),
-  }),
+  loader: githubToken
+    ? loaders.ghSponsors({
+        login: 'thetutlage',
+        isOrg: false,
+        includeInactive: true,
+        outputPath: app.makePath('content/sponsors/db.json'),
+        refresh: 'daily',
+        ghToken: githubToken,
+      })
+    : {
+        async load() {
+          return []
+        },
+      },
   schema: vine.array(
     vine.object({
       sponsorName: vine.string().optional(),

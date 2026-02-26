@@ -14,17 +14,25 @@ const releases = vine.array(
   })
 )
 
+const githubToken = env.get('GH_TOKEN')
+
 export const adonisJsReleases = Collection.create({
   cache: false,
-  loader: loaders.ghReleases({
-    ghToken: env.get('GH_TOKEN'),
-    outputPath: app.makePath('content/releases.json'),
-    org: 'adonisjs',
-    refresh: 'weekly',
-    filters: {
-      nameDoesntInclude: ['Update dependencies', 'Tag as latest'],
-    },
-  }),
+  loader: githubToken
+    ? loaders.ghReleases({
+        ghToken: githubToken,
+        outputPath: app.makePath('content/releases.json'),
+        org: 'adonisjs',
+        refresh: 'weekly',
+        filters: {
+          nameDoesntInclude: ['Update dependencies', 'Tag as latest'],
+        },
+      })
+    : {
+        async load() {
+          return []
+        },
+      },
   schema: releases,
   views: {
     groupedByMonth(data) {
@@ -36,7 +44,7 @@ export const adonisJsReleases = Collection.create({
       for (const release of data) {
         const date = new Date(release.publishedAt)
         const year = date.getFullYear()
-        const month = date.getMonth() + 1 // 1-based month
+        const month = date.getMonth() + 1
         const key = `${year}-${month.toString().padStart(2, '0')}`
 
         if (!grouped.has(key)) {

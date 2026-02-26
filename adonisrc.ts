@@ -36,7 +36,6 @@ export default defineConfig({
   */
   providers: [
     () => import('@adonisjs/core/providers/app_provider'),
-    () => import('@adonisjs/core/providers/hash_provider'),
     {
       file: () => import('@adonisjs/core/providers/repl_provider'),
       environment: ['repl', 'test'],
@@ -61,31 +60,6 @@ export default defineConfig({
     () => import('#start/kernel'),
     () => import('#start/view'),
   ],
-
-  /*
-  |--------------------------------------------------------------------------
-  | Tests
-  |--------------------------------------------------------------------------
-  |
-  | List of test suites to organize tests by their type. Feel free to remove
-  | and add additional suites.
-  |
-  */
-  tests: {
-    suites: [
-      {
-        files: ['tests/unit/**/*.spec.ts'],
-        name: 'unit',
-        timeout: 2000,
-      },
-      {
-        files: ['tests/functional/**/*.spec.ts'],
-        name: 'functional',
-        timeout: 30000,
-      },
-    ],
-    forceExit: false,
-  },
 
   metaFiles: [
     {
