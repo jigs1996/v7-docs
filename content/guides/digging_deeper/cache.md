@@ -121,7 +121,7 @@ Uses Redis as a distributed cache. Requires the `@adonisjs/redis` package to be 
 }
 ```
 
-See also: [Redis setup guide](../databases/redis.md)
+See also: [Redis setup guide](../database/redis.md)
 
 :::
 
