@@ -162,7 +162,7 @@ Rolling back migrations in production is disabled by default and is not recommen
 The following Dockerfile creates an optimized production image using multi-stage builds. The first stage installs all dependencies and creates the build, while the final stage contains only the production runtime.
 
 ```dockerfile title="Dockerfile"
-FROM node:24-alpine AS base
+FROM node:lts-bookworm-slim AS base
 
 # ----------------------------
 # Stage 1: Install all dependencies
@@ -237,7 +237,7 @@ await import('./bin/server.js')
 Update your Dockerfile to use this entrypoint:
 
 ```dockerfile title="Dockerfile"
-FROM node:24-alpine AS base
+FROM node:lts-bookworm-slim AS base
 
 FROM base AS deps
 WORKDIR /app
