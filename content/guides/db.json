@@ -298,6 +298,11 @@
         "contentPath": "./digging_deeper/mail.md"
       },
       {
+        "title": "Queues",
+        "permalink": "guides/digging-deeper/queues",
+        "contentPath": "./digging_deeper/queues.md"
+      },
+      {
         "title": "Transmit",
         "permalink": "guides/digging-deeper/transmit",
         "contentPath": "./digging_deeper/transmit.md"
