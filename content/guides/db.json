@@ -303,9 +303,10 @@
         "contentPath": "./digging_deeper/queues.md"
       },
       {
-        "title": "Transmit",
-        "permalink": "guides/digging-deeper/transmit",
-        "contentPath": "./digging_deeper/transmit.md"
+        "title": "Server-Sent Events",
+        "permalink": "guides/digging-deeper/server-sent-events",
+        "oldUrls": ["guides/digging-deeper/transmit"],
+        "contentPath": "./digging_deeper/server_sent_events.md"
       },
       {
         "title": "OpenTelemetry",
