@@ -576,11 +576,139 @@ const posts = await tuyau.posts.index({
 })
 ```
 
+## Error handling
+
+Tuyau supports both throwing and non-throwing error handling.
+
+By default, requests behave like regular promises. Successful responses resolve to the response payload, while failed requests throw. HTTP failures throw a `TuyauHTTPError`, and transport failures such as DNS issues, refused connections, or offline states throw a `TuyauNetworkError`.
+
+### Using `.safe()`
+
+If you prefer not to throw, call `.safe()` on the request. It returns a tuple where the first element is the data and the second element is the error:
+
+```ts
+const [data, error] = await tuyau.posts.show({
+  params: { id: '123' }
+}).safe()
+
+if (error) {
+  console.log(error.message)
+  return
+}
+
+console.log(data.title)
+```
+
+The error returned by `.safe()` is always typed as `TuyauError`. This gives you a single error shape for both HTTP and network failures.
+
+### Narrowing HTTP errors with `isStatus()`
+
+When your controller returns typed non-2xx responses, Tuyau automatically extracts those error payloads from the controller's return type and makes them available on the client. Use `isStatus()` to narrow the error to a specific status code:
+
+```ts title="app/controllers/posts_controller.ts"
+import type { HttpContext } from '@adonisjs/core/http'
+
+export default class PostsController {
+  async show({ params, response }: HttpContext) {
+    const post = await Post.find(params.id)
+
+    if (!post) {
+      return response.notFound({ message: 'Post not found', key: 'post_not_found' })
+    }
+
+    return response.ok({ post })
+  }
+}
+```
+
+```ts
+const [data, error] = await tuyau.posts.show({
+  params: { id: '123' }
+}).safe()
+
+if (error?.isStatus(404)) {
+  // error.response is narrowed to { message: string, key: string } — inferred from the controller
+  console.log(error.response.message)
+  console.log(error.response.key)
+  return
+}
+
+console.log(data.post.title)
+```
+
+After `error.isStatus(404)`, TypeScript narrows `error.response` to the exact payload shape returned by `response.notFound()` in the controller.
+
+### Validation errors
+
+Routes that use `request.validateUsing()` automatically get a typed 422 error response. The type uses `SimpleError` from `@vinejs/vine/types`. Use `isValidationError()` as a shorthand for `isStatus(422)`:
+
+```ts
+const [data, error] = await tuyau.posts.store({
+  body: { title: '', content: '' }
+}).safe()
+
+if (error?.isValidationError()) {
+  // error.response is typed as { errors: SimpleError[] }
+  for (const err of error.response.errors) {
+    console.log(err.field, err.message)
+  }
+}
+```
+
+You can customize the error type or disable it via the `validationErrorType` option in the `generateRegistry` hook in case your API returns a different shape for validation errors:
+
+```ts title="adonisrc.ts"
+generateRegistry({
+  validationErrorType: '{ errors: { path: string; message: string }[] }',
+  // or set to `false` to disable
+})
+```
+
+### Distinguishing HTTP and network failures
+
+The `TuyauError` type includes a `kind` property. Use it when you need to treat network failures differently from server responses:
+
+```ts
+const [, error] = await tuyau.posts.show({
+  params: { id: '123' }
+}).safe()
+
+if (error?.kind === 'network') {
+  console.log('The server is unreachable')
+}
+```
+
+For network failures, `status` and `response` are `undefined` because the server did not send a response.
+
+### Using try/catch
+
+If you prefer the throwing flow, cast the caught error using `Route.Error` to get full type narrowing:
+
+```ts
+import type { Route } from '@tuyau/core/types'
+
+try {
+  await tuyau.posts.show({ params: { id: '123' } })
+} catch (e) {
+  const error = e as Route.Error<'posts.show'>
+
+  if (error.isStatus(404)) {
+    // error.response is narrowed to the 404 payload from the controller
+    console.log(error.response.message)
+    return
+  }
+
+  if (error.kind === 'network') {
+    console.log('The server is unreachable')
+  }
+}
+```
+
 ## Retrieving typings
 
-Tuyau provides two type helper namespaces, `Path` and `Route`, that let you extract request and response types from your API definition. This is useful when you need to type a variable, a function parameter, or a return type based on your API schema.
+Tuyau provides two type helper namespaces, `Path` and `Route`, that let you extract request, response, and error types from your API definition. This is useful when you need to type a variable, a function parameter, or a return type based on your API schema.
 
-Both helpers are imported from `@tuyau/core/types` and expose the same utilities: `Request`, `Response`, `Params`, `Body`, and `Query`. `Route` extracts types by route name, while `Path` extracts types by HTTP method and URL pattern.
+Both helpers are imported from `@tuyau/core/types` and expose the same utilities: `Request`, `Response`, `Error`, `Params`, `Body`, and `Query`. `Route` extracts types by route name, while `Path` extracts types by HTTP method and URL pattern.
 
 ```ts
 import type { Route, Path } from '@tuyau/core/types'
@@ -588,6 +716,7 @@ import type { Route, Path } from '@tuyau/core/types'
 // By route name
 type StoreRequest = Route.Request<'posts.store'>
 type StoreResponse = Route.Response<'posts.store'>
+type ShowError = Route.Error<'posts.show'>
 type ShowParams = Route.Params<'posts.show'>
 type StoreBody = Route.Body<'posts.store'>
 type IndexQuery = Route.Query<'posts.index'>
@@ -595,10 +724,13 @@ type IndexQuery = Route.Query<'posts.index'>
 // By HTTP method + URL pattern
 type LoginRequest = Path.Request<'POST', '/auth/login'>
 type LoginResponse = Path.Response<'POST', '/auth/login'>
+type LoginError = Path.Error<'POST', '/auth/login'>
 type UserParams = Path.Params<'GET', '/users/:id'>
 type LoginBody = Path.Body<'POST', '/auth/login'>
 type PostsQuery = Path.Query<'GET', '/posts'>
 ```
+
+The `Error` helper resolves to `TuyauError`, which means it models both HTTP and network failures while still supporting `isStatus()` for HTTP error narrowing.
 
 ## File uploads
 
