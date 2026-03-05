@@ -1190,6 +1190,35 @@ This pattern reads the token from storage before each request. You can adapt it 
 
 For a complete list of available options, see the [Ky documentation](https://github.com/sindresorhus/ky#options).
 
+:::tip
+All Ky options can also be passed per-request, not just at client creation. This is useful for setting a custom timeout, attaching an `AbortSignal`, or adding headers for a single call:
+
+```ts
+const data = await tuyau.posts.index({
+  query: { page: 1 },
+  timeout: 5000,
+  signal: controller.signal,
+  headers: { 'X-Custom': 'value' },
+})
+```
+:::
+
+### Filtering routes
+
+By default, `generateRegistry` includes all named routes. Use the `routes` option to include or exclude specific routes from the generated registry:
+
+```ts title="adonisrc.ts"
+generateRegistry({
+  routes: {
+    only: ['api.*'],                          // substring match
+    // or
+    except: [/^admin\./, (name) => name.startsWith('internal.')],
+  },
+})
+```
+
+Filters accept strings (substring match), RegExp, or functions. You cannot use `only` and `except` together.
+
 ## Related resources
 
 Tuyau integrates with several parts of the AdonisJS ecosystem and provides additional packages for specific use cases.
