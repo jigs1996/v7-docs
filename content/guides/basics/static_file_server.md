@@ -34,6 +34,12 @@ router.get('/images/logo.png', async ({ response }) => {
 
 With the static middleware, all files in the `public` directory are automatically available. The middleware intercepts HTTP requests before they reach your routes. If a file matching the request path exists, it serves the file with appropriate HTTP headers for caching and performance. If no file exists, the request continues to your route handlers as normal.
 
+:::warning
+The AdonisJS static file server is convenient during development, but in production you should prefer serving static files through a reverse proxy (Nginx, Caddy, Traefik, Apache) or a CDN. These tools are purpose-built for static file delivery and offer better performance, caching, and compression than a Node.js process. This frees your AdonisJS server to focus on handling dynamic requests.
+
+See the [deployment guide](../../start/deployment.md#serving-static-files-in-production) for recommended production setups.
+:::
+
 The key distinction in AdonisJS: files in the `public` directory are served as-is without any processing, while files in the `resources` directory are processed by your assets bundler (like Vite). Use `public` for files that are already in their final form.
 
 ## Installation

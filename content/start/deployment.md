@@ -103,15 +103,56 @@ Static files that need to be included in the production build are configured usi
 
 The `pattern` property accepts glob patterns to match files. The `reloadServer` property controls whether file changes trigger a server restart during development and has no effect on the production build.
 
-For Hypermedia and Inertia applications, Vite compiles frontend assets and places them in the `public` directory. These are then copied to `build/public` during the build process. If your hosting platform has special configuration for serving static files, point it to this directory. Otherwise, AdonisJS will serve these files automatically when requests come through your application server.
+For Hypermedia and Inertia applications, Vite compiles frontend assets and places them in the `public` directory. These are then copied to `build/public` during the build process.
 
-If you plan to serve frontend assets from a CDN, update the `assetsUrl` option in your Vite configuration to point to your CDN URL.
+### Serving static files in production
+
+While AdonisJS includes a [static file server](../guides/basics/static_file_server.md), you should offload static file serving to a dedicated tool in production. Every static file request handled by your Node.js process is a request that cannot be spent on dynamic work. A reverse proxy or CDN is purpose-built for this job and will deliver files faster with less resource usage.
+
+You have two main options depending on your infrastructure.
+
+**Reverse proxy (Nginx, Caddy, Traefik, Apache)**
+
+Configure your reverse proxy to serve the `build/public` directory directly for static file requests and forward everything else to your AdonisJS server. This way, static files never reach your Node.js process.
+
+With Nginx, you can add a `location` block that tries to serve files from the `public` directory first and falls back to the AdonisJS server for dynamic routes.
+
+```nginx title="nginx.conf"
+server {
+    listen 80;
+    server_name example.com;
+
+    root /path/to/your/app/build/public;
+
+    location / {
+        try_files $uri @adonis;
+    }
+
+    location @adonis {
+        proxy_pass http://localhost:3333;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+**CDN**
+
+For the best performance, upload your compiled assets to a CDN. This requires updating the `assetsUrl` option in your Vite configuration so that generated asset URLs point to your CDN instead of your application server.
 
 ```ts title="config/vite.ts"
 {
   assetsUrl: 'https://cdn.example.com/assets',
 }
 ```
+
+After each build, deploy the contents of `build/public` to your CDN. Your CI/CD pipeline can automate this step.
+
+:::tip
+You can combine both approaches. Use a reverse proxy to serve files like `favicon.ico` and `robots.txt` from the `public` directory, and a CDN for Vite-compiled assets (JavaScript, CSS, images) that benefit from global distribution.
+:::
 
 ## Running the production build
 
