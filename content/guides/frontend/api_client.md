@@ -2,7 +2,7 @@
 description: Learn how to use Tuyau, a type-safe HTTP client for AdonisJS applications that enables end-to-end type safety between backend and frontend.
 ---
 
-# Tuyau
+# Type-safe API client
 
 This guide covers Tuyau, a type-safe HTTP client for AdonisJS applications. You will learn how to install and configure Tuyau, make type-safe API calls using route names, handle request parameters and validation, work with file uploads, generate URLs programmatically, and understand type-level serialization for end-to-end type safety between your backend and frontend.
 
@@ -24,32 +24,44 @@ Tuyau installation differs depending on whether you're using Inertia (single rep
 
 For Inertia applications, installation is straightforward since your frontend and backend live in the same repository.
 
-#### Step 1. Install the package
+::::steps
+
+:::step{title="Install the package"}
 
 ```bash
 npm install @tuyau/core
 ```
 
-#### Step 2. Configure the assembler hook
+:::
+
+:::step{title="Configure the assembler hook"}
 
 The assembler hook automatically generates the Tuyau registry whenever your codebase changes. Add the `generateRegistry` hook to your `adonisrc.ts` file:
 
 ```ts title="adonisrc.ts"
+import { indexPages } from '@adonisjs/inertia'
+import { indexEntities } from '@adonisjs/core'
 import { defineConfig } from '@adonisjs/core/app'
 import { generateRegistry } from '@tuyau/core/hooks'
 
 export default defineConfig({
   // ... other config
   hooks: {
-    // [!code highlight]
-    init: [generateRegistry()],
+    // [!code highlight:6]
+    init: [
+      indexEntities({ transformers: { enabled: true, withSharedProps: true } }),
+      indexPages({ framework: 'react' }),
+      generateRegistry(),
+    ],
   },
 })
 ```
 
-The `generateRegistry` hook runs during initialization and generates files in the `.adonisjs/client` directory. These files contain the type information Tuyau needs to provide type safety.
+The `indexEntities` hook indexes your models and transformers for type generation, `indexPages` indexes your Inertia page components, and `generateRegistry` generates the Tuyau registry files in the `.adonisjs/client` directory.
 
-#### Step 3. Configure TypeScript paths
+:::
+
+:::step{title="Configure TypeScript paths"}
 
 Configure path aliases in your Inertia `tsconfig.json` to import the generated registry:
 
@@ -59,15 +71,16 @@ Configure path aliases in your Inertia `tsconfig.json` to import the generated r
     // ... other options
     "paths": {
       "~/*": ["./*"],
-      // [!code highlight:2]
-      "~/generated/*": ["../.adonisjs/client/*"],
-      "~registry": ["../.adonisjs/client/registry.ts"]
+      // [!code highlight]
+      "@generated/*": ["../.adonisjs/client/*"]
     }
   }
 }
 ```
 
-#### Step 4. Configure Vite aliases
+:::
+
+:::step{title="Configure Vite aliases"}
 
 Add matching aliases to your `vite.config.ts`:
 
@@ -88,29 +101,35 @@ export default defineConfig({
     alias: {
       '~/': `${import.meta.dirname}/inertia/`,
       // [!code highlight]
-      '~registry': `${import.meta.dirname}/.adonisjs/client/registry.ts`, 
+      '@generated': `${import.meta.dirname}/.adonisjs/client/`,
     },
   },
 })
 ```
 
-#### Step 5. Create the Tuyau client
+:::
+
+:::step{title="Create the Tuyau client"}
 
 Create a file to initialize your Tuyau client:
 
-```ts title="inertia/lib/client.ts"
-import { registry } from '~registry'
+```ts title="inertia/client.ts"
+import { registry } from '@generated/registry'
 import { createTuyau } from '@tuyau/core/client'
 
 export const client = createTuyau({
-  baseUrl: import.meta.env.VITE_API_URL,
+  baseUrl: '/',
   registry,
 })
 
 export const urlFor = client.urlFor
 ```
 
-The `baseUrl` should point to your API server. Using an environment variable allows different URLs for development and production.
+The `baseUrl` is set to `'/'` since the frontend and backend are served from the same origin in an Inertia application.
+
+:::
+
+::::
 
 :::tip
 **Recommended approach**: Instead of manual setup, use the [React Starter Kit](https://github.com/adonisjs/react-starter-kit) which comes with Tuyau pre-configured and ready to use.
@@ -122,7 +141,9 @@ For monorepo setups where your frontend and backend are separate packages, the s
 
 This guide assumes you're using npm workspaces with Turborepo (as used by the [API Starter Kit](https://github.com/adonisjs/api-starter-kit)), but the concepts apply to other monorepo tools like pnpm or Yarn workspaces with slight variations in syntax.
 
-#### Step 1. Structure your monorepo
+::::steps
+
+:::step{title="Structure your monorepo"}
 
 Organize your monorepo with separate workspaces for your API and frontend application:
 
@@ -134,9 +155,24 @@ my-app/
 └── package.json
 ```
 
-#### Step 2. Install Tuyau in the frontend
+:::
 
-In your frontend workspace, install Tuyau and add your API as a dependency:
+:::step{title="Install Tuyau in the backend"}
+
+Install `@tuyau/core` in your backend workspace — it handles both the assembler hook (registry generation) and exposes the client for your frontend to import:
+
+```json title="apps/backend/package.json"
+{
+  "name": "@my-app/backend",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@tuyau/core": "^1.0.0" // [!code highlight]
+  }
+}
+```
+
+Then, in your frontend workspace, add your backend as a workspace dependency so it can import the generated registry and the Tuyau client:
 
 ```json title="apps/frontend/package.json"
 {
@@ -144,16 +180,16 @@ In your frontend workspace, install Tuyau and add your API as a dependency:
   "private": true,
   "type": "module",
   "dependencies": {
-    // [!code highlight:2]
-    "@tuyau/core": "^3.0.0",
-    "@my-app/backend": "*"
+    "@my-app/backend": "*" // [!code highlight]
   }
 }
 ```
 
 The `"*"` version range tells npm to resolve `@my-app/backend` from your local workspace. Make sure the package name matches the `name` field in your backend's `package.json`.
 
-#### Step 3. Enable experimental decorators
+:::
+
+:::step{title="Enable experimental decorators"}
 
 Tuyau uses TypeScript decorators internally. Enable them in your frontend `tsconfig.json`:
 
@@ -166,22 +202,31 @@ Tuyau uses TypeScript decorators internally. Enable them in your frontend `tscon
 }
 ```
 
-#### Step 4. Configure the backend
+:::
+
+:::step{title="Configure the backend"}
 
 In your backend AdonisJS application, add the `generateRegistry` hook just like in the Inertia setup:
 
 ```ts title="apps/backend/adonisrc.ts"
+import { indexEntities } from '@adonisjs/core'
 import { defineConfig } from '@adonisjs/core/app'
 import { generateRegistry } from '@tuyau/core/hooks'
 
 export default defineConfig({
   hooks: {
-    init: [generateRegistry()], // [!code highlight]
+    // [!code highlight:6]
+    init: [
+      indexEntities({ transformers: { enabled: true } }),
+      generateRegistry(),
+    ],
   },
 })
 ```
 
-#### Step 5. Export the registry
+:::
+
+:::step{title="Export the registry"}
 
 Configure your backend `package.json` to export the generated Tuyau files so your frontend can import them:
 
@@ -200,7 +245,9 @@ Configure your backend `package.json` to export the generated Tuyau files so you
 
 These exports allow your frontend to import the registry using `@my-app/backend/registry`.
 
-#### Step 6. Create the Tuyau client
+:::
+
+:::step{title="Create the Tuyau client"}
 
 In your frontend, create a file to initialize Tuyau:
 
@@ -227,6 +274,10 @@ export const tuyau = createTuyau({
 
 The `baseUrl` should use an environment variable so you can configure different API URLs for development and production environments.
 
+:::
+
+::::
+
 :::tip
 **Reference implementation**: Check out this [monorepo starter kit](https://github.com/Julien-R44/adonis-starter-kit) for a complete working example of Tuyau in a monorepo setup.
 :::
@@ -235,7 +286,9 @@ The `baseUrl` should use an environment variable so you can configure different 
 
 Let's build a complete example showing how Tuyau provides end-to-end type safety from your backend route to your frontend API call.
 
-### Step 1. Define the backend route
+::::steps
+
+:::step{title="Define the backend route"}
 
 Create a route with a name using the `as` method:
 
@@ -248,7 +301,9 @@ router.post('register', [AuthController, 'register']).as('auth.register')
 
 The route name `auth.register` is what you'll use to call this endpoint from your frontend.
 
-### Step 2. Create the validator
+:::
+
+:::step{title="Create the validator"}
 
 Define validation rules using VineJS:
 
@@ -262,7 +317,9 @@ export const signupValidator = vine.create({
 })
 ```
 
-### Step 3. Implement the controller
+:::
+
+:::step{title="Implement the controller"}
 
 Create a controller action that uses the validator:
 
@@ -278,7 +335,7 @@ export default class AuthController {
      * This is critical - Tuyau requires this to infer types.
      */
     const payload = await request.validateUsing(signupValidator)
-    
+
     const user = await User.create({ ...payload })
     await auth.use('web').login(user)
 
@@ -289,12 +346,14 @@ export default class AuthController {
 
 The call to `request.validateUsing()` is essential for Tuyau to understand the shape of your request body and provide accurate types on the frontend.
 
-### Step 4. Make the API call from your frontend
+:::
+
+:::step{title="Make the API call from your frontend"}
 
 Import your Tuyau client and call the route using its name:
 
 ```ts title="src/pages/register.tsx"
-import { tuyau } from '~/lib/client'
+import { tuyau } from '~/client'
 
 async function handleRegister() {
   const { authenticated } = await tuyau.auth.register({
@@ -304,12 +363,16 @@ async function handleRegister() {
       password: 'password123',
     },
   })
-  
+
   console.log('User registered:', authenticated)
 }
 ```
 
 Notice how the route name `auth.register` becomes a method chain `tuyau.auth.register()`. The `body` parameter is fully typed based on your validator - your IDE will autocomplete the fields and TypeScript will catch any mistakes.
+
+:::
+
+::::
 
 ## Making API calls
 
@@ -741,7 +804,7 @@ Tuyau automatically handles file uploads by detecting File objects in your reque
 When you pass a File object in your request body, Tuyau converts the entire payload to FormData:
 
 ```ts title="src/pages/profile.tsx"
-import { tuyau } from '~/lib/client'
+import { tuyau } from '~/client'
 
 async function uploadAvatar(file: File) {
   const result = await tuyau.users.avatar.update({
@@ -830,7 +893,7 @@ Tuyau provides the `urlFor` helper to generate URLs from route names in a type-s
 The `urlFor` method searches across all HTTP methods and returns the URL as a string:
 
 ```ts
-import { urlFor } from '~/lib/client'
+import { urlFor } from '~/client'
 
 // Generate URL for a named route
 const logoutUrl = urlFor('auth.logout')
@@ -1229,11 +1292,11 @@ If you're using Inertia, Tuyau provides enhanced type safety for Inertia-specifi
 
 ```tsx
 import { TuyauProvider } from '@adonisjs/inertia/react'
-import { tuyau } from '~/lib/client'
+import { client } from '~/client'
 
 function App() {
   return (
-    <TuyauProvider client={tuyau}>
+    <TuyauProvider client={client}>
       <Link route="auth.login">Login</Link>
     </TuyauProvider>
   )

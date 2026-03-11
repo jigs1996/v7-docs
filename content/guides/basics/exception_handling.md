@@ -175,27 +175,50 @@ Status pages allow you to display custom HTML pages for specific HTTP status cod
 
 The `statusPages` property is a key-value map where keys are HTTP status codes or ranges, and values are callback functions that render and return HTML content. The callback receives the error object and the HTTP context, giving you full access to view rendering and error details.
 
+::::tabs
+
+:::tab{title="Edge (Hypermedia apps)"}
 ```ts
 export default class HttpExceptionHandler extends ExceptionHandler {
   protected statusPages: Record<StatusPageRange, StatusPageRenderer> = {
-    /**
-     * Handle 404 Not Found errors with a custom template
-     */
     '404': (error, { view }) => {
       return view.render('pages/errors/not_found', { error })
     },
-    /**
-     * Handle all 5xx server errors with a single template
-     * using a range notation
-     */
     '500..599': (error, { view }) => {
       return view.render('pages/errors/server_error', { error })
     },
   }
 }
 ```
+:::
+
+:::tab{title="Inertia apps"}
+
+When using the Inertia starter kit, status pages render Inertia components instead of Edge templates. The callback receives the `inertia` object from the HTTP context, which you use to render a frontend page component.
+
+```ts
+export default class HttpExceptionHandler extends ExceptionHandler {
+  protected statusPages: Record<StatusPageRange, StatusPageRenderer> = {
+    '404': (error, { inertia }) => {
+      return inertia.render('errors/not_found', { error })
+    },
+    '500..599': (error, { inertia }) => {
+      return inertia.render('errors/server_error', { error })
+    },
+  }
+}
+```
+
+The page paths (e.g., `errors/not_found`) map to files inside `inertia/pages/` — for example, `inertia/pages/errors/not_found.tsx`.
+:::
+
+::::
 
 Status pages are only rendered when the `renderStatusPages` property is set to `true`. The default configuration enables them in production (`app.inProduction`) where custom error pages provide a better user experience, while keeping them disabled in development where detailed Youch error pages are more useful for debugging.
+
+:::note
+Status pages only apply to requests that accept an HTML or Inertia response. For API requests that accept JSON (e.g., requests with `Accept: application/json`), the exception handler returns a JSON error response instead. This means the API starter kit does not include `renderStatusPages` or `statusPages` in its exception handler, since all responses are JSON.
+:::
 
 ## Reporting errors
 

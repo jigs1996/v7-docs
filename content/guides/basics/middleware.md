@@ -126,12 +126,16 @@ Finally, let's register our logging middleware in the server middleware stack so
 Server middleware are registered in the `start/kernel.ts` file using lazy imports, and they execute in the order they're registered.
 
 ```ts title="start/kernel.ts"
+import router from '@adonisjs/core/services/router'
 import server from '@adonisjs/core/services/server'
 
 server.use([
   () => import('#middleware/log_requests_middleware'), // [!code ++]
   () => import('#middleware/container_bindings_middleware'),
   () => import('#middleware/force_json_response_middleware'),
+])
+
+router.use([
   () => import('@adonisjs/core/bodyparser_middleware'),
 ])
 ```

@@ -61,11 +61,12 @@ node ace add @adonisjs/cors
 The CORS configuration lives in `config/cors.ts`. Here is the default configuration with all available options:
 
 ```ts title="config/cors.ts"
+import app from '@adonisjs/core/services/app'
 import { defineConfig } from '@adonisjs/cors'
 
 const corsConfig = defineConfig({
   enabled: true,
-  origin: true,
+  origin: app.inDev ? true : [],
   methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE'],
   headers: true,
   exposeHeaders: [],
@@ -75,6 +76,8 @@ const corsConfig = defineConfig({
 
 export default corsConfig
 ```
+
+In development, `origin` is set to `true` to allow all origins for easy local frontend/backend setup. In production, it defaults to an empty array `[]`, which blocks all cross-origin requests until you explicitly configure allowed origins.
 
 ### Enabling and disabling CORS
 

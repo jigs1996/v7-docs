@@ -15,6 +15,49 @@ Three main exports are available:
 - `appUrl` - The canonical URL of your application, used for generating absolute URLs
 - `http` - The HTTP server configuration object containing all runtime settings
 
+## App Key
+
+The `appKey` is used for encrypting cookies, generating signed URLs, and by the encryption module. The encryption module will fail to decrypt data if the key is lost or changed, so keep the app key secure.
+
+```ts
+// title: config/app.ts
+import env from '#start/env'
+
+export const appKey = env.get('APP_KEY')
+```
+
+Generate a new app key using the following Ace command:
+
+```sh
+node ace generate:key
+```
+
+## App URL
+
+The `appUrl` is used in various places where you need to create absolute URLs to your application. For example, when sending emails, images should use absolute URLs.
+
+```ts
+// title: config/app.ts
+import env from '#start/env'
+
+export const appUrl = env.get('APP_URL')
+```
+
+## Request ID Generation
+
+The `generateRequestId` option controls whether a unique identifier is generated for each incoming HTTP request. This is useful for correlating logs and debugging a request flow across your application.
+
+```ts
+// title: config/app.ts
+import { defineConfig } from '@adonisjs/core/http'
+
+export const http = defineConfig({
+  generateRequestId: true
+})
+```
+
+When enabled, each request receives a unique ID accessible via `request.id()`. The default value is `true`.
+
 ## Form Method Spoofing
 
 HTML forms only support GET and POST methods. Method spoofing allows you to specify other HTTP methods (PUT, PATCH, DELETE) via a query parameter, enabling full RESTful routing with standard HTML forms.

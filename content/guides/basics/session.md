@@ -65,36 +65,36 @@ import app from '@adonisjs/core/services/app'
 import { defineConfig, stores } from '@adonisjs/session'
 
 export default defineConfig({
-  age: '2 hours',
-  clearWithBrowser: true,
-  
+  enabled: true,
+  cookieName: 'adonis-session',
+  clearWithBrowser: false,
+  age: '2h',
+
   cookie: {
-    name: 'adonis-session',
-    domain: '',
     path: '/',
     httpOnly: true,
-    secure: true,
+    secure: app.inProduction,
     sameSite: 'lax',
   },
-  
+
   store: env.get('SESSION_DRIVER'),
-  
+
   stores: {
     cookie: stores.cookie(),
-    
+
     file: stores.file({
       location: app.tmpPath('sessions')
     }),
-    
+
     redis: stores.redis({
       connection: 'main'
     }),
-    
+
     database: stores.database({
       connection: 'postgres',
       tableName: 'sessions',
     }),
-    
+
     dynamodb: stores.dynamodb({
       region: env.get('AWS_REGION'),
       endpoint: env.get('AWS_ENDPOINT'),
@@ -119,11 +119,9 @@ age: 7200000 // 2 hours in milliseconds
 
 :::option{name="clearWithBrowser" dataType="boolean"}
 
-Controls session expiration behavior. When `true`, the session expiration resets on every request, keeping users logged in as long as they're active. When `false`, sessions expire at the exact age regardless of activity (absolute expiration).
-
-For example, with `age: '2 hours'` and `clearWithBrowser: true`, a user browsing your site will stay logged in indefinitely as long as they make a request within 2 hours of their last activity.
+When `true`, the session cookie is deleted when the user closes the browser, regardless of the configured `age`. When `false` (the default), the session persists for the configured `age` duration even after the browser is closed.
 ```ts
-clearWithBrowser: true
+clearWithBrowser: false
 ```
 
 :::
@@ -205,11 +203,10 @@ cookie: {
 
 :::option{name="cookie.secure" dataType="boolean"}
 
-When `true`, ensures cookies are only sent over HTTPS connections, preventing session hijacking on unsecured networks. Automatically enabled in production. Should be `false` in local development.
+When `true`, ensures cookies are only sent over HTTPS connections, preventing session hijacking on unsecured networks. The starter kit uses `app.inProduction` to automatically enable this in production while keeping it disabled during local development over HTTP.
 ```ts
 cookie: {
-  secure: true // Production
-  // secure: false // Development
+  secure: app.inProduction
 }
 ```
 

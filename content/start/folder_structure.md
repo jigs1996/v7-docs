@@ -94,6 +94,7 @@ Feel free to create additional folders in the `app` directory to better organize
 │   ├── mails
 │   ├── middleware
 │   ├── models
+│   ├── transformers
 │   └── validators
 ```
 
@@ -142,6 +143,8 @@ The `database` directory holds artifacts related to the database layer. By defau
 - `migrations/` - versioned schema changes
 - `seeders/` - scripts to insert initial or test data
 - `factories/` - blueprints for generating model instances in tests or seeders
+- `schema.ts` - auto-generated database schema used by models
+- `schema_rules.ts` - auto-generated schema rules used by validators
 
 See also: [Lucid documentation](https://lucid.adonisjs.com)
 
@@ -149,7 +152,9 @@ See also: [Lucid documentation](https://lucid.adonisjs.com)
 database/
   ├── migrations/
   ├── seeders/
-  └── factories/
+  ├── factories/
+  ├── schema.ts
+  └── schema_rules.ts
 ```
 
 ## `providers/`
@@ -165,6 +170,10 @@ The `providers` directory is used to store the [service providers](../guides/con
 
 The `public` directory contains raw static assets that are served directly to the browser without any compilation step. Files in this directory are publicly accessible over HTTP using the `http://localhost:3333/public/<file-name>` URL.
 
+:::note
+The API starter kit does not include a `public` directory, since the backend serves only JSON responses and does not serve static assets.
+:::
+
 Typical examples of files stored in this folder include:
 
 - Favicon `(favicon.ico)`
@@ -175,6 +184,10 @@ Typical examples of files stored in this folder include:
 ## `resources/`
 
 The `resources` directory stores Edge templates and uncompiled frontend assets such as CSS and JavaScript files.
+
+:::note
+The API starter kit does not include a `resources` directory, since the backend serves only JSON responses and does not render HTML templates.
+:::
 
 For applications using Inertia (alongside Vue or React), the frontend code is kept within the `inertia` directory, and the `resources` directory contains only the root Edge template. Think of this root template as the `index.html` file that contains the HTML shell for your frontend application.
 

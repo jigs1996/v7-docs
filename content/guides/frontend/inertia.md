@@ -59,7 +59,7 @@ The page component receives the props and renders the UI. Rather than defining p
 :::tab{title="React"}
 ```tsx title="inertia/pages/posts/index.tsx"
 import { InertiaProps } from '~/types'
-import { Data } from '~/generated/data'
+import { Data } from '@generated/data'
 
 type PageProps = InertiaProps<{ posts: Data.Post[] }>
 
@@ -80,7 +80,7 @@ export default function PostsIndex({ posts }: PageProps) {
 :::tab{title="Vue"}
 ```vue title="inertia/pages/posts/index.vue"
 <script setup lang="ts">
-import { Data } from '~/generated/data'
+import { Data } from '@generated/data'
 
 defineProps<{ posts: Data.Post[] }>()
 </script>
@@ -106,12 +106,16 @@ The `inertia/` directory contains your frontend application. Here is the structu
 ```
 inertia/
 ├── app.tsx (or app.vue)     # Frontend application entrypoint
+├── client.ts                # Tuyau API client setup
 ├── ssr.tsx (or ssr.vue)     # SSR entrypoint (when enabled)
 ├── tsconfig.json            # TypeScript config for frontend code
-├── pages/                   # Page components rendered by controllers
-│   └── home.tsx
-└── layouts/                 # Reusable layout components
-    └── default.tsx
+├── types.ts                 # Shared type definitions
+├── css/
+│   └── app.css              # Global styles
+├── layouts/                 # Reusable layout components
+│   └── default.tsx
+└── pages/                   # Page components rendered by controllers
+    └── home.tsx
 ```
 
 The `pages/` directory is where Inertia looks for components when you call `inertia.render()`. The path you pass (like `posts/index`) maps directly to a file in this directory (`inertia/pages/posts/index.tsx`).
@@ -403,7 +407,7 @@ TypeScript enforces that you provide all required parameters with the correct na
 The `Link` and `Form` components use the `route` prop for type-safe navigation, but they don't accept query parameters directly. To add query parameters (for example, `?page=2`), generate the URL with `urlFor` and pass it as the `href` prop instead:
 
 ```tsx
-import { urlFor } from '~/lib/client'
+import { urlFor } from '~/client'
 
 <Link href={urlFor('posts.index', {}, { qs: { page: 2, status: 'published' } })}>
   Page 2
@@ -464,7 +468,7 @@ Shared data is automatically included in the props for every page. When you defi
 
 ```tsx title="inertia/pages/posts/index.tsx"
 import { InertiaProps } from '~/types'
-import { Data } from '~/generated/data'
+import { Data } from '@generated/data'
 
 type PageProps = InertiaProps<{
   posts: Data.Post[]
@@ -518,9 +522,9 @@ Type the paginated props using the `Data` namespace. The pagination metadata inc
 
 ```tsx title="inertia/pages/posts/index.tsx"
 import { Link } from '@adonisjs/inertia/react'
-import { urlFor } from '~/lib/client'
+import { urlFor } from '~/client'
 import { InertiaProps } from '~/types'
-import { Data } from '~/generated/data'
+import { Data } from '@generated/data'
 
 type PageProps = InertiaProps<{
   posts: {
