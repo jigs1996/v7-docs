@@ -1017,14 +1017,6 @@ tuyau.current('users.show', { query: { foo: 'bar' } })        // true
 tuyau.current('users.show', { query: { foo: 'baz' } })        // false
 ```
 
-:::note
-Both `has()` and `current()` provide autocomplete for known route names. `current()` also accepts arbitrary strings for wildcard patterns like `'users.*'`.
-:::
-
-:::note
-`current()` returns `undefined` (no args) or `false` (with route name) when running server-side since `window.location` is not available.
-:::
-
 ## Type-level serialization
 
 An important concept to understand when working with Tuyau is type-level serialization. This refers to how types are automatically transformed to match what actually gets sent over the network as JSON.
