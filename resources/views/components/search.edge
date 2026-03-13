@@ -37,8 +37,7 @@
     }
   })($props.only(['size']))
 )
-
-<div data-pf-theme="light" x-data="" x-cloak>
+<div x-data="" :data-pf-theme="$store.colorMode.effective" x-cloak>
   <pagefind-modal-trigger placeholder="Search"></pagefind-modal-trigger>
   <pagefind-modal>
     <pagefind-modal-header>

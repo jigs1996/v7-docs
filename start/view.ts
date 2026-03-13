@@ -31,7 +31,11 @@ edge.use(edgeMarkdown, {
       'dockerfile',
       'diff',
     ],
-    theme: 'github-light',
+    themes: {
+      light: 'github-light',
+      dark: 'github-dark',
+    },
+    defaultColor: false,
   },
   allowHTML: true,
 })

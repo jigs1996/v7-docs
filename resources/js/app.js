@@ -142,6 +142,8 @@ Alpine.data('trackScroll', function () {
   }
 })
 
+Alpine.store('colorMode', { effective: 'dark' })
+
 Alpine.data('themeSwitcher', function () {
   return {
     current: 'system',
@@ -166,6 +168,8 @@ Alpine.data('themeSwitcher', function () {
       } else {
         root.classList.remove('dark')
       }
+
+      Alpine.store('colorMode').effective = theme
     },
 
     applySystemTheme() {
@@ -177,6 +181,8 @@ Alpine.data('themeSwitcher', function () {
       } else {
         root.classList.remove('dark')
       }
+
+      Alpine.store('colorMode').effective = prefersDark ? 'dark' : 'light'
     },
 
     setSystem() {
@@ -198,7 +204,9 @@ Alpine.data('themeSwitcher', function () {
     },
 
     buttonClass(name) {
-      return this.current === name ? 'bg-gray-300 dark:bg-woodsmoke-800 text-gray-900 dark:text-woodsmoke-50! shadow-sm' : ''
+      return this.current === name
+        ? 'bg-gray-300 dark:bg-woodsmoke-800 text-gray-900 dark:text-woodsmoke-50! shadow-sm'
+        : ''
     },
   }
 })

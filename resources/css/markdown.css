@@ -294,6 +294,14 @@
   @apply border-l-4 border-violet-400 bg-gray-200 dark:bg-woodsmoke-800/45;
 }
 
+.code_snippet pre code span {
+  color: var(--shiki-light);
+}
+
+html.dark .code_snippet pre code span {
+  color: var(--shiki-dark);
+}
+
 .prose .tabs {
   display: block;
   margin-top: 32px;
