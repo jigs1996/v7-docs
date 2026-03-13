@@ -26,13 +26,13 @@
 <div class="relative hidden sm:inline-block z-1" x-data="{ open: false }">
   <button
     @click="open = !open"
-    class="group relative flex gap-1.5 border border-woodsmoke-800/60 bg-woodsmoke-900/38 backdrop-blur-xl pl-3 py-2 pr-8 rounded-md text-woodsmoke-400 hover:text-woodsmoke-300 transition-colors"
+    class="group relative flex gap-1.5 border border-gray-300 dark:border-woodsmoke-800/60 bg-gray-100 hover:bg-gray-200 dark:bg-woodsmoke-900/38 dark:hover:bg-woodsmoke-900/50 backdrop-blur-xl pl-3 py-2 pr-8 rounded-md text-gray-600 hover:text-gray-800 dark:text-woodsmoke-400 dark:hover:text-woodsmoke-300 transition-colors"
   >
     @svg('tabler:settings', { class: 'w-5 h-5' })
     <span class="text-13 font-medium">Actions</span>
     <span>
       @svg('mynaui:chevron-down', {
-        class: 'absolute w-5 h-5 text-woodsmoke-400 right-2 transition-transform',
+        class: 'absolute w-5 h-5 dark:text-woodsmoke-400 right-2 transition-transform',
         'x-bind:class': "{\'rotate-180\': open}"
       })
     </span>
@@ -42,13 +42,13 @@
     x-show="open"
     x-cloak
     @click.outside="open=false"
-    class="absolute left-0 border border-woodsmoke-800/60 bg-woodsmoke-950/38 backdrop-blur-md px-4 py-2.5 rounded-md text-13 w-44 mt-0.5"
+    class="absolute left-0 border border-gray-300 dark:border-woodsmoke-800/60 bg-gray-100/40 dark:bg-woodsmoke-950/38 backdrop-blur-md px-4 py-2.5 rounded-md text-13 w-44 mt-px"
   >
     @each(action in actions)
       <div class="group">
         @if(action.type === 'copyMarkdown')
           <button
-            class="py-1.5 rounded-md w-full text-left flex items-center gap-1.5 hover:text-woodsmoke-50 transition-colors"
+            class="py-1.5 rounded-md w-full text-left flex items-center gap-1.5 hover:text-gray-900 dark:hover:text-woodsmoke-50 transition-colors"
             {{
               html.attrs({
                 'x-data': `copyDocToClipboard('/${doc.permalink}.md')`,
@@ -73,7 +73,7 @@
           </button>
         @elseif(action.type === 'openInAI')
           <button
-            class="py-1.5 rounded-md w-full text-left flex items-center gap-1.5 hover:text-woodsmoke-50 transition-colors"
+            class="py-1.5 rounded-md w-full text-left flex items-center gap-1.5 hover:text-gray-900 dark:hover:text-woodsmoke-50 transition-colors"
             {{
               html.attrs({
                 'x-data': `openInAI('${action.aiBaseUrl}', '/${doc.permalink}.md')`,
@@ -89,7 +89,7 @@
         @elseif(action.type === 'link')
           @link({
             href: action.href,
-            class: 'py-1.5 rounded-md w-full text-left flex items-center gap-1.5 text-inherit! hover:text-woodsmoke-50! transition-colors',
+            class: 'py-1.5 rounded-md w-full text-left flex items-center gap-1.5 text-inherit! hover:text-gray-900! dark:hover:text-woodsmoke-50! transition-colors',
             target: action.target,
           })
             @if(action.icon)

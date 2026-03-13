@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @source "../views";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @import './font.css';
 @import './markdown.css';
@@ -99,11 +100,13 @@
 }
 
 .bg-hero {
-  background-image: url('/resources/assets/hero-bg.webp');
+  @apply bg-[url('/resources/assets/light-hero-bg.png')];
+  @apply dark:bg-[url('/resources/assets/hero-bg.webp')];
 }
 
 .bg-docs-hero {
-  background-image: url('/resources/assets/docs-hero-bg.webp');
+  @apply bg-[url('/resources/assets/light-docs-hero-bg.png')];
+  @apply dark:bg-[url('/resources/assets/docs-hero-bg.webp')];
 }
 
 .container {

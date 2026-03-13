@@ -30,7 +30,7 @@ edge.use(edgeMarkdown, {
       'dockerfile',
       'diff',
     ],
-    theme: 'github-dark',
+    theme: 'github-light',
   },
   allowHTML: true,
 })
@@ -66,7 +66,7 @@ edge.global('parseCodeblockTitle', function (title: string) {
   if (title.startsWith('❌')) {
     return {
       icon: 'mynaui:x',
-      classes: 'text-red-400',
+      classes: 'size-5 text-red-600 dark:text-red-400',
       title: title.split('❌')[1],
     }
   }
@@ -74,7 +74,7 @@ edge.global('parseCodeblockTitle', function (title: string) {
   if (title.startsWith('✅')) {
     return {
       icon: 'mynaui:check',
-      classes: 'text-green-400',
+      classes: 'size-5 text-green-600 dark:text-green-400',
       title: title.split('✅')[1],
     }
   }

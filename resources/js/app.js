@@ -142,5 +142,66 @@ Alpine.data('trackScroll', function () {
   }
 })
 
+Alpine.data('themeSwitcher', function () {
+  return {
+    current: 'system',
+
+    init() {
+      const stored = window.localStorage.getItem('theme')
+
+      if (stored === 'light' || stored === 'dark') {
+        this.current = stored
+        this.applyExplicitTheme(stored)
+      } else {
+        this.current = 'system'
+        this.applySystemTheme()
+      }
+    },
+
+    applyExplicitTheme(theme) {
+      const root = document.documentElement
+
+      if (theme === 'dark') {
+        root.classList.add('dark')
+      } else {
+        root.classList.remove('dark')
+      }
+    },
+
+    applySystemTheme() {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+      const root = document.documentElement
+
+      if (prefersDark) {
+        root.classList.add('dark')
+      } else {
+        root.classList.remove('dark')
+      }
+    },
+
+    setSystem() {
+      this.current = 'system'
+      window.localStorage.removeItem('theme')
+      this.applySystemTheme()
+    },
+
+    setLight() {
+      this.current = 'light'
+      window.localStorage.setItem('theme', 'light')
+      this.applyExplicitTheme('light')
+    },
+
+    setDark() {
+      this.current = 'dark'
+      window.localStorage.setItem('theme', 'dark')
+      this.applyExplicitTheme('dark')
+    },
+
+    buttonClass(name) {
+      return this.current === name ? 'bg-gray-300 dark:bg-woodsmoke-800 text-gray-900 dark:text-woodsmoke-50! shadow-sm' : ''
+    },
+  }
+})
+
 Alpine.plugin(collapse)
 Alpine.start()

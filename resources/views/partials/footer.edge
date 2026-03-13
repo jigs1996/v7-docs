@@ -66,16 +66,16 @@
   ]
 }])
 
-<div class="border-t border-woodsmoke-900">
-  <div class="container mx-auto px-5 lg:px-10 pt-15 md:pt-30 lg:border-x border-woodsmoke-900">
+<div class="border-t border-gray-300 dark:border-woodsmoke-900">
+  <div class="container mx-auto px-5 lg:px-10 pt-15 md:pt-30 lg:border-x border-gray-300 dark:border-woodsmoke-900">
     <div class="lg:px-22.5 mb-30 md:mb-52 space-y-7 sm:space-y-5">
       @each(footer in footerSections)
         <div class="flex flex-col sm:flex-row gap-1.5 sm:gap-3">
-          <label class="text-14 text-woodsmoke-50 tracking-wide">
+          <label class="text-14 text-gray-900 dark:text-woodsmoke-50 tracking-wide">
             {{ footer.mainTitle }}
           </label>
 
-          <div class="flex-1 border-b border-dashed border-woodsmoke-800 sm:mb-1.5">
+          <div class="flex-1 border-b border-dashed border-gray-400 dark:border-woodsmoke-800 sm:mb-1.5">
           </div>
 
           <div class="flex flex-wrap gap-5.5 text-14">
@@ -84,16 +84,46 @@
                 href: subItem.url,
                 target: '_blank',
                 text: subItem.title,
-                class: "relative hover:text-woodsmoke-50 transition-colors not-last:after:content-['/'] after:pointer-events-none after:text-woodsmoke-400 after:absolute after:-right-3.5"
+                class: "relative hover:text-gray-900 dark:hover:text-woodsmoke-50 transition-colors not-last:after:content-['/'] after:pointer-events-none after:text-woodsmoke-400 after:absolute after:-right-3.5"
               })
               @end
           </div>
         </div>
       @end
+
+      <div class="mt-8 pt-3 flex justify-between items-center">
+        <span class="text-13 text-gray-900 dark:text-woodsmoke-400">Copyright © 2026 AdonisJS</span>
+        <div x-data="themeSwitcher()" class="flex bg-gray-200 dark:bg-woodsmoke-950 p-1 rounded-full">
+          <button
+            type="button"
+            class="p-1.5 rounded-full text-gray-600 dark:text-woodsmoke-400 hover:text-gray-900 dark:hover:text-woodsmoke-50 transition-colors duration-150"
+            :class="buttonClass('system')"
+            @click="setSystem"
+          >
+            @svg('mynaui:desktop', {class: 'size-4.5'})
+          </button>
+          <button
+            type="button"
+            class="p-1.5 rounded-full text-gray-600 dark:text-woodsmoke-400 hover:text-gray-900 dark:hover:text-woodsmoke-50 transition-colors duration-150"
+            :class="buttonClass('light')"
+            @click="setLight"
+          >
+            @svg('mynaui:sun', {class: 'size-4.5'})
+          </button>
+          <button
+            type="button"
+            class="p-1.5 rounded-full text-gray-600 dark:text-woodsmoke-400 hover:text-gray-900 dark:hover:text-woodsmoke-50 transition-colors duration-150"
+            :class="buttonClass('dark')"
+            @click="setDark"
+          >
+            @svg('mynaui:moon', {class: 'size-4.5'})
+          </button>
+        </div>
+      </div>
     </div>
 
     <div>
-      <svg class="w-full" xmlns="http://www.w3.org/2000/svg" width="1248" viewBox="0 0 1248 277" fill="none">
+      <svg class="w-full opacity-20 dark:opacity-80" xmlns="http://www.w3.org/2000/svg" width="1248" viewBox="0 0 1248 277" fill="none">
         <mask id="b" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1248" height="281">
           <g clip-path="url(#a)" fill="#282832">
             <path

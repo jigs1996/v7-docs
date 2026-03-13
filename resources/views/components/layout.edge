@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-us" class="bg-woodsmoke-1000" >
+<html lang="en-us" class="bg-gray-100 dark:bg-woodsmoke-1000">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,7 +11,7 @@
     @vite(['resources/js/app.js'])
     @stack('dumper')
   </head>
-  <body class="font-sans antialiased tracking-wide text-woodsmoke-300 relative">
+  <body class="font-sans antialiased tracking-wide text-gray-600 dark:text-woodsmoke-300 relative">
     @include('partials/header')
     <main>
       {{{ await $slots.main() }}}

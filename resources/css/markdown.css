@@ -1,11 +1,11 @@
 .prose {
-  @apply lg:max-w-145 text-woodsmoke-300;
+  @apply lg:max-w-145 text-gray-600 dark:text-woodsmoke-300;
   @apply sm:min-h-[65vh];
 }
 
 .prose :not(pre) > code {
   font-family: var(--font-mono);
-  @apply text-woodsmoke-200 bg-woodsmoke-800/40;
+  @apply text-gray-600 dark:text-woodsmoke-200 bg-gray-200 dark:bg-woodsmoke-800/40 font-medium dark:font-normal;
   padding: calc(var(--spacing) * 0.5) calc(var(--spacing) * 1);
   border-radius: var(--radius-sm);
   white-space: nowrap;
@@ -33,7 +33,7 @@
 .prose h6 {
   font-weight: 500;
   scroll-margin-top: calc(var(--spacing) * 32);
-  color: var(--color-white);
+  @apply text-gray-950 dark:text-white;
 }
 
 .prose h1 {
@@ -92,11 +92,10 @@
   margin-bottom: 24px;
   font-size: 16px;
   line-height: 29px;
-  @apply text-woodsmoke-300;
 }
 
 .prose strong {
-  @apply text-woodsmoke-50;
+  @apply text-gray-700 dark:text-woodsmoke-50;
   font-weight: 600;
 }
 .prose a strong {
@@ -105,7 +104,7 @@
 
 .prose a {
   font-weight: 500;
-  @apply text-indigo-400;
+  @apply text-indigo-600 dark:text-indigo-400;
 }
 
 .prose ul,
@@ -118,7 +117,6 @@
   padding-left: 18px;
   margin-top: 6px;
   position: relative;
-  @apply text-woodsmoke-300;
   line-height: 26px;
 }
 
@@ -130,11 +128,11 @@
   border-radius: 50%;
   top: 11px;
   left: 2px;
-  @apply bg-woodsmoke-400;
+  @apply bg-gray-700 dark:bg-woodsmoke-400;
 }
 
 .prose ul li {
-  @apply before:bg-woodsmoke-200;
+  @apply dark:before:bg-woodsmoke-200;
 }
 
 .prose ul li p {
@@ -160,7 +158,7 @@
   left: -6px;
   top: 0;
   font-weight: 500;
-  color: var(--color-woodsmoke-50);
+  @apply dark:text-woodsmoke-50;
 }
 
 .prose table {
@@ -175,12 +173,12 @@
 }
 
 .prose table th {
-  color: var(--color-woodsmoke-50);
+  @apply dark:text-woodsmoke-50;
   text-align: left;
 }
 
 .prose table tr {
-  @apply border-b border-woodsmoke-800/70;
+  @apply border-b border-gray-300 dark:border-woodsmoke-800/70;
 }
 
 .prose table th,
@@ -191,7 +189,7 @@
 }
 
 .prose table td {
-  @apply text-woodsmoke-300;
+  @apply dark:text-woodsmoke-300;
 }
 
 .prose .alert_note,
@@ -201,7 +199,7 @@
   border-radius: var(--radius-lg);
   padding: 12px 16px;
   margin: 16px 0;
-  @apply bg-woodsmoke-900 border border-woodsmoke-800/70;
+  @apply bg-gray-100 dark:bg-woodsmoke-900 border text-gray-800 dark:text-woodsmoke-300;
 }
 
 .prose .alert_note p,
@@ -219,7 +217,7 @@
 .prose .code_snippet {
   margin-top: 32px;
   margin-bottom: 32px;
-  @apply bg-woodsmoke-900/50 border border-woodsmoke-800/70;
+  @apply bg-gray-300/70 dark:bg-woodsmoke-900/50 border border-gray-300 dark:border-woodsmoke-800/70;
   border-radius: var(--radius-xl);
   overflow: hidden;
   padding: 1px;
@@ -228,7 +226,7 @@
 .prose .media_container {
   margin-top: 32px;
   margin-bottom: 32px;
-  @apply bg-woodsmoke-900/50 border border-woodsmoke-800/70;
+  @apply bg-gray-300 dark:bg-woodsmoke-900/50 border border-gray-400/30 dark:border-woodsmoke-800/70;
   border-radius: var(--radius-xl);
   padding: 8px;
 }
@@ -256,12 +254,12 @@
 
 .prose .code_snippet .code_snippet_header {
   padding: 0 calc(var(--spacing) * 2.5) calc(var(--spacing) * 1) calc(var(--spacing) * 4);
-  color: var(--color-woodsmoke-200);
+  @apply text-gray-600 dark:text-woodsmoke-200 font-medium dark:font-normal;
   font-size: var(--text-sm);
 }
 
 .prose .code_snippet pre {
-  @apply bg-woodsmoke-900;
+  @apply bg-gray-100 dark:bg-woodsmoke-900;
   padding: calc(var(--spacing) * 3) calc(var(--spacing) * 4);
   border-radius: var(--radius-xl);
   overflow-x: auto;
@@ -292,7 +290,7 @@
 }
 
 .prose .code_snippet code .highlighted {
-  @apply border-l-4 border-violet-400 bg-woodsmoke-800/45;
+  @apply border-l-4 border-violet-400 bg-gray-200 dark:bg-woodsmoke-800/45;
 }
 
 .prose .tabs {
@@ -306,15 +304,14 @@
   cursor: pointer;
   font-weight: 500;
   margin-right: 14px;
-  @apply text-woodsmoke-400;
+  @apply text-gray-500 dark:text-woodsmoke-400;
 }
 
 .prose .tabs .tab_content {
   padding-top: calc(var(--spacing) * 4);
   border-top-width: 1px;
   border-top-style: solid;
-  border-top-color: var(--color-woodsmoke-800);
-  @apply text-woodsmoke-300;
+  @apply border-gray-300 dark:border-woodsmoke-800;
 }
 
 .prose .tabs .tab_content > .code_snippet {
@@ -322,10 +319,9 @@
 }
 
 .prose .tabs [role='tab'][aria-selected='true'] {
-  color: var(--color-indigo-400);
+  @apply text-indigo-600 dark:text-indigo-400 border-indigo-600 dark:border-indigo-400;
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  border-bottom-color: var(--color-indigo-400);
 }
 
 .prose .disclosure {
@@ -402,11 +398,11 @@
 }
 
 .menu-group li > a.up-current {
-  @apply text-white;
+  @apply text-gray-950 dark:text-white;
 }
 
 .menu-group li a.up-current {
-  @apply text-white before:content-[''] before:absolute before:-left-4 lg:before:-left-8 before:top-0 before:bottom-0 before:w-0.5 before:bg-indigo-400;
+  @apply text-gray-950 dark:text-white before:content-[''] before:absolute before:-left-4 lg:before:-left-8 before:top-0 before:bottom-0 before:w-0.5 before:bg-indigo-600 dark:before:bg-indigo-400;
 }
 
 .doc-right-nav > ul {
@@ -434,12 +430,11 @@
 .doc-right-nav a {
   font-size: var(--text-12);
   padding-right: calc(var(--spacing) * 2);
-  color: var(--color-woodsmoke-300);
   display: block;
 }
 
 .doc-right-nav a.up-current {
-  color: var(--color-white);
+  @apply text-gray-950 dark:text-white;
 }
 
 .doc-right-nav code {
@@ -447,11 +442,11 @@
 }
 
 .doc-right-nav ul .up-current a {
-  color: var(--color-white);
+  @apply text-gray-950 dark:text-white;
 }
 
 .doc-right-nav li.up-current > a {
-  color: var(--color-white);
+  @apply text-gray-950 dark:text-white;
 }
 
 .doc-right-nav li {
@@ -482,7 +477,7 @@
   left: 5px;
   top: 34px;
   bottom: 0;
-  @apply border-l border-woodsmoke-800/70;
+  @apply border-l border-gray-300 dark:border-woodsmoke-800/70;
 }
 
 .prose .steppers > li::after {
@@ -493,12 +488,12 @@
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background-color: var(--color-woodsmoke-800);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: var(--text-sm);
   font-weight: 500;
+  @apply bg-gray-200 dark:bg-woodsmoke-800;
 }
 
 .prose .code_snippet span.line span {
@@ -518,7 +513,7 @@
 }
 
 .prose .card a {
-  @apply text-indigo-500 border-b;
+  @apply text-indigo-600 dark:text-indigo-500 border-b;
 }
 
 .changelog .prose {

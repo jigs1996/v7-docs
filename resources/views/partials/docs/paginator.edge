@@ -1,6 +1,6 @@
 @let(paginationLinks = section.peek(doc.permalink, doc.variant))
 
-<div class="bg-woodsmoke-950 p-1 rounded-2xl mt-14">
+<div class="border dark:border-0 border-gray-300 bg-gray-200/50 dark:bg-woodsmoke-950 p-1 rounded-2xl mt-14">
   <div class="w-full rounded-lg flex text-sm h-16">
     @if(paginationLinks.previous)
       @link({
@@ -14,10 +14,10 @@
         @svg('mynaui:chevron-left', {
           width: '18px',
           height: '18px',
-          class: 'text-woodsmoke-400 group-hover:text-white'
+          class: 'text-gray-500 dark:text-woodsmoke-400 group-hover:text-gray-900 dark:group-hover:text-white'
         })
         <span
-          class="text-woodsmoke-500 font-medium tracking-tight group-hover:text-white"
+          class="text-gray-500 dark:text-woodsmoke-500 font-medium tracking-tight group-hover:text-gray-900 dark:group-hover:text-white"
         >
           Previous
         </span>
@@ -40,27 +40,27 @@
           }
         }))
         <div
-          class="flex items-center justify-end h-16 bg-woodsmoke-900 hover:ring-1 hover:ring-woodsmoke-800/50 rounded-xl"
+          class="flex items-center justify-end h-16 bg-gray-300/60 dark:bg-woodsmoke-900 hover:ring-1 hover:ring-gray-400/50 dark:hover:ring-woodsmoke-800/50 rounded-xl"
         >
           <div class="flex flex-col items-end justify-center px-5 min-w-0">
-            <span class="hidden sm:block font-semibold text-right text-woodsmoke-200">
+            <span class="hidden sm:block font-semibold text-right text-gray-700 dark:text-woodsmoke-200">
               {{ paginationLinks.next.title }}
             </span>
-            <span class="hidden sm:block text-right text-woodsmoke-600 w-full truncate sm:w-72">
+            <span class="hidden sm:block text-right text-gray-500 dark:text-woodsmoke-600 w-full truncate sm:w-72">
               {{ nextDocMarkdown.frontmatter.description }}
             </span>
           </div>
 
-          <div class="hidden sm:block w-px h-8 bg-woodsmoke-700"></div>
+          <div class="hidden sm:block w-px h-8 bg-gray-400 dark:bg-woodsmoke-700"></div>
 
-          <div class="pl-5 pr-3 text-woodsmoke-600 flex items-center space-x-1.5">
-            <span class="font-medium tracking-tight text-woodsmoke-400 group-hover:text-white">
+          <div class="pl-5 pr-3 text-gray-500 dark:text-woodsmoke-600 flex items-center space-x-1.5">
+            <span class="font-medium tracking-tight dark:text-woodsmoke-400 group-hover:text-gray-900 dark:group-hover:text-white">
               Next
             </span>
             @svg('mynaui:chevron-right', {
               width: '18px',
               height: '18px',
-              class: 'text-woodsmoke-400 group-hover:text-white'
+              class: 'dark:text-woodsmoke-400 group-hover:text-gray-900 dark:group-hover:text-white'
             })
           </div>
         </div>
