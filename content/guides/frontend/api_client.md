@@ -1043,6 +1043,129 @@ const post = await client.api.posts.show({ params: { id: '1' } })
 // Full autocomplete and type safety
 ```
 
+## SuperJSON
+
+As described above, when data crosses the HTTP boundary, rich JavaScript types like `Date`, `BigInt`, `Map`, or `Set` are lost — they get serialized to strings or plain objects by `JSON.stringify()`. [SuperJSON](https://github.com/flightcontrolhq/superjson) solves this by automatically preserving type information during serialization, so you receive proper typed values on the frontend instead of plain strings.
+
+The `@tuyau/superjson` package provides both a server-side middleware and a client-side plugin that work together transparently.
+
+### Installation
+
+::::steps
+
+:::step{title="Install and configure the package"}
+
+```bash
+node ace add @tuyau/superjson
+```
+
+This registers the SuperJSON middleware in your application. The middleware intercepts responses and serializes them with type metadata, then deserializes incoming request bodies on the server.
+
+:::
+
+:::step{title="Add the client plugin"}
+
+On the frontend, add the `superjson` plugin when creating your Tuyau client.
+
+```ts
+import { superjson } from '@tuyau/superjson/plugin'
+
+const client = createTuyau({
+  baseUrl: 'http://localhost:3333',
+  registry,
+  // [!code highlight]
+  plugins: [superjson()],
+})
+```
+
+:::
+
+::::
+
+That's it for the basic setup. Native JavaScript types like `Date`, `BigInt`, `Map`, `Set`, `RegExp`, and `URL` are now automatically preserved across HTTP calls.
+
+### Custom recipes
+
+SuperJSON only handles native JavaScript types out of the box. If your application uses custom classes — like Luxon `DateTime` which is used by Lucid models for date fields — SuperJSON won't recognize them and they will end up as plain strings on the frontend.
+
+You can teach SuperJSON how to handle any custom type by registering a recipe with three things: an `isApplicable` check to identify the type, a `serialize` function to convert it to a JSON-safe value, and a `deserialize` function to reconstruct it on the other side.
+
+Since recipes must be registered on both the server and client, they should live in a shared file imported by both sides.
+
+Here's an example with Luxon `DateTime`, which is the most common case in AdonisJS applications.
+
+::::steps
+
+:::step{title="Create a shared recipes file"}
+
+```ts title="app/superjson_recipes.ts"
+import { DateTime } from 'luxon'
+import SuperJSON from 'superjson'
+
+SuperJSON.registerCustom<DateTime, string>(
+  {
+    isApplicable: (v) => DateTime.isDateTime(v),
+    serialize: (v) => v.toISO()!,
+    deserialize: (v) => DateTime.fromISO(v),
+  },
+  'DateTime'
+)
+```
+
+:::
+
+:::step{title="Register as a server preload"}
+
+Add the recipes file to your preloads so it runs when the server starts.
+
+```ts title="adonisrc.ts"
+export default defineConfig({
+  preloads: [
+    () => import('#start/routes'),
+    () => import('#start/kernel'),
+    // [!code highlight]
+    () => import('#app/superjson_recipes'),
+  ],
+})
+```
+
+:::
+
+:::step{title="Import on the client side"}
+
+Import the same file where you create your Tuyau client, so the recipes are registered before any API calls.
+
+```ts title="inertia/client.ts"
+import '#app/superjson_recipes'
+import { superjson } from '@tuyau/superjson/plugin'
+
+const client = createTuyau({
+  baseUrl: 'http://localhost:3333',
+  registry,
+  plugins: [superjson()],
+})
+```
+
+:::
+
+::::
+
+### Type-level integration with transformers
+
+When using custom SuperJSON recipes with [HTTP Transformers](./transformers.md), you need to tell the transformer type system that certain types should not be converted to strings at the type level. Without this, TypeScript would still infer your `DateTime` fields as `string` in the frontend response types, even though SuperJSON preserves them at runtime.
+
+Add a module augmentation in your API provider to extend the allowed JSON types.
+
+```ts title="providers/api_provider.ts"
+declare module '@adonisjs/core/types/transformers' {
+  interface ExtendedJSONTypes {
+    DateTime: import('luxon').DateTime
+  }
+}
+```
+
+With this augmentation, transformers that return `DateTime` values will preserve the `DateTime` type in the generated frontend types instead of converting it to `string`.
+
 ## Response parsing
 
 By default, Tuyau parses responses based on the `Content-Type` header: JSON for `application/json`, `ArrayBuffer` for `application/octet-stream`, and text for everything else.
