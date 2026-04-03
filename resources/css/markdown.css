@@ -261,12 +261,12 @@
 
 .prose .code_snippet pre {
   @apply bg-gray-100 dark:bg-woodsmoke-900;
-  padding: calc(var(--spacing) * 3) calc(var(--spacing) * 4);
   border-radius: var(--radius-xl);
   overflow-x: auto;
 }
 
 .prose .code_snippet code {
+  padding: calc(var(--spacing) * 3) calc(var(--spacing) * 4);
   font-weight: normal;
   display: block;
   width: fit-content;
