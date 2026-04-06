@@ -225,7 +225,8 @@ Ally provides user information but doesn't create users or sessions. After getti
 
 ### With the session guard
 
-For server-rendered applications, create a session after social authentication:
+For server-rendered applications, create a session after social authentication.
+
 ```ts title="start/routes.ts"
 import User from '#models/user'
 import router from '@adonisjs/core/services/router'
@@ -274,7 +275,8 @@ router.get('/github/callback', async ({ ally, auth, response }) => {
 
 ### With the access tokens guard
 
-For APIs and mobile apps, issue an access token after social authentication:
+For APIs and mobile apps, issue an access token after social authentication.
+
 ```ts title="start/routes.ts"
 import User from '#models/user'
 import router from '@adonisjs/core/services/router'
@@ -314,6 +316,29 @@ router.get('/github/callback', async ({ ally }) => {
     type: 'bearer',
     value: token.value!.release(),
   }
+})
+```
+
+## Disallow signups for a provider
+
+Use the `disallowLocalSignup` option when a provider should only be used for login or account linking, but not for creating new local accounts. This can be helpful when you have historically allowed signups using a given provider but now want to limit it to login only.
+
+```ts title="config/ally.ts"
+export default defineConfig({
+  github: services.github({
+    clientId: env.get('GITHUB_CLIENT_ID'),
+    clientSecret: env.get('GITHUB_CLIENT_SECRET'),
+    callbackUrl: 'http://localhost:3333/github/callback',
+    disallowLocalSignup: true,
+  }),
+})
+```
+
+With `disallowLocalSignup` enabled, calling `ally.use(provider, { intent: 'signup' })` will throw an exception with status code `403`.
+
+```ts title="start/routes.ts"
+router.get('/github/signup/redirect', ({ ally }) => {
+  return ally.use('github', { intent: 'signup' }).redirect()
 })
 ```
 
@@ -359,16 +384,35 @@ Handle multiple providers with a single route using route parameters:
 ```ts title="start/routes.ts"
 router
   .get('/:provider/redirect', ({ ally, params }) => {
+    if (!ally.has(params.provider)) {
+      return 'Unknown provider'
+    }
+
     return ally.use(params.provider).redirect()
   })
   .where('provider', /github|google|twitter/)
 
 router
   .get('/:provider/callback', async ({ ally, params }) => {
+    if (!ally.has(params.provider)) {
+      return 'Unknown provider'
+    }
+
     const driver = ally.use(params.provider)
     // Handle callback...
   })
   .where('provider', /github|google|twitter/)
+```
+
+You can also inspect configured providers at runtime:
+
+```ts title="start/routes.ts"
+router.get('/login', ({ ally }) => {
+  return {
+    providers: ally.configuredProviderNames(),
+    signupProviders: ally.signupProviderNames(),
+  }
+})
 ```
 
 ## Provider configuration reference
@@ -381,6 +425,7 @@ github: services.github({
   clientId: '',
   clientSecret: '',
   callbackUrl: '',
+  disallowLocalSignup: false,
   scopes: ['user', 'gist'],
   login: 'adonisjs',
   allowSignup: true,
@@ -395,6 +440,7 @@ google: services.google({
   clientId: '',
   clientSecret: '',
   callbackUrl: '',
+  disallowLocalSignup: false,
   scopes: ['userinfo.email', 'calendar.events'],
   prompt: 'select_account',
   accessType: 'offline',
@@ -411,6 +457,20 @@ twitter: services.twitter({
   clientId: '',
   clientSecret: '',
   callbackUrl: '',
+  disallowLocalSignup: false,
+})
+```
+
+:::
+
+:::disclosure{title="X"}
+```ts
+twitterX: services.twitterX({
+  clientId: '',
+  clientSecret: '',
+  callbackUrl: '',
+  disallowLocalSignup: false,
+  scopes: ['tweet.read', 'users.read', 'users.email'],
 })
 ```
 
@@ -422,6 +482,7 @@ discord: services.discord({
   clientId: '',
   clientSecret: '',
   callbackUrl: '',
+  disallowLocalSignup: false,
   scopes: ['identify', 'email'],
   prompt: 'consent',
   guildId: '',
@@ -434,10 +495,11 @@ discord: services.discord({
 
 :::disclosure{title="LinkedIn (OpenID Connect)"}
 ```ts
-linkedin: services.linkedinOpenidConnect({
+linkedinOpenidConnect: services.linkedinOpenidConnect({
   clientId: '',
   clientSecret: '',
   callbackUrl: '',
+  disallowLocalSignup: false,
   scopes: ['openid', 'profile', 'email'],
 })
 ```
@@ -450,6 +512,7 @@ facebook: services.facebook({
   clientId: '',
   clientSecret: '',
   callbackUrl: '',
+  disallowLocalSignup: false,
   scopes: ['email', 'user_photos'],
   userFields: ['first_name', 'picture', 'email'],
   display: '',
@@ -465,6 +528,7 @@ spotify: services.spotify({
   clientId: '',
   clientSecret: '',
   callbackUrl: '',
+  disallowLocalSignup: false,
   scopes: ['user-read-email', 'streaming'],
   showDialog: false,
 })
