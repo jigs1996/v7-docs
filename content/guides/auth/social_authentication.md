@@ -15,9 +15,9 @@ This guide covers social authentication in AdonisJS using the Ally package. You 
 
 ## Overview
 
-Social authentication allows users to log in using their existing accounts from services like GitHub, Google, or Twitter. Instead of creating a new username and password, users authorize your application to access their profile information from the provider.
+Social authentication allows users to log in using their existing accounts from services like GitHub, Google, X (formerly Twitter), or Discord. Instead of creating a new username and password, users authorize your application to access their profile information from the provider.
 
-AdonisJS provides the `@adonisjs/ally` package for social authentication. Ally handles the OAuth flow (redirecting users, exchanging codes for tokens, fetching user data) and provides a consistent API across different providers. It supports OAuth 1.0 (Twitter) and OAuth 2.0 (most other providers).
+AdonisJS provides the `@adonisjs/ally` package for social authentication. Ally handles the OAuth flow (redirecting users, exchanging codes for tokens, fetching user data) and provides a consistent API across different providers. It supports OAuth 1.0 (Twitter) and OAuth 2.0 (X, GitHub, Google, and most other providers).
 
 Ally does not store users or tokens in your database. It handles the OAuth flow and returns user information, which you then use to create or find a user in your database and log them in using an [auth guard](./introduction.md).
 
@@ -84,11 +84,15 @@ The callback URL in your config must exactly match what you register with the pr
 
 ## Redirecting users to the provider
 
-Create a route that redirects users to the OAuth provider. Use `ally.use()` to get the driver instance and call `redirect()`:
+Create a route that redirects users to the OAuth provider. Use `ally.use()` to get the driver instance and call `redirect()`.
+
+Before redirecting, store `redirect.previousUrl` in the session so that error handlers and `back()` calls redirect the user to the correct page in your application instead of the OAuth provider's domain.
+
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
-router.get('/github/redirect', ({ ally }) => {
+router.get('/github/redirect', ({ ally, session }) => {
+  session.put('redirect.previousUrl', '/login')
   return ally.use('github').redirect()
 })
 ```
@@ -135,39 +139,36 @@ router.get('/google/redirect', ({ ally }) => {
 
 ## Handling the callback
 
-After the user authorizes (or denies) access, the provider redirects them to your callback URL. Handle this redirect to complete authentication:
+After the user authorizes (or denies) access, the provider redirects them to your callback URL. Call `user()` on the driver to exchange the authorization code for an access token and fetch the user's profile.
+
 ```ts title="start/routes.ts"
 import router from '@adonisjs/core/services/router'
 
+router.get('/github/callback', async ({ ally }) => {
+  const github = ally.use('github')
+  const githubUser = await github.user()
+
+  return githubUser
+})
+```
+
+If something goes wrong during the callback (the user denied access, the state token doesn't match, or the authorization code is missing), the `user()` method throws a self-handled exception. The exception content-negotiates the response automatically:
+
+- **HTML requests with a session**: the error message is flashed to the session and the user is redirected back. If you stored `redirect.previousUrl` in the session before the OAuth redirect, the user returns to that page.
+- **JSON requests**: a JSON error response is returned with the appropriate status code.
+- **JSONAPI requests**: a JSONAPI-formatted error response is returned.
+
+If you need to handle specific error cases yourself, you can still check for them before calling `user()`.
+
+```ts title="start/routes.ts"
 router.get('/github/callback', async ({ ally, response }) => {
   const github = ally.use('github')
 
-  /**
-   * User cancelled the authentication flow
-   */
   if (github.accessDenied()) {
-    return 'Access denied. You cancelled the login process.'
+    return response.redirect().toPath('/login?error=access_denied')
   }
 
-  /**
-   * OAuth state verification failed (possible CSRF attack)
-   */
-  if (github.stateMisMatch()) {
-    return 'State mismatch. Request may have been tampered with.'
-  }
-
-  /**
-   * Provider returned an error
-   */
-  if (github.hasError()) {
-    return github.getError()
-  }
-
-  /**
-   * Get the authenticated user's information
-   */
   const githubUser = await github.user()
-
   return githubUser
 })
 ```
@@ -225,28 +226,14 @@ Ally provides user information but doesn't create users or sessions. After getti
 
 ### With the session guard
 
-For server-rendered applications, create a session after social authentication.
+For server-rendered applications, create a session after social authentication. Errors during the callback (denied access, state mismatch) are self-handled and will redirect the user back with a flash message.
 
 ```ts title="start/routes.ts"
 import User from '#models/user'
 import router from '@adonisjs/core/services/router'
 
 router.get('/github/callback', async ({ ally, auth, response }) => {
-  const github = ally.use('github')
-
-  if (github.accessDenied()) {
-    return response.redirect('/login?error=access_denied')
-  }
-
-  if (github.stateMisMatch()) {
-    return response.redirect('/login?error=state_mismatch')
-  }
-
-  if (github.hasError()) {
-    return response.redirect(`/login?error=${github.getError()}`)
-  }
-
-  const githubUser = await github.user()
+  const githubUser = await ally.use('github').user()
 
   /**
    * Find existing user or create a new one
@@ -269,7 +256,11 @@ router.get('/github/callback', async ({ ally, auth, response }) => {
    */
   await auth.use('web').login(user)
 
-  return response.redirect('/dashboard')
+  /**
+   * Redirect to the page the user was trying to access,
+   * or /dashboard if no intended URL was stored
+   */
+  return response.redirect().toIntended('/dashboard')
 })
 ```
 
