@@ -136,3 +136,38 @@ export class AuditLogger {
   }
 }
 ```
+
+## Redirect Configuration
+
+The `redirect` option controls the behavior of HTTP redirects, including referrer host validation for `back()` and query string forwarding.
+
+```ts
+// title: config/app.ts
+import { defineConfig } from '@adonisjs/core/http'
+
+export const http = defineConfig({
+  redirect: {
+    /**
+     * Array of allowed hosts for referrer-based redirects.
+     * The back() method validates the Referer header against the
+     * current request's Host header. Add additional trusted hosts
+     * here if your application spans multiple domains.
+     *
+     * Defaults to []
+     */
+    allowedHosts: [],
+
+    /**
+     * Whether to forward the query string from the current request
+     * to the redirect destination by default.
+     *
+     * Defaults to false
+     */
+    forwardQueryString: true,
+  },
+})
+```
+
+When `forwardQueryString` is enabled, all redirects automatically carry over the current URL's query parameters. You can disable forwarding for a specific redirect by calling `withQs(false)` on the redirect instance.
+
+The `allowedHosts` array is checked alongside the request's `Host` header when `back()` validates the `Referer` header. Referrers from hosts not in this list and not matching the current request's host will cause `back()` to use the fallback URL instead.

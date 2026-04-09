@@ -268,6 +268,7 @@ router.get('/track', ({ request }) => {
 | `completeUrl()`              | Returns the complete URL including domain |
 | `ip()`                       | Returns the client IP address             |
 | `ips()`                      | Returns array of IPs when behind proxies  |
+| `getPreviousUrl(allowedHosts, fallback?)` | Returns the validated previous URL from the `Referer` header |
 
 ## Reading request cookies
 

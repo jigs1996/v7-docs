@@ -326,6 +326,63 @@ export default class SessionController {
 }
 ```
 
+## Redirecting to the intended URL
+
+When unauthenticated users try to access a protected page, the auth middleware redirects them to the login page. After login, you will want to send them back to the page they originally requested instead of a generic dashboard.
+
+### Forced login flow
+
+When the auth middleware rejects an unauthenticated request, it automatically stores the current URL in the session before redirecting to the login page. This happens for GET, navigational (non-AJAX) requests that matched a route. No changes to your auth middleware are needed.
+
+In your login controller, use `toIntendedRoute()` to redirect after successful authentication. It reads the stored URL from the session and falls back to the provided default.
+
+```ts title="app/controllers/session_controller.ts"
+import User from '#models/user'
+import type { HttpContext } from '@adonisjs/core/http'
+
+export default class SessionController {
+  async store({ request, auth, response }: HttpContext) {
+    const { email, password } = request.only(['email', 'password'])
+    const user = await User.verifyCredentials(email, password)
+
+    await auth.use('web').login(user)
+
+    /**
+     * Redirect to the page the user was trying to access,
+     * or dashboard if no intended URL was stored
+     */
+    return response.redirect().toIntendedRoute('dashboard')
+  }
+}
+```
+
+### Voluntary login flow
+
+When a user voluntarily clicks a login link from a public page, the current URL can be passed as a query parameter. The login page handler stores it in the session using `session.setIntendedUrl()`, which validates the URL to prevent open redirects.
+
+```edge title="resources/views/partials/header.edge"
+<a href="{{ route('auth.login', {}, { qs: { intended: request.url(true) } }) }}">
+  Login
+</a>
+```
+
+```ts title="app/controllers/session_controller.ts"
+import type { HttpContext } from '@adonisjs/core/http'
+
+export default class SessionController {
+  async show({ request, session, view }: HttpContext) {
+    const intended = request.input('intended')
+    if (intended) {
+      session.setIntendedUrl(intended)
+    }
+
+    return view.render('auth/login')
+  }
+}
+```
+
+After login, `toIntended()` works the same way regardless of how the intended URL was stored.
+
 ## Guest middleware
 
 The guest middleware redirects authenticated users away from pages like `/login` or `/register`. This prevents users from creating multiple sessions on a single device.

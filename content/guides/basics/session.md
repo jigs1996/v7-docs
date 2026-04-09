@@ -667,6 +667,70 @@ session.reflashOnly(['error'])
 session.reflashExcept(['success'])
 ```
 
+## Intended URL
+
+The intended URL feature allows you to store a URL the user should be redirected to after completing an intermediate step. For example, you can store the current page URL before redirecting the user to a login page, and after login, redirect them back to the page they were on.
+
+URLs are validated before storage to prevent open redirect attacks. Invalid or unsafe URLs (like protocol-relative `//evil.com`) are silently ignored.
+
+```ts title="app/controllers/session_controller.ts"
+import type { HttpContext } from '@adonisjs/core/http'
+
+export default class SessionController {
+  async show({ request, session, view }: HttpContext) {
+    /**
+     * If the login page is accessed with an ?intended query param,
+     * store the intended URL in the session for use after login
+     */
+    const intended = request.input('intended')
+    if (intended) {
+      session.setIntendedUrl(intended)
+    }
+
+    return view.render('auth/login')
+  }
+
+  async store({ request, auth, response }: HttpContext) {
+    const user = await User.verifyCredentials(
+      request.input('email'),
+      request.input('password')
+    )
+    await auth.use('web').login(user)
+
+    /**
+     * Redirect to the intended URL if one was stored,
+     * otherwise fall back to dashboard
+     */
+    return response.redirect().toIntendedRoute('dashboard')
+  }
+}
+```
+
+You can also read, consume, or clear the intended URL directly.
+
+```ts title="start/routes.ts"
+import router from '@adonisjs/core/services/router'
+
+router.get('/example', ({ session }) => {
+  /**
+   * Read without consuming
+   */
+  const url = session.getIntendedUrl()
+
+  /**
+   * Read and remove in one step
+   */
+  const consumed = session.pullIntendedUrl()
+
+  /**
+   * Remove without reading
+   */
+  session.clearIntendedUrl()
+})
+```
+
+See also: [Redirecting to the intended URL after login](../auth/session_guard.md#redirecting-to-the-intended-url)
+
 ## Session regeneration
 
 Session regeneration creates a new session ID while preserving all existing session data. This is a critical security measure to prevent [session fixation attacks](https://owasp.org/www-community/attacks/Session_fixation), where an attacker tricks a user into using a session ID controlled by the attacker.

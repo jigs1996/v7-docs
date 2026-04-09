@@ -256,7 +256,9 @@ export default class PostsController {
 
 ### Redirecting back
 
-Use `response.redirect().back()` to redirect to the previous page. This uses the referrer header and falls back to `/` if the referrer is not available.
+Use `response.redirect().back()` to redirect to the previous page. The method reads the `Referer` header and validates that the referrer's host matches the current request's `Host` header. If the referrer is missing, invalid, or from an unknown host, the redirect falls back to `/`.
+
+You can provide a custom fallback URL as an argument to `back()`.
 
 ```ts title="app/controllers/comments_controller.ts"
 import type { HttpContext } from '@adonisjs/core/http'
@@ -264,12 +266,65 @@ import type { HttpContext } from '@adonisjs/core/http'
 export default class CommentsController {
   async destroy({ response, params }: HttpContext) {
     /**
-     * Redirect back to the page the user came from
+     * Redirect back to the page the user came from.
+     * Falls back to /posts if no valid referrer is found.
+     */
+    response.redirect().back('/posts')
+  }
+}
+```
+
+### Allowing external referrer hosts
+
+By default, `back()` only accepts referrers that match the current request's host. This prevents open redirect attacks where a malicious referrer could send users to an external site.
+
+If your application spans multiple domains (for example, `app.example.com` and `admin.example.com`), you can add trusted hosts to the `redirect.allowedHosts` config so that `back()` accepts referrers from those domains as well.
+
+```ts title="config/app.ts"
+import { defineConfig } from '@adonisjs/core/http'
+
+export const http = defineConfig({
+  redirect: {
+    allowedHosts: [
+      'app.example.com',
+      'admin.example.com',
+    ],
+  },
+})
+```
+
+### Customizing previous URL resolution
+
+When using the `@adonisjs/session` package, you can store a previous URL in the session by setting the `redirect.previousUrl` property. When set, `back()` will use the session value instead of the `Referer` header.
+
+This is useful when your application redirects users to third-party websites (like OAuth providers). The browser's `Referer` header will point to the external site when the user returns, so `back()` would fall back to `/` instead of the page the user was originally on. By storing the intended return URL in the session before the redirect, you ensure `back()` takes them to the right place.
+
+```ts title="app/controllers/auth_controller.ts"
+import type { HttpContext } from '@adonisjs/core/http'
+
+export default class AuthController {
+  async redirectToProvider({ session, response }: HttpContext) {
+    /**
+     * Store the current URL so back() returns here
+     * after the OAuth flow completes
+     */
+    session.put('redirect.previousUrl', '/dashboard')
+    response.redirect().toPath('https://accounts.google.com/o/oauth2/auth')
+  }
+
+  async handleCallback({ response }: HttpContext) {
+    /**
+     * This will redirect to /dashboard (from the session)
+     * instead of using the Referer header
      */
     response.redirect().back()
   }
 }
 ```
+
+:::note
+The session-based previous URL resolution requires the `@adonisjs/session` package. Without it, `back()` will always use the `Referer` header.
+:::
 
 ### Setting redirect status code
 
@@ -290,7 +345,37 @@ export default class PagesController {
 
 ### Forwarding query strings
 
-Use the `withQs()` method to forward the current URL's query string to the redirect destination.
+Query string forwarding is enabled by default in AdonisJS starter kits via the `redirect.forwardQueryString` option in your server config. You can verify this in your `config/app.ts` file.
+
+```ts title="config/app.ts"
+import { defineConfig } from '@adonisjs/core/http'
+
+export const http = defineConfig({
+  redirect: {
+    forwardQueryString: true,
+  },
+})
+```
+
+When enabled, all redirects automatically carry over the current URL's query string to the destination. For example, if the current URL is `/search?q=adonis&sort=date` and you redirect to `/results`, the user will be sent to `/results?q=adonis&sort=date`.
+
+You can disable forwarding for a specific redirect by passing `false` to `withQs()`.
+
+```ts title="app/controllers/auth_controller.ts"
+import type { HttpContext } from '@adonisjs/core/http'
+
+export default class AuthController {
+  async logout({ response }: HttpContext) {
+    /**
+     * Disable query string forwarding for this redirect.
+     * The user will be sent to / without any query parameters.
+     */
+    response.redirect().withQs(false).toPath('/')
+  }
+}
+```
+
+If query string forwarding is not enabled by default, you can enable it for a specific redirect by calling `withQs()` without arguments.
 
 ```ts title="app/controllers/search_controller.ts"
 import type { HttpContext } from '@adonisjs/core/http'
@@ -325,6 +410,34 @@ export default class ProductsController {
       .withQs({ category: 'electronics' })
       .withQs({ sort: 'price' })
       .toPath('/products')
+  }
+}
+```
+
+### Redirecting to the intended URL
+
+The `toIntended()` method redirects to a URL previously stored in the session via `session.setIntendedUrl()`. If no intended URL is stored, it redirects to the provided fallback. The stored URL is consumed (removed from session) after use.
+
+The `withIntendedUrl()` method stores the current request URL in the session as the intended destination. It only stores for GET, navigational requests that matched a route.
+
+These methods are available when the `@adonisjs/session` package is installed. See [Redirecting to the intended URL after login](../auth/session_guard.md#redirecting-to-the-intended-url) for a complete example.
+
+```ts title="app/controllers/session_controller.ts"
+import type { HttpContext } from '@adonisjs/core/http'
+
+export default class SessionController {
+  async store({ auth, request, response }: HttpContext) {
+    await auth.use('web').login(
+      await User.verifyCredentials(
+        request.input('email'),
+        request.input('password')
+      )
+    )
+
+    /**
+     * Redirect to the intended URL or /dashboard
+     */
+    return response.redirect().toIntended('/dashboard')
   }
 }
 ```
