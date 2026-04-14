@@ -96,8 +96,8 @@ The HTTP context provides access to many framework services and request-specific
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `request` | `Request` | HTTP request object for accessing request data |
-| `response` | `Response` | HTTP response object for sending responses |
+| `request` | `HttpRequest` | HTTP request object for accessing request data |
+| `response` | `HttpResponse` | HTTP response object for sending responses |
 | `params` | `object` | Route parameters as key-value pairs |
 | `logger` | `Logger` | Request-scoped logger instance |
 | `session` | `Session` | Session manager (when session middleware is enabled) |

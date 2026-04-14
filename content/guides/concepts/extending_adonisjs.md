@@ -14,7 +14,7 @@ This guide covers how to extend AdonisJS with custom functionality. You will lea
 
 ## Overview
 
-AdonisJS provides a powerful extension system that lets you add custom methods and properties to framework classes without modifying the framework's source code. This means you can enhance the Request class with custom validation logic, add utility methods to the Response class, or extend any other framework class to fit your application's specific needs.
+AdonisJS provides a powerful extension system that lets you add custom methods and properties to framework classes without modifying the framework's source code. This means you can enhance the `HttpRequest` class with custom validation logic, add utility methods to the `HttpResponse` class, or extend any other framework class to fit your application's specific needs.
 
 The extension system is built on two core concepts: **macros** (custom methods) and **getters** (computed properties). Both are added at runtime and integrate seamlessly with TypeScript through declaration merging, giving you full type safety and autocomplete in your editor.
 
@@ -46,12 +46,12 @@ export default class PostsController {
 With a macro, you write this logic once and use it everywhere:
 
 ```ts title="src/extensions.ts"
-import { Request } from '@adonisjs/core/http'
+import { HttpRequest } from '@adonisjs/core/http'
 
 /**
  * Check if the request expects a JSON response based on Accept header
  */
-Request.macro('wantsJSON', function (this: Request) {
+HttpRequest.macro('wantsJSON', function (this: HttpRequest) {
   const firstType = this.types()[0]
   if (!firstType) {
     return false
@@ -94,7 +94,7 @@ Under the hood, AdonisJS uses the [macroable](https://github.com/poppinss/macroa
 
 ## Creating your first macro
 
-Let's build a simple macro step-by-step. We'll add a method to the Request class that checks if the incoming request is from a mobile device.
+Let's build a simple macro step-by-step. We'll add a method to the `HttpRequest` class that checks if the incoming request is from a mobile device.
 
 ::::steps
 
@@ -111,10 +111,10 @@ The file can be named anything you like, but `extensions.ts` clearly communicate
 
 :::step{title="Import the class you want to extend"}
 
-Import the framework class you want to add functionality to. For our example, we'll extend the Request class.
+Import the framework class you want to add functionality to. For our example, we'll extend the `HttpRequest` class.
 
 ```ts title="src/extensions.ts"
-import { Request } from '@adonisjs/core/http'
+import { HttpRequest } from '@adonisjs/core/http'
 ```
 :::
 
@@ -123,9 +123,9 @@ import { Request } from '@adonisjs/core/http'
 Use the `macro` method to add your custom functionality. The method receives the class instance as `this`, giving you access to all the class's existing properties and methods.
 
 ```ts title="src/extensions.ts"
-import { Request } from '@adonisjs/core/http'
+import { HttpRequest } from '@adonisjs/core/http'
 
-Request.macro('isMobile', function (this: Request) {
+HttpRequest.macro('isMobile', function (this: HttpRequest) {
   /**
    * Get the User-Agent header, defaulting to empty string if not present
    */
@@ -138,7 +138,7 @@ Request.macro('isMobile', function (this: Request) {
 })
 ```
 
-The `function (this: Request)` syntax is important because it gives you the correct `this` context. Don't use arrow functions here, as they don't preserve the `this` binding.
+The `function (this: HttpRequest)` syntax is important because it gives you the correct `this` context. Don't use arrow functions here, as they don't preserve the `this` binding.
 :::
 
 :::step{title="Add TypeScript type definitions"}
@@ -147,7 +147,7 @@ Tell TypeScript about your new method using declaration merging. Add this at the
 
 ```ts title="src/extensions.ts"
 declare module '@adonisjs/core/http' {
-  interface Request {
+  interface HttpRequest {
     isMobile(): boolean
   }
 }
@@ -196,12 +196,12 @@ export default class HomeController {
 
 ## Creating your first getter
 
-Getters are computed properties that work like regular properties but are calculated on-demand. Let's add a getter to the Request class that provides a cleaned version of the request path.
+Getters are computed properties that work like regular properties but are calculated on-demand. Let's add a getter to the `HttpRequest` class that provides a cleaned version of the request path.
 
 ```ts title="src/extensions.ts"
-import { Request } from '@adonisjs/core/http'
+import { HttpRequest } from '@adonisjs/core/http'
 
-Request.getter('cleanPath', function (this: Request) {
+HttpRequest.getter('cleanPath', function (this: HttpRequest) {
   /**
    * Get the current URL path
    */
@@ -216,7 +216,7 @@ Request.getter('cleanPath', function (this: Request) {
 
 ```ts title="src/extensions.ts"
 declare module '@adonisjs/core/http' {
-  interface Request {
+  interface HttpRequest {
     cleanPath: string  // Note: property, not a method
   }
 }
@@ -248,12 +248,12 @@ Getter callbacks cannot be async because [JavaScript getters](https://developer.
 By default, getters recalculate their value every time you access them. For expensive computations, you can make a getter a **singleton**, which caches the result after the first calculation.
 
 ```ts title="src/extensions.ts"
-import { Request } from '@adonisjs/core/http'
+import { HttpRequest } from '@adonisjs/core/http'
 
 /**
  * The third parameter (true) makes this a singleton getter
  */
-Request.getter('ipAddress', function (this: Request) {
+HttpRequest.getter('ipAddress', function (this: HttpRequest) {
   /**
    * Check for proxy headers first, fall back to direct IP
    * This only runs once per request instance
@@ -267,7 +267,7 @@ Request.getter('ipAddress', function (this: Request) {
 
 ```ts title="src/extensions.ts"
 declare module '@adonisjs/core/http' {
-  interface Request {
+  interface HttpRequest {
     ipAddress: string
   }
 }
@@ -302,7 +302,7 @@ Choosing between macros and getters depends on your use case. Here's a practical
 /**
  * Macro example: Accepts a role parameter
  */
-Request.macro('hasRole', function (this: Request, role: string) {
+HttpRequest.macro('hasRole', function (this: HttpRequest, role: string) {
   const user = this.ctx.auth.user
   return user?.role === role
 })
@@ -321,7 +321,7 @@ Request.macro('hasRole', function (this: Request, role: string) {
 /**
  * Getter example: Computed property with no parameters
  */
-Request.getter('isAuthenticated', function (this: Request) {
+HttpRequest.getter('isAuthenticated', function (this: HttpRequest) {
   return this.ctx.auth.isAuthenticated
 })
 
@@ -338,11 +338,11 @@ The module path in your `declare module` statement must exactly match the path y
 
 ```ts title="src/extensions.ts"
 // If you import like this:
-import { Request } from '@adonisjs/core/http'
+import { HttpRequest } from '@adonisjs/core/http'
 
 // You must declare like this (exact same path):
 declare module '@adonisjs/core/http' {
-  interface Request {
+  interface HttpRequest {
     isMobile(): boolean
   }
 }
@@ -357,11 +357,11 @@ declare module '@adonisjs/core/http' {
 
 ```ts
 // ✅ Correct: Paths match
-import { Request } from '@adonisjs/core/http'
+import { HttpRequest } from '@adonisjs/core/http'
 declare module '@adonisjs/core/http' { ... }
 
 // ❌ Wrong: Paths don't match
-import { Request } from '@adonisjs/core/http'
+import { HttpRequest } from '@adonisjs/core/http'
 declare module '@adonisjs/http-server' { ... }
 ```
 :::
@@ -370,7 +370,7 @@ You can declare multiple extensions in the same `declare module` block:
 
 ```ts title="src/extensions.ts"
 declare module '@adonisjs/core/http' {
-  interface Request {
+  interface HttpRequest {
     isMobile(): boolean
     hasRole(role: string): boolean
     cleanPath: string
@@ -383,13 +383,13 @@ Or split them across multiple blocks if you prefer:
 
 ```ts title="src/extensions.ts"
 declare module '@adonisjs/core/http' {
-  interface Request {
+  interface HttpRequest {
     isMobile(): boolean
   }
 }
 
 declare module '@adonisjs/core/http' {
-  interface Request {
+  interface HttpRequest {
     hasRole(role: string): boolean
   }
 }
@@ -408,12 +408,12 @@ Here are the most common issues developers encounter when extending the framewor
 
 ```ts
 // ❌ Wrong: Arrow function
-Request.macro('isMobile', () => {
+HttpRequest.macro('isMobile', () => {
   return this.header('user-agent')  // `this` is undefined!
 })
 
 // ✅ Correct: Regular function
-Request.macro('isMobile', function (this: Request) {
+HttpRequest.macro('isMobile', function (this: HttpRequest) {
   return this.header('user-agent')  // `this` is the Request instance
 })
 ```
@@ -426,12 +426,12 @@ Request.macro('isMobile', function (this: Request) {
 
 ```ts
 // This executes the function every single time
-Request.getter('expensiveCalculation', function (this: Request) {
+HttpRequest.getter('expensiveCalculation', function (this: HttpRequest) {
   return someExpensiveOperation()
 })
 
 // Add true for singleton to cache the result
-Request.getter('expensiveCalculation', function (this: Request) {
+HttpRequest.getter('expensiveCalculation', function (this: HttpRequest) {
   return someExpensiveOperation()
 }, true)  // Caches after first access
 ```
@@ -443,7 +443,7 @@ Request.getter('expensiveCalculation', function (this: Request) {
 **What happens**: You'll get errors because getters are properties, not functions.
 
 ```ts
-Request.getter('ipAddress', function (this: Request) {
+HttpRequest.getter('ipAddress', function (this: HttpRequest) {
   return this.ip()
 })
 
@@ -479,7 +479,7 @@ app.getter('isProduction', function () {
 [View source](https://github.com/adonisjs/application/blob/main/src/application.ts)
 :::
 
-:::option{name="Request" import="@adonisjs/core/http"}
+:::option{name="HttpRequest" import="@adonisjs/core/http"}
 The HTTP request class. Extend this to add request validation or parsing logic.
 
 **Common use cases**: Add methods for checking request characteristics, parsing custom headers, or validating request types.
@@ -487,9 +487,9 @@ The HTTP request class. Extend this to add request validation or parsing logic.
 **Example**: Add a method to check if the request is an AJAX request.
 
 ```ts
-import { Request } from '@adonisjs/core/http'
+import { HttpRequest } from '@adonisjs/core/http'
 
-Request.macro('isAjax', function (this: Request) {
+HttpRequest.macro('isAjax', function (this: HttpRequest) {
   return this.header('x-requested-with') === 'XMLHttpRequest'
 })
 ```
@@ -497,7 +497,7 @@ Request.macro('isAjax', function (this: Request) {
 [View source](https://github.com/adonisjs/http-server/blob/main/src/request.ts)
 :::
 
-:::option{name="Response" import="@adonisjs/core/http"}
+:::option{name="HttpResponse" import="@adonisjs/core/http"}
 The HTTP response class. Extend this to add custom response methods or formatters.
 
 **Common use cases**: Add methods for sending formatted responses, setting common headers, or handling specific response types.
@@ -505,9 +505,9 @@ The HTTP response class. Extend this to add custom response methods or formatter
 **Example**: Add a method for sending paginated JSON responses.
 
 ```ts
-import { Response } from '@adonisjs/core/http'
+import { HttpResponse } from '@adonisjs/core/http'
 
-Response.macro('paginated', function (this: Response, data: any, meta: any) {
+HttpResponse.macro('paginated', function (this: HttpResponse, data: any, meta: any) {
   return this.json({ data, meta })
 })
 ```

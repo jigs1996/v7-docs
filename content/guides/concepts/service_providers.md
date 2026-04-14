@@ -234,14 +234,14 @@ The `register` hook is synchronous and must remain synchronous. Don't attempt to
 The `boot` method runs after all providers have finished registering their bindings. At this point, the container is fully populated and you can safely resolve any binding. This makes `boot` the natural place to extend framework classes or configure services that depend on other registered bindings.
 
 ```ts title="providers/response_extension_provider.ts"
-import { Response } from '@adonisjs/core/http'
+import { HttpResponse } from '@adonisjs/core/http'
 import type { ApplicationService } from '@adonisjs/core/types'
 
 export default class ResponseExtensionProvider {
   constructor(protected app: ApplicationService) {}
 
   async boot() {
-    Response.macro('apiSuccess', function (data: any) {
+    HttpResponse.macro('apiSuccess', function (data: any) {
       return this.json({
         success: true,
         data,

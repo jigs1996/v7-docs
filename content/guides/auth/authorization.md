@@ -565,11 +565,11 @@ import BaseInertiaMiddleware from '@adonisjs/inertia/inertia_middleware'
 
 export default class InertiaMiddleware extends BaseInertiaMiddleware {
   async share(ctx: HttpContext) {
-    const postPolicy = bouncer.with('PostPolicy')
+    const postPolicy = ctx.bouncer.with('PostPolicy')
 
     return {
       // ...rest of the properties
-      permissions: ctx.inertia.once(() => {
+      permissions: ctx.inertia.once(async () => {
         return {
           post: {
             create: await postPolicy.allows('create'),

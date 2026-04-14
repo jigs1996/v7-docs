@@ -59,13 +59,17 @@ If you rename directories in your project structure, update the corresponding pa
     models: 'app/models',
     services: 'app/services',
     exceptions: 'app/exceptions',
+    mailers: 'app/mailers',
     mails: 'app/mails',
     middleware: 'app/middleware',
     policies: 'app/policies',
     validators: 'app/validators',
     events: 'app/events',
     listeners: 'app/listeners',
+    transformers: 'app/transformers',
     stubs: 'stubs',
+    generatedClient: '.adonisjs/client',
+    generatedServer: '.adonisjs/server',
   }
 }
 ```

@@ -974,9 +974,9 @@ router.get('/text', async () => {
 })
 ```
 
-## Extending Response class
+## Extending HttpResponse class
 
-You can add custom methods and properties to the Response class using macros and getters. This allows you to create reusable response helpers that match your application's needs.
+You can add custom methods and properties to the `HttpResponse` class using macros and getters. This allows you to create reusable response helpers that match your application's needs.
 
 :::note
 Read the [Extending AdonisJS](../concepts/extending_adonisjs.md) guide if you are new to the concept of macros and getters.
@@ -984,17 +984,17 @@ Read the [Extending AdonisJS](../concepts/extending_adonisjs.md) guide if you ar
 
 ### Adding custom methods
 
-Use `Response.macro()` to add methods to all Response instances throughout your application.
+Use `HttpResponse.macro()` to add methods to all response instances throughout your application.
 
 ```ts title="providers/app_provider.ts"
-import { Response } from '@adonisjs/core/http'
+import { HttpResponse } from '@adonisjs/core/http'
 
 export default class AppProvider {
   async boot() {
     /**
      * Add a custom method to send API responses with consistent structure
      */
-    Response.macro('api', function (data: any, meta?: Record<string, any>) {
+    HttpResponse.macro('api', function (data: any, meta?: Record<string, any>) {
       return this.json({
         success: true,
         data: data,
@@ -1005,7 +1005,7 @@ export default class AppProvider {
     /**
      * Add a custom method for paginated responses
      */
-    Response.macro('paginated', function (items: any[], pagination: any) {
+    HttpResponse.macro('paginated', function (items: any[], pagination: any) {
       return this.json({
         data: items,
         pagination: {
@@ -1019,15 +1019,15 @@ export default class AppProvider {
 }
 ```
 
-### Augmenting the Response class type
+### Augmenting the HttpResponse class type
 
-After adding custom methods, you must inform TypeScript about them by augmenting the Response interface. Otherwise, you will get type errors when trying to use the custom methods.
+After adding custom methods, you must inform TypeScript about them by augmenting the `HttpResponse` interface. Otherwise, you will get type errors when trying to use the custom methods.
 
 ```ts title="types/response.ts"
-import { Response } from '@adonisjs/core/http'
+import { HttpResponse } from '@adonisjs/core/http'
 
 declare module '@adonisjs/core/http' {
-  export interface Response {
+  export interface HttpResponse {
     /**
      * Send a standardized API response
      */
@@ -1047,7 +1047,7 @@ declare module '@adonisjs/core/http' {
 
 ### Using custom methods
 
-Once defined, your custom methods are available on all Response instances.
+Once defined, your custom methods are available on all response instances.
 
 ```ts title="app/controllers/posts_controller.ts"
 import Post from '#models/post'
