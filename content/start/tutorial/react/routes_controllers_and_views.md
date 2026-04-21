@@ -403,7 +403,7 @@ export default class PostTransformer extends BaseTransformer<Post> {
       ...this.pick(this.resource, ['id', 'title', 'url', 'summary', 'createdAt']),
       author: UserTransformer.transform(this.resource.user),
       // [!code ++]
-      comments: CommentTransformer.transform(this.whenLoaded(this.resource.comments)),
+      comments: CommentTransformer.transform(this.whenLoaded(this.resource.comments))?.depth(2),
     }
   }
 }
